@@ -34,7 +34,7 @@ export const projects: Project[] = [
     image: '/projects/world-explorer.png',
     github: 'https://github.com/suufiaane13/Wold-Explorer',
     demo: 'https://world-explorer0.netlify.app/',
-    featured: true,
+    featured: false,
     year: 2025,
   },
   {
@@ -43,7 +43,7 @@ export const projects: Project[] = [
     image: '/projects/sultan-kunafa.png',
     github: 'https://github.com/suufiaane13/sultan_kunafa',
     demo: 'https://sweets-48.netlify.app/',
-    featured: true,
+    featured: false,
     year: 2026,
   },
 ]
