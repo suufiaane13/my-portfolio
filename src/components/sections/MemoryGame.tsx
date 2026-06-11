@@ -55,10 +55,7 @@ function MemoryCard({
           />
         </div>
         <div className="memory-card__face memory-card__face--back" aria-hidden={!isFlipped && !isMatched}>
-          <div className="memory-card__icon-badge">
-            <CardIcon id={cardId} />
-          </div>
-          <span className="memory-card__label">{label}</span>
+          <CardIcon id={cardId} />
         </div>
       </div>
     </button>

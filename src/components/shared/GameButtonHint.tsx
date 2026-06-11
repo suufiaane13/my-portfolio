@@ -33,10 +33,14 @@ export function GameButtonHint({ enabled, className, children }: GameButtonHintP
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 4, scale: 0.98 }}
             transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
-            className="absolute right-0 top-[calc(100%+0.5rem)] z-[60] w-[min(16.5rem,calc(100vw-2rem))]"
+            className={cn(
+              'z-[60]',
+              'max-sm:fixed max-sm:inset-x-4 max-sm:top-[4.25rem] max-sm:w-auto',
+              'sm:absolute sm:right-0 sm:top-[calc(100%+0.5rem)] sm:w-[min(16.5rem,calc(100vw-2rem))]',
+            )}
           >
             <div
-              className="pointer-events-none absolute -top-1.5 right-3 h-3 w-3 rotate-45 border-l border-t border-primary/25 bg-card"
+              className="pointer-events-none absolute -top-1.5 right-3 hidden h-3 w-3 rotate-45 border-l border-t border-primary/25 bg-card sm:block"
               aria-hidden="true"
             />
 
