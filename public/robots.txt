@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://soufiane-hajji.netlify.app/sitemap.xml
+
+Allow: /CV_Soufiane.pdf
