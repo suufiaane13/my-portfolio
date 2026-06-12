@@ -10,12 +10,14 @@ import { Interests } from '@/components/sections/Interests'
 import { Projects } from '@/components/sections/Projects'
 import { Skills } from '@/components/sections/Skills'
 import { Analytics } from '@/components/shared/Analytics'
+import { PortfolioAnalytics } from '@/components/shared/PortfolioAnalytics'
 import { ScrollToTop } from '@/components/shared/ScrollToTop'
 import { SeoHead } from '@/components/shared/SeoHead'
+import { PortfolioContentProvider } from '@/hooks/PortfolioContentProvider'
 import { useTheme } from '@/hooks/useTheme'
 import { useTranslation } from '@/i18n/LanguageProvider'
 
-export function HomePage() {
+function HomePageContent() {
   const { isDark, toggleTheme } = useTheme()
   const { t } = useTranslation()
 
@@ -23,6 +25,7 @@ export function HomePage() {
     <>
       <SeoHead />
       <Analytics />
+      <PortfolioAnalytics />
 
       <a
         href="#hero"
@@ -48,5 +51,13 @@ export function HomePage() {
       <ScrollToTop />
       <Toaster richColors closeButton position="top-right" />
     </>
+  )
+}
+
+export function HomePage() {
+  return (
+    <PortfolioContentProvider>
+      <HomePageContent />
+    </PortfolioContentProvider>
   )
 }

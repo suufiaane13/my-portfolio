@@ -215,6 +215,19 @@ export const fr: Translations = {
     winMessage: 'Félicitations ! Toutes les paires sont réunies 🚀',
     winStats: '{{moves}} coups en {{time}}',
     backToPortfolio: 'Retour au portfolio',
+    leaderboard: {
+      title: 'Classement',
+      loading: 'Chargement du classement…',
+      empty: 'Aucun score pour l’instant — soyez le premier !',
+      nameLabel: 'Votre pseudo',
+      namePlaceholder: 'Ex. Soufiane',
+      nameError: 'Pseudo invalide (2 à 20 caractères, lettres/chiffres).',
+      submit: 'Enregistrer le score',
+      success: 'Score enregistré !',
+      successRank: 'Score enregistré — vous êtes {{rank}}ᵉ !',
+      submitError: 'Impossible d’enregistrer le score. Réessayez.',
+      rateLimit: 'Trop de tentatives — réessayez dans une minute.',
+    },
     cards: {
       compass: 'Boussole',
       waves: 'Vagues',
@@ -243,7 +256,9 @@ export const fr: Translations = {
     info: 'Informations',
     spokenLanguages: 'Langues',
     formTitle: 'Envoyez-moi un message',
-    formDescription: 'Le formulaire sera disponible très bientôt. En attendant, contactez-moi par email ou WhatsApp.',
+    formDescription: 'Remplissez le formulaire ci-dessous — je vous réponds sous 24–48 h.',
+    formUnavailable:
+      'Formulaire temporairement indisponible. Contactez-moi par email ou WhatsApp.',
     name: 'Nom complet *',
     namePlaceholder: 'Votre nom',
     email: 'Email *',
@@ -291,5 +306,7 @@ export const fr: Translations = {
     error: "Erreur lors de l'envoi",
     errorDescription: 'Vérifiez votre connexion et réessayez.',
     submitError: "Erreur lors de l'envoi du message",
+    rateLimit: 'Trop de messages envoyés',
+    rateLimitDescription: 'Réessayez dans une heure ou contactez-moi par WhatsApp.',
   },
 }

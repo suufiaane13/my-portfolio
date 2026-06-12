@@ -1,9 +1,22 @@
 import { AnimatePresence, motion } from 'framer-motion'
-import { Clock, Grid2x2, Grid3x3, Play, RotateCcw, Trophy, Volume2, VolumeX } from 'lucide-react'
-import { useEffect, useMemo, useRef, useState } from 'react'
+import {
+  Clock,
+  Grid2x2,
+  Grid3x3,
+  Loader2,
+  Play,
+  RotateCcw,
+  Send,
+  Trophy,
+  Volume2,
+  VolumeX,
+} from 'lucide-react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { Section, SectionHeading } from '@/components/layout/Container'
 import { SectionReveal } from '@/components/shared/SectionReveal'
+import { Leaderboard } from '@/components/sections/memory/Leaderboard'
 import { Button } from '@/components/ui/Button'
+import { Input } from '@/components/ui/Input'
 import { CardIcon } from '@/components/sections/memory/CardIcons'
 import { type CardId, type GridSize } from '@/data/memoryGame'
 import { profile } from '@/data/profile'
@@ -11,6 +24,13 @@ import { useGameSounds } from '@/hooks/useGameSounds'
 import { useMemoryGame } from '@/hooks/useMemoryGame'
 import { useTranslation } from '@/i18n/LanguageProvider'
 import { cn } from '@/lib/utils'
+import { trackEvent } from '@/services/analytics'
+import {
+  getSavedPlayerName,
+  isLeaderboardEnabled,
+  ScoreServiceError,
+  submitScore,
+} from '@/services/memoryGame'
 import './MemoryGame.css'
 
 function MemoryCard({
@@ -63,16 +83,24 @@ function MemoryCard({
 }
 
 export function MemoryGame() {
-  const { t } = useTranslation()
+  const { t, locale } = useTranslation()
   const [gridSize, setGridSize] = useState<GridSize>(4)
   const [hasGameStarted, setHasGameStarted] = useState(false)
   const [soundOn, setSoundOn] = useState(true)
+  const [playerName, setPlayerName] = useState(() => getSavedPlayerName())
+  const [scoreSubmitted, setScoreSubmitted] = useState(false)
+  const [submittedRank, setSubmittedRank] = useState<number | null>(null)
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [submitError, setSubmitError] = useState<string | null>(null)
+  const [leaderboardRefreshKey, setLeaderboardRefreshKey] = useState(0)
   const winMessageRef = useRef<HTMLDivElement>(null)
+  const winTrackedRef = useRef(false)
   const { play } = useGameSounds(soundOn)
 
   const {
     cards,
     moves,
+    seconds,
     formattedTime,
     isLocked,
     isWon,
@@ -87,6 +115,78 @@ export function MemoryGame() {
     onMismatch: () => play('mismatch'),
     onWin: () => play('win'),
   })
+
+  const resetScoreState = useCallback(() => {
+    setScoreSubmitted(false)
+    setSubmittedRank(null)
+    setSubmitError(null)
+    setIsSubmitting(false)
+    winTrackedRef.current = false
+  }, [])
+
+  const handleRestart = useCallback(() => {
+    resetScoreState()
+    setHasGameStarted(false)
+    restart()
+  }, [resetScoreState, restart])
+
+  const handleSubmitScore = useCallback(async () => {
+    const trimmedName = playerName.trim()
+    if (trimmedName.length < 2) {
+      setSubmitError(t.memoryGame.leaderboard.nameError)
+      return
+    }
+
+    setIsSubmitting(true)
+    setSubmitError(null)
+
+    try {
+      const result = await submitScore({
+        playerName: trimmedName,
+        gridSize,
+        moves,
+        seconds,
+        locale,
+      })
+
+      setScoreSubmitted(true)
+      setSubmittedRank(result.rank)
+      setLeaderboardRefreshKey((value) => value + 1)
+
+      trackEvent({
+        eventType: 'game_score_submit',
+        path: '/game',
+        locale,
+        metadata: { gridSize, moves, seconds, rank: result.rank },
+      })
+    } catch (error) {
+      if (error instanceof ScoreServiceError) {
+        if (error.code === 'rate_limit') {
+          setSubmitError(t.memoryGame.leaderboard.rateLimit)
+        } else if (error.code === 'validation') {
+          setSubmitError(t.memoryGame.leaderboard.nameError)
+        } else {
+          setSubmitError(t.memoryGame.leaderboard.submitError)
+        }
+      } else {
+        setSubmitError(t.memoryGame.leaderboard.submitError)
+      }
+    } finally {
+      setIsSubmitting(false)
+    }
+  }, [gridSize, locale, moves, playerName, seconds, t.memoryGame.leaderboard])
+
+  useEffect(() => {
+    if (!isWon || winTrackedRef.current) return
+
+    winTrackedRef.current = true
+    trackEvent({
+      eventType: 'game_win',
+      path: '/game',
+      locale,
+      metadata: { gridSize, moves, seconds },
+    })
+  }, [gridSize, isWon, locale, moves, seconds])
 
   useEffect(() => {
     if (!isWon) return
@@ -177,7 +277,7 @@ export function MemoryGame() {
                 size="sm"
                 variant="outline"
                 className="memory-game__btn memory-game__toolbar-action"
-                onClick={restart}
+                onClick={handleRestart}
               >
                 <RotateCcw className="h-4 w-4 shrink-0" aria-hidden="true" />
                 <span className="memory-game__toolbar-action-label">{t.memoryGame.restart}</span>
@@ -279,13 +379,69 @@ export function MemoryGame() {
                     .replace('{{moves}}', String(moves))
                     .replace('{{time}}', formattedTime)}
                 </p>
-                <Button className="mt-5" onClick={restart}>
+
+                {isLeaderboardEnabled() && (
+                  <div className="mx-auto mt-5 max-w-sm text-left">
+                    {scoreSubmitted ? (
+                      <p className="rounded-xl border border-[rgb(37_99_235/0.28)] bg-[rgb(37_99_235/0.08)] px-4 py-3 text-sm text-foreground">
+                        {submittedRank
+                          ? t.memoryGame.leaderboard.successRank.replace(
+                              '{{rank}}',
+                              String(submittedRank),
+                            )
+                          : t.memoryGame.leaderboard.success}
+                      </p>
+                    ) : (
+                      <>
+                        <label
+                          htmlFor="player-name"
+                          className="mb-2 block text-sm font-medium text-foreground"
+                        >
+                          {t.memoryGame.leaderboard.nameLabel}
+                        </label>
+                        <div className="flex gap-2">
+                          <Input
+                            id="player-name"
+                            value={playerName}
+                            onChange={(event) => setPlayerName(event.target.value)}
+                            placeholder={t.memoryGame.leaderboard.namePlaceholder}
+                            maxLength={20}
+                            disabled={isSubmitting}
+                            autoComplete="nickname"
+                          />
+                          <Button
+                            type="button"
+                            onClick={() => void handleSubmitScore()}
+                            disabled={isSubmitting}
+                            className="shrink-0"
+                          >
+                            {isSubmitting ? (
+                              <Loader2 className="h-4 w-4 animate-spin" aria-hidden="true" />
+                            ) : (
+                              <Send className="h-4 w-4" aria-hidden="true" />
+                            )}
+                            <span className="sr-only">{t.memoryGame.leaderboard.submit}</span>
+                          </Button>
+                        </div>
+                        {submitError && (
+                          <p className="mt-2 text-sm text-destructive" role="alert">
+                            {submitError}
+                          </p>
+                        )}
+                      </>
+                    )}
+                  </div>
+                )}
+
+                <Button className="mt-5" onClick={handleRestart}>
                   <RotateCcw className="h-4 w-4" />
                   {t.memoryGame.playAgain}
                 </Button>
               </motion.div>
             )}
           </AnimatePresence>
+
+          <Leaderboard gridSize={gridSize} refreshKey={leaderboardRefreshKey} />
         </div>
       </SectionReveal>
     </Section>

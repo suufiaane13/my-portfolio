@@ -2,7 +2,7 @@
 
 Copiez ici les fichiers depuis votre ancien portfolio :
 
-- `logo.png` — logo brand SH (navbar, footer, favicon, OG, menu mobile)
+- `logo.png` — généré depuis `favicon.svg` (navbar, footer, emails, OG)
 - `hajji.png` — photo profil (section À propos + menu mobile)
 - `CV_Soufiane.pdf`
 - `projects/world-explorer.png`

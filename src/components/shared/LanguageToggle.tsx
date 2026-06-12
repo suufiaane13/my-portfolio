@@ -1,5 +1,6 @@
 import { localeLabels } from '@/i18n'
 import { useTranslation } from '@/i18n/LanguageProvider'
+import { trackEvent } from '@/services/analytics'
 import {
   navActionClass,
   navActionIconClass,
@@ -13,7 +14,14 @@ export function LanguageToggle() {
   return (
     <button
       type="button"
-      onClick={toggleLocale}
+      onClick={() => {
+        trackEvent({
+          eventType: 'lang_switch',
+          locale: nextLocale,
+          metadata: { from: locale, to: nextLocale },
+        })
+        toggleLocale()
+      }}
       className={cn(
         navActionClass(),
         navActionIconClass,

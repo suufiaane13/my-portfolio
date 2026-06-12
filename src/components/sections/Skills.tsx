@@ -3,8 +3,7 @@ import { Code, Database, Palette, Server, Smartphone } from 'lucide-react'
 import { useState } from 'react'
 import { Section, SectionHeading } from '@/components/layout/Container'
 import { SectionReveal } from '@/components/shared/SectionReveal'
-import { coreStack, skillCategories } from '@/data/skills'
-import { profile } from '@/data/profile'
+import { usePortfolioContent } from '@/hooks/PortfolioContentProvider'
 import { useTranslation } from '@/i18n/LanguageProvider'
 import { cn } from '@/lib/utils'
 import './Skills.css'
@@ -26,11 +25,10 @@ const panelMotion = {
 
 export function Skills() {
   const { t } = useTranslation()
+  const { content } = usePortfolioContent()
   const [activeIndex, setActiveIndex] = useState(0)
-  const activeCategory = skillCategories[activeIndex]
-  const activeTranslation = activeCategory
-    ? t.skills.categories[activeCategory.key]
-    : t.skills.categories.frontend
+  const categories = content.skillCategories
+  const activeCategory = categories[activeIndex]
   const meta = categoryMeta[activeIndex] ?? categoryMeta[0]
   const Icon = meta.icon
 
@@ -43,14 +41,13 @@ export function Skills() {
           className="skills-nav flex gap-2 overflow-x-auto pb-1 lg:flex-col lg:overflow-visible lg:pb-0"
           aria-label={t.nav.skillCategories}
         >
-          {skillCategories.map((category, index) => {
+          {categories.map((category, index) => {
             const NavIcon = categoryMeta[index]?.icon ?? Code
             const isActive = index === activeIndex
-            const label = t.skills.categories[category.key]
 
             return (
               <button
-                key={category.key}
+                key={category.slug}
                 type="button"
                 onClick={() => setActiveIndex(index)}
                 aria-current={isActive ? 'true' : undefined}
@@ -73,7 +70,7 @@ export function Skills() {
                 </span>
                 <span className="min-w-0 flex-1">
                   <span className="block font-display text-sm font-semibold leading-tight">
-                    {label.title}
+                    {category.title}
                   </span>
                   <span className="mt-0.5 block text-xs text-muted-foreground">
                     {category.skills.length} {t.common.technos}
@@ -87,7 +84,7 @@ export function Skills() {
         <div className="relative min-h-[18rem]">
           <AnimatePresence mode="wait">
             <motion.article
-              key={activeCategory?.key}
+              key={activeCategory?.slug}
               initial={panelMotion.initial}
               animate={panelMotion.animate}
               exit={panelMotion.exit}
@@ -108,19 +105,19 @@ export function Skills() {
                       {String(activeIndex + 1).padStart(2, '0')}
                     </p>
                     <h3 className="mt-1 font-display text-2xl font-bold tracking-tight md:text-3xl">
-                      {activeTranslation.title}
+                      {activeCategory?.title}
                     </h3>
                     <p className="mt-2 max-w-xl text-sm leading-relaxed text-muted-foreground md:text-base">
-                      {activeTranslation.description}
+                      {activeCategory?.description}
                     </p>
                   </div>
                 </div>
 
                 <ul className="flex flex-wrap gap-2.5">
                   {activeCategory?.skills.map((skill) => (
-                    <li key={skill}>
+                    <li key={skill.name}>
                       <span className="inline-flex items-center rounded-lg border border-border bg-background/80 px-3.5 py-2 text-sm font-medium text-foreground transition-colors duration-200 hover:border-primary/35 hover:bg-primary/5 hover:text-primary">
-                        {skill}
+                        {skill.name}
                       </span>
                     </li>
                   ))}
@@ -137,7 +134,7 @@ export function Skills() {
             {t.skills.coreStack}
           </p>
           <div className="flex flex-wrap items-center justify-center gap-2">
-            {coreStack.map((tech) => (
+            {content.coreStack.map((tech) => (
               <span
                 key={tech}
                 className="rounded-full border border-primary/25 bg-primary/10 px-3 py-1 text-xs font-semibold text-primary"
@@ -146,7 +143,7 @@ export function Skills() {
               </span>
             ))}
             <span className="rounded-full border border-border bg-background px-3 py-1 text-xs font-medium text-muted-foreground">
-              {profile.stats.publicRepos} {t.skills.githubProjects}
+              {content.profile.publicRepos} {t.skills.githubProjects}
             </span>
           </div>
         </div>

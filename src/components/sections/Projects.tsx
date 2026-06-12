@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion'
 import { ExternalLink, Eye } from 'lucide-react'
-import { useEffect, useMemo, useState } from 'react'
+import { useMemo, useState } from 'react'
 import { GithubIcon } from '@/components/shared/SocialIcons'
 import { Section, SectionHeading } from '@/components/layout/Container'
 import { SectionReveal, staggerContainer, staggerItem } from '@/components/shared/SectionReveal'
@@ -8,9 +8,11 @@ import { Badge } from '@/components/ui/Badge'
 import { Button } from '@/components/ui/Button'
 import { Card } from '@/components/ui/Card'
 import { Dialog } from '@/components/ui/Dialog'
-import { projects, type Project } from '@/data/projects'
+import { usePortfolioContent } from '@/hooks/PortfolioContentProvider'
 import { useTranslation } from '@/i18n/LanguageProvider'
+import { trackEvent } from '@/services/analytics'
 import { cn } from '@/lib/utils'
+import type { PortfolioProject } from '@/types/portfolio'
 
 const PLACEHOLDER = '/placeholder-project.svg'
 
@@ -21,27 +23,21 @@ function projectActionsGridClass(actionCount: number) {
   )
 }
 
-interface DisplayProject extends Project {
-  title: string
-  description: string
-  longDescription: string
-}
-
 function ProjectCard({
   project,
   onOpen,
 }: {
-  project: DisplayProject
-  onOpen: (project: DisplayProject) => void
+  project: PortfolioProject
+  onOpen: (project: PortfolioProject) => void
 }) {
   const { t } = useTranslation()
-  const actionCount = (project.github ? 1 : 0) + 1
+  const actionCount = (project.githubUrl ? 1 : 0) + 1
 
   return (
     <Card className="group overflow-hidden border-border transition-all duration-300 hover:border-primary/40 hover:shadow-xl hover:shadow-primary/10">
       <div className="relative h-44 overflow-hidden sm:h-48">
         <img
-          src={project.image}
+          src={project.imageUrl}
           alt={project.title}
           className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
           loading="lazy"
@@ -82,22 +78,22 @@ function ProjectCard({
         </div>
 
         <div className={projectActionsGridClass(actionCount)}>
-          {project.github && (
+          {project.githubUrl && (
             <Button
               variant="outline"
               size="sm"
               className="min-w-0 w-full"
-              onClick={() => window.open(project.github, '_blank', 'noopener,noreferrer')}
+              onClick={() => window.open(project.githubUrl, '_blank', 'noopener,noreferrer')}
             >
               <GithubIcon className="h-4 w-4 shrink-0" />
               {t.common.github}
             </Button>
           )}
-          {project.demo ? (
+          {project.demoUrl ? (
             <Button
               size="sm"
               className="min-w-0 w-full"
-              onClick={() => window.open(project.demo, '_blank', 'noopener,noreferrer')}
+              onClick={() => window.open(project.demoUrl, '_blank', 'noopener,noreferrer')}
             >
               <ExternalLink className="h-4 w-4 shrink-0" />
               {t.common.demo}
@@ -121,40 +117,36 @@ function ProjectCard({
 
 export function Projects() {
   const { t, locale } = useTranslation()
-  const [activeFilter, setActiveFilter] = useState(t.common.all)
+  const { content } = usePortfolioContent()
+  const allLabel = t.common.all
+  const [activeFilter, setActiveFilter] = useState(allLabel)
+  const [selectedProject, setSelectedProject] = useState<PortfolioProject | null>(null)
 
-  useEffect(() => {
-    setActiveFilter(t.common.all)
-  }, [locale, t.common.all])
-  const [selectedProject, setSelectedProject] = useState<DisplayProject | null>(null)
-
-  const displayProjects = useMemo<DisplayProject[]>(
-    () =>
-      projects.map((project) => {
-        const copy = t.projects.items[project.id]
-        return {
-          ...project,
-          title: copy.title,
-          description: copy.description,
-          longDescription: copy.longDescription,
-        }
-      }),
-    [t],
-  )
+  const displayProjects = content.projects
 
   const filters = useMemo(() => {
     const tags = new Set<string>()
-    projects.forEach((project) => project.tags.forEach((tag) => tags.add(tag)))
-    return [t.common.all, ...Array.from(tags)]
-  }, [t.common.all])
+    displayProjects.forEach((project) => project.tags.forEach((tag) => tags.add(tag)))
+    return [allLabel, ...Array.from(tags)]
+  }, [allLabel, displayProjects])
 
   const filteredProjects = useMemo(() => {
-    if (activeFilter === t.common.all) return displayProjects
+    if (activeFilter === allLabel) return displayProjects
     return displayProjects.filter((project) => project.tags.includes(activeFilter))
-  }, [activeFilter, displayProjects, t.common.all])
+  }, [activeFilter, allLabel, displayProjects])
+
+  const handleOpenProject = (project: PortfolioProject) => {
+    trackEvent({
+      eventType: 'project_click',
+      sectionId: 'projects',
+      projectId: project.slug,
+      locale,
+    })
+    setSelectedProject(project)
+  }
 
   return (
-    <Section id="projects">
+    <Section id="projects" key={locale}>
       <SectionHeading title={t.projects.title} description={t.projects.description} />
 
       <SectionReveal className="mb-8 flex flex-wrap justify-center gap-2">
@@ -184,8 +176,8 @@ export function Projects() {
         className="grid grid-cols-1 gap-6 md:grid-cols-2 md:gap-8"
       >
         {filteredProjects.map((project) => (
-          <motion.div key={project.id} variants={staggerItem}>
-            <ProjectCard project={project} onOpen={setSelectedProject} />
+          <motion.div key={project.slug} variants={staggerItem}>
+            <ProjectCard project={project} onOpen={handleOpenProject} />
           </motion.div>
         ))}
       </motion.div>
@@ -203,7 +195,7 @@ export function Projects() {
           <div className="space-y-5">
             <div className="overflow-hidden rounded-xl border border-border">
               <img
-                src={selectedProject.image}
+                src={selectedProject.imageUrl}
                 alt={selectedProject.title}
                 className="h-48 w-full object-cover sm:h-56"
                 onError={(event) => {
@@ -224,26 +216,26 @@ export function Projects() {
 
             <div
               className={projectActionsGridClass(
-                (selectedProject.github ? 1 : 0) + (selectedProject.demo ? 1 : 0),
+                (selectedProject.githubUrl ? 1 : 0) + (selectedProject.demoUrl ? 1 : 0),
               )}
             >
-              {selectedProject.github && (
+              {selectedProject.githubUrl && (
                 <Button
                   variant="outline"
                   className="min-w-0 w-full"
                   onClick={() =>
-                    window.open(selectedProject.github, '_blank', 'noopener,noreferrer')
+                    window.open(selectedProject.githubUrl, '_blank', 'noopener,noreferrer')
                   }
                 >
                   <GithubIcon className="h-4 w-4 shrink-0" />
                   {t.common.github}
                 </Button>
               )}
-              {selectedProject.demo && (
+              {selectedProject.demoUrl && (
                 <Button
                   className="min-w-0 w-full"
                   onClick={() =>
-                    window.open(selectedProject.demo, '_blank', 'noopener,noreferrer')
+                    window.open(selectedProject.demoUrl, '_blank', 'noopener,noreferrer')
                   }
                 >
                   <ExternalLink className="h-4 w-4 shrink-0" />

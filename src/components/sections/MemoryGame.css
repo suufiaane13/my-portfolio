@@ -347,6 +347,11 @@
   color: var(--memory-blue) !important;
 }
 
+.memory-leaderboard__row--top {
+  border-color: rgb(37 99 235 / 0.22);
+  background: rgb(37 99 235 / 0.04);
+}
+
 @keyframes memory-win-in {
   from {
     opacity: 0;

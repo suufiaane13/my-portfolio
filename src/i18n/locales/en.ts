@@ -215,6 +215,19 @@ export const en: Translations = {
     winMessage: 'Congratulations! All pairs matched 🚀',
     winStats: '{{moves}} moves in {{time}}',
     backToPortfolio: 'Back to portfolio',
+    leaderboard: {
+      title: 'Leaderboard',
+      loading: 'Loading leaderboard…',
+      empty: 'No scores yet — be the first!',
+      nameLabel: 'Your nickname',
+      namePlaceholder: 'e.g. Soufiane',
+      nameError: 'Invalid nickname (2–20 characters, letters/numbers).',
+      submit: 'Save score',
+      success: 'Score saved!',
+      successRank: 'Score saved — you rank #{{rank}}!',
+      submitError: 'Could not save score. Please try again.',
+      rateLimit: 'Too many attempts — try again in a minute.',
+    },
     cards: {
       compass: 'Compass',
       waves: 'Waves',
@@ -243,7 +256,9 @@ export const en: Translations = {
     info: 'Information',
     spokenLanguages: 'Languages',
     formTitle: 'Send me a message',
-    formDescription: 'The form will be available soon. In the meantime, reach me by email or WhatsApp.',
+    formDescription: 'Fill out the form below — I usually reply within 24–48 hours.',
+    formUnavailable:
+      'Form temporarily unavailable. Please reach me by email or WhatsApp.',
     name: 'Full name *',
     namePlaceholder: 'Your name',
     email: 'Email *',
@@ -291,5 +306,7 @@ export const en: Translations = {
     error: 'Error while sending',
     errorDescription: 'Check your connection and try again.',
     submitError: 'Error while sending the message',
+    rateLimit: 'Too many messages sent',
+    rateLimitDescription: 'Try again in an hour or contact me on WhatsApp.',
   },
 }

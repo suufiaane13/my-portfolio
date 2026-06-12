@@ -96,6 +96,19 @@ export interface Translations {
     winMessage: string
     winStats: string
     backToPortfolio: string
+    leaderboard: {
+      title: string
+      loading: string
+      empty: string
+      nameLabel: string
+      namePlaceholder: string
+      nameError: string
+      submit: string
+      success: string
+      successRank: string
+      submitError: string
+      rateLimit: string
+    }
     cards: {
       compass: string
       waves: string
@@ -196,6 +209,7 @@ export interface Translations {
     submit: string
     submitSoon: string
     submitting: string
+    formUnavailable: string
     labels: {
       email: string
       whatsapp: string
@@ -234,5 +248,7 @@ export interface Translations {
     error: string
     errorDescription: string
     submitError: string
+    rateLimit: string
+    rateLimitDescription: string
   }
 }

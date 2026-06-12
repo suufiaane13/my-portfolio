@@ -6,6 +6,7 @@ import { Footer } from '@/components/layout/Footer'
 import { Navigation } from '@/components/layout/Navigation'
 import { MemoryGame } from '@/components/sections/MemoryGame'
 import { Analytics } from '@/components/shared/Analytics'
+import { PortfolioAnalytics } from '@/components/shared/PortfolioAnalytics'
 import { useTheme } from '@/hooks/useTheme'
 import { useTranslation } from '@/i18n/LanguageProvider'
 
@@ -20,6 +21,7 @@ export function GamePage() {
   return (
     <>
       <Analytics />
+      <PortfolioAnalytics />
       <Navigation isDark={isDark} onToggleTheme={toggleTheme} />
 
       <main className="min-h-screen bg-background">

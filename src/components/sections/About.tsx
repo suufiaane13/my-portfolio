@@ -1,14 +1,13 @@
 import { motion } from 'framer-motion'
-import { Code, Database, Globe, Smartphone } from 'lucide-react'
 import { useState } from 'react'
 import { Section, SectionHeading } from '@/components/layout/Container'
 import { SectionReveal, staggerContainer, staggerItem } from '@/components/shared/SectionReveal'
 import { Card } from '@/components/ui/Card'
-import { profile } from '@/data/profile'
+import { usePortfolioContent } from '@/hooks/PortfolioContentProvider'
 import { useTranslation } from '@/i18n/LanguageProvider'
+import { getExpertiseIcon } from '@/lib/portfolioIcons'
 import { cn } from '@/lib/utils'
 
-const expertiseIcons = [Code, Database, Smartphone, Globe]
 const expertiseColors = [
   'text-blue-500',
   'text-green-500',
@@ -19,6 +18,8 @@ const expertiseColors = [
 export function About() {
   const [imageLoaded, setImageLoaded] = useState(false)
   const { t } = useTranslation()
+  const { content } = usePortfolioContent()
+  const { profile, expertise } = content
 
   return (
     <Section id="about" className="bg-section-alt">
@@ -37,8 +38,8 @@ export function About() {
                 <div className="absolute inset-0 animate-pulse bg-muted" aria-hidden="true" />
               )}
               <img
-                src={profile.avatar}
-                alt={`${profile.name} — ${t.profile.title}`}
+                src={profile.avatarUrl}
+                alt={`${profile.name} — ${profile.title}`}
                 className={cn(
                   'h-full w-full object-cover object-[center_12%] transition-opacity duration-700',
                   imageLoaded ? 'opacity-100' : 'opacity-0',
@@ -62,7 +63,7 @@ export function About() {
             <h3 className="text-center font-display text-3xl font-bold md:text-4xl lg:text-left">
               {profile.name}
             </h3>
-            {t.profile.bio.map((paragraph) => (
+            {profile.bio.map((paragraph) => (
               <p
                 key={paragraph.slice(0, 24)}
                 className="mt-4 text-base leading-relaxed text-muted-foreground md:text-lg"
@@ -79,12 +80,12 @@ export function About() {
             viewport={{ once: true, amount: 0.1 }}
             className="grid grid-cols-2 gap-3 sm:gap-4"
           >
-            {t.profile.expertise.map((item, index) => {
-              const Icon = expertiseIcons[index] ?? Code
+            {expertise.map((item, index) => {
+              const Icon = getExpertiseIcon(item.iconKey)
               const color = expertiseColors[index] ?? 'text-primary'
 
               return (
-                <motion.div key={item.title} variants={staggerItem}>
+                <motion.div key={item.slug} variants={staggerItem}>
                   <Card className="h-full border-border/60 bg-card/80 p-4 backdrop-blur-sm transition-all duration-300 hover:border-primary/40 hover:shadow-lg hover:shadow-primary/5">
                     <div className="flex items-start gap-3">
                       <div className="rounded-lg bg-primary/10 p-2">

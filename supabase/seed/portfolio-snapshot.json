@@ -1,0 +1,431 @@
+{
+  "version": "1.0.0",
+  "exportedAt": "2026-06-12",
+  "owner": "Soufiane HAJJI",
+  "profile": {
+    "name": "Soufiane HAJJI",
+    "avatarUrl": "/hajji.png",
+    "logoUrl": "/logo.png",
+    "cvUrl": "/CV_Soufiane.pdf",
+    "cvFilename": "CV_Soufiane_HAJJI.pdf",
+    "githubUrl": "https://github.com/suufiaane13",
+    "githubHandle": "@suufiaane13",
+    "publicRepos": 33,
+    "memberSince": 2022,
+    "email": "hjisfn@gmail.com",
+    "whatsapp": "+212 602 353 136",
+    "whatsappHref": "https://wa.me/212602353136",
+    "address": "Hay Saada Rue Khaibar N°07, Ahfir"
+  },
+  "profileTranslations": {
+    "fr": {
+      "title": "Développeur Full-Stack & UI/UX Designer",
+      "tagline": "React, Laravel, Rust & Tauri — je construis des apps web, mobiles et outils pour startups et clients freelance.",
+      "availability": "Disponible pour freelance — hireable",
+      "bio": [
+        "Développeur full-stack basé au Maroc, spécialisé en React, TypeScript, Laravel et applications mobile-first. Plus de 30 projets open source sur GitHub, du site vitrine à la gestion métier.",
+        "Mon approche combine design soigné, code maintenable et livraison rapide — dashboards, e-commerce, apps Android et outils métier offline."
+      ]
+    },
+    "en": {
+      "title": "Full-Stack Developer & UI/UX Designer",
+      "tagline": "React, Laravel, Rust & Tauri — I build web apps, mobile apps, and tools for startups and freelance clients.",
+      "availability": "Available for freelance — hireable",
+      "bio": [
+        "Full-stack developer based in Morocco, specializing in React, TypeScript, Laravel, and mobile-first applications. 30+ open-source projects on GitHub, from landing pages to business management tools.",
+        "My approach combines polished design, maintainable code, and fast delivery — dashboards, e-commerce, Android apps, and offline business tools."
+      ]
+    }
+  },
+  "expertise": [
+    {
+      "slug": "frontend",
+      "iconKey": "code",
+      "sortOrder": 1,
+      "translations": {
+        "fr": { "title": "Frontend", "description": "React, Vite, Tailwind CSS v4, TypeScript" },
+        "en": { "title": "Frontend", "description": "React, Vite, Tailwind CSS v4, TypeScript" }
+      }
+    },
+    {
+      "slug": "backend",
+      "iconKey": "database",
+      "sortOrder": 2,
+      "translations": {
+        "fr": { "title": "Backend", "description": "Laravel, PHP, Python, FastAPI, Supabase" },
+        "en": { "title": "Backend", "description": "Laravel, PHP, Python, FastAPI, Supabase" }
+      }
+    },
+    {
+      "slug": "mobile",
+      "iconKey": "smartphone",
+      "sortOrder": 3,
+      "translations": {
+        "fr": { "title": "Mobile", "description": "Kotlin, Jetpack Compose, React Native" },
+        "en": { "title": "Mobile", "description": "Kotlin, Jetpack Compose, React Native" }
+      }
+    },
+    {
+      "slug": "systems",
+      "iconKey": "globe",
+      "sortOrder": 4,
+      "translations": {
+        "fr": { "title": "Systèmes", "description": "Rust, Tauri, Docker, Oracle DB" },
+        "en": { "title": "Systems", "description": "Rust, Tauri, Docker, Oracle DB" }
+      }
+    }
+  ],
+  "skillCategories": [
+    {
+      "slug": "frontend",
+      "sortOrder": 1,
+      "translations": {
+        "fr": { "title": "Front-end", "description": "Interfaces modernes, performantes et accessibles." },
+        "en": { "title": "Front-end", "description": "Modern, performant, and accessible interfaces." }
+      },
+      "skills": [
+        { "name": "HTML5", "sortOrder": 1, "isCore": false },
+        { "name": "CSS3", "sortOrder": 2, "isCore": false },
+        { "name": "JavaScript", "sortOrder": 3, "isCore": false },
+        { "name": "TypeScript", "sortOrder": 4, "isCore": true },
+        { "name": "React", "sortOrder": 5, "isCore": true },
+        { "name": "Vite", "sortOrder": 6, "isCore": false },
+        { "name": "Tailwind CSS", "sortOrder": 7, "isCore": false },
+        { "name": "Bootstrap", "sortOrder": 8, "isCore": false }
+      ]
+    },
+    {
+      "slug": "backend",
+      "sortOrder": 2,
+      "translations": {
+        "fr": { "title": "Back-end", "description": "APIs REST, logique métier et architectures maintenables." },
+        "en": { "title": "Back-end", "description": "REST APIs, business logic, and maintainable architectures." }
+      },
+      "skills": [
+        { "name": "PHP", "sortOrder": 1, "isCore": false },
+        { "name": "Python", "sortOrder": 2, "isCore": false },
+        { "name": "Laravel", "sortOrder": 3, "isCore": true },
+        { "name": "FastAPI", "sortOrder": 4, "isCore": false },
+        { "name": "Node.js", "sortOrder": 5, "isCore": false },
+        { "name": "Express.js", "sortOrder": 6, "isCore": false },
+        { "name": "API REST", "sortOrder": 7, "isCore": false }
+      ]
+    },
+    {
+      "slug": "mobile",
+      "sortOrder": 3,
+      "translations": {
+        "fr": { "title": "Mobile & Desktop", "description": "Applications natives et cross-platform." },
+        "en": { "title": "Mobile & Desktop", "description": "Native and cross-platform applications." }
+      },
+      "skills": [
+        { "name": "Kotlin", "sortOrder": 1, "isCore": true },
+        { "name": "Jetpack Compose", "sortOrder": 2, "isCore": false },
+        { "name": "React Native", "sortOrder": 3, "isCore": false },
+        { "name": "Rust", "sortOrder": 4, "isCore": false },
+        { "name": "Tauri", "sortOrder": 5, "isCore": false }
+      ]
+    },
+    {
+      "slug": "data",
+      "sortOrder": 4,
+      "translations": {
+        "fr": { "title": "Data & DevOps", "description": "Bases de données, déploiement et workflows de production." },
+        "en": { "title": "Data & DevOps", "description": "Databases, deployment, and production workflows." }
+      },
+      "skills": [
+        { "name": "MySQL", "sortOrder": 1, "isCore": false },
+        { "name": "MongoDB", "sortOrder": 2, "isCore": false },
+        { "name": "Oracle", "sortOrder": 3, "isCore": false },
+        { "name": "Supabase", "sortOrder": 4, "isCore": true },
+        { "name": "Docker", "sortOrder": 5, "isCore": true },
+        { "name": "Git/GitHub", "sortOrder": 6, "isCore": false }
+      ]
+    },
+    {
+      "slug": "design",
+      "sortOrder": 5,
+      "translations": {
+        "fr": { "title": "Design", "description": "UI/UX, prototypage et design systems." },
+        "en": { "title": "Design", "description": "UI/UX, prototyping, and design systems." }
+      },
+      "skills": [
+        { "name": "Figma", "sortOrder": 1, "isCore": false },
+        { "name": "Canva", "sortOrder": 2, "isCore": false },
+        { "name": "UI/UX", "sortOrder": 3, "isCore": false },
+        { "name": "Responsive", "sortOrder": 4, "isCore": false },
+        { "name": "PWA", "sortOrder": 5, "isCore": false }
+      ]
+    }
+  ],
+  "projects": [
+    {
+      "slug": "myfood",
+      "tags": ["Kotlin", "Jetpack Compose", "Supabase", "Android"],
+      "imageUrl": "/projects/myfood.png",
+      "githubUrl": "https://github.com/suufiaane13/MyFood",
+      "demoUrl": null,
+      "featured": true,
+      "year": 2026,
+      "sortOrder": 1,
+      "translations": {
+        "fr": {
+          "title": "MyFood",
+          "description": "App Android de commande de plats : menu, panier, livraison et espace restaurateur.",
+          "longDescription": "Application mobile Kotlin + Jetpack Compose avec backend Supabase (Auth, PostgreSQL, Storage). Parcours complet client et espace de gestion pour restaurateurs."
+        },
+        "en": {
+          "title": "MyFood",
+          "description": "Android food ordering app: menu, cart, delivery, and restaurant management space.",
+          "longDescription": "Kotlin + Jetpack Compose mobile app with Supabase backend (Auth, PostgreSQL, Storage). Full customer journey and management space for restaurant owners."
+        }
+      }
+    },
+    {
+      "slug": "pure-power-menu",
+      "tags": ["TypeScript", "React", "Tailwind CSS v4", "Vite"],
+      "imageUrl": "/projects/pure-power.png",
+      "githubUrl": "https://github.com/suufiaane13/pure-power-menu",
+      "demoUrl": "https://pure-power-menu.netlify.app/",
+      "featured": true,
+      "year": 2026,
+      "sortOrder": 2,
+      "translations": {
+        "fr": {
+          "title": "Pure Power Menu",
+          "description": "Menu digital mobile-first pour snack fitness à Oujda — macros, QR code table, React + Tailwind v4.",
+          "longDescription": "Carte digitale interactive pour Pure Power avec fiches produits Mass Gainer & Shred, macros nutritionnels, QR code par table et design mobile-first."
+        },
+        "en": {
+          "title": "Pure Power Menu",
+          "description": "Mobile-first digital menu for a fitness snack bar in Oujda — macros, table QR codes, React + Tailwind v4.",
+          "longDescription": "Interactive digital menu for Pure Power with Mass Gainer & Shred product pages, nutritional macros, per-table QR codes, and mobile-first design."
+        }
+      }
+    },
+    {
+      "slug": "world-explorer",
+      "tags": ["JavaScript", "React", "Tailwind CSS", "API"],
+      "imageUrl": "/projects/world-explorer.png",
+      "githubUrl": "https://github.com/suufiaane13/Wold-Explorer",
+      "demoUrl": "https://world-explorer0.netlify.app/",
+      "featured": false,
+      "year": 2025,
+      "sortOrder": 3,
+      "translations": {
+        "fr": {
+          "title": "World Explorer",
+          "description": "Explorez 195+ pays, leurs cultures, capitales et populations. Infos temps réel et anecdotes IA.",
+          "longDescription": "Application web interactive pour découvrir le monde : données en temps réel, favoris, anecdotes générées par IA et design moderne. Gratuit et interactif."
+        },
+        "en": {
+          "title": "World Explorer",
+          "description": "Explore 195+ countries, their cultures, capitals, and populations. Real-time info and AI anecdotes.",
+          "longDescription": "Interactive web app to discover the world: real-time data, favorites, AI-generated anecdotes, and modern design. Free and interactive."
+        }
+      }
+    },
+    {
+      "slug": "sultan-kunafa",
+      "tags": ["TypeScript", "React", "Tailwind CSS", "Vite"],
+      "imageUrl": "/projects/sultan-kunafa.png",
+      "githubUrl": "https://github.com/suufiaane13/sultan_kunafa",
+      "demoUrl": "https://sweets-48.netlify.app/",
+      "featured": false,
+      "year": 2026,
+      "sortOrder": 4,
+      "translations": {
+        "fr": {
+          "title": "Sultan Kunafa",
+          "description": "Site vitrine premium pour marque de desserts orientaux — commande rapide via WhatsApp.",
+          "longDescription": "Landing page haut de gamme mettant en valeur l'expérience visuelle autour de la kunafa. Frontend optimisé pour la conversion et la commande via WhatsApp."
+        },
+        "en": {
+          "title": "Sultan Kunafa",
+          "description": "Premium showcase site for an oriental desserts brand — quick ordering via WhatsApp.",
+          "longDescription": "High-end landing page highlighting the visual experience around kunafa. Frontend optimized for conversion and WhatsApp ordering."
+        }
+      }
+    }
+  ],
+  "experiences": [
+    {
+      "slug": "freelance",
+      "sortOrder": 1,
+      "technologies": ["React", "TypeScript", "Laravel", "Supabase", "Kotlin", "Docker"],
+      "isCurrent": true,
+      "projectSlug": null,
+      "translations": {
+        "fr": {
+          "period": "2024 — Présent",
+          "role": "Développeur Full-Stack Freelance",
+          "company": "Maroc · Remote",
+          "description": "33+ repos publics sur GitHub. Dashboards, apps mobile (Kotlin/Compose), menus digitaux, gestion médicale (Oracle/FastAPI) et sites vitrine pour clients locaux."
+        },
+        "en": {
+          "period": "2024 — Present",
+          "role": "Freelance Full-Stack Developer",
+          "company": "Morocco · Remote",
+          "description": "33+ public repos on GitHub. Dashboards, mobile apps (Kotlin/Compose), digital menus, medical management (Oracle/FastAPI), and showcase sites for local clients."
+        }
+      }
+    },
+    {
+      "slug": "pure-power",
+      "sortOrder": 2,
+      "technologies": ["React", "TypeScript", "Tailwind CSS v4", "Vite"],
+      "isCurrent": false,
+      "projectSlug": "pure-power-menu",
+      "translations": {
+        "fr": {
+          "period": "2026",
+          "role": "Développeur Frontend",
+          "company": "Pure Power — Snack fitness, Oujda",
+          "description": "Création du menu digital mobile-first : carte interactive, fiches macros, QR code par table et déploiement en production."
+        },
+        "en": {
+          "period": "2026",
+          "role": "Frontend Developer",
+          "company": "Pure Power — Fitness snack, Oujda",
+          "description": "Built a mobile-first digital menu: interactive menu, macro cards, per-table QR codes, and production deployment."
+        }
+      }
+    },
+    {
+      "slug": "cmfp",
+      "sortOrder": 3,
+      "technologies": ["PHP", "Laravel", "Blade", "MySQL", "Git"],
+      "isCurrent": false,
+      "projectSlug": null,
+      "translations": {
+        "fr": {
+          "period": "2023 — 2025",
+          "role": "Technicien Spécialisé — Développement Digital",
+          "company": "Centre Mixte de Formation Professionnelle, Oujda",
+          "description": "Projets académiques Laravel/Blade : bibliothèque, inventaire IT, e-learning, gestion commerciale. Bases solides PHP, MySQL et méthode Agile."
+        },
+        "en": {
+          "period": "2023 — 2025",
+          "role": "Specialized Technician — Digital Development",
+          "company": "Professional Training Center, Oujda",
+          "description": "Academic Laravel/Blade projects: library, IT inventory, e-learning, business management. Strong foundations in PHP, MySQL, and Agile methodology."
+        }
+      }
+    }
+  ],
+  "education": [
+    {
+      "slug": "tsdd",
+      "sortOrder": 1,
+      "isCompleted": false,
+      "translations": {
+        "fr": {
+          "periodLabel": "2023–2025",
+          "title": "Technicien Spécialisé en Développement Digital",
+          "description": "Formation en développement web et mobile",
+          "institution": "Centre Mixte de Formation Professionnelle, Oujda"
+        },
+        "en": {
+          "periodLabel": "2023–2025",
+          "title": "Specialized Technician in Digital Development",
+          "description": "Training in web and mobile development",
+          "institution": "Professional Training Center, Oujda"
+        }
+      }
+    },
+    {
+      "slug": "bac",
+      "sortOrder": 2,
+      "isCompleted": true,
+      "translations": {
+        "fr": {
+          "periodLabel": "2022–2023",
+          "title": "Baccalauréat Sciences Physiques — Option Français",
+          "description": "Diplôme du baccalauréat avec spécialisation en sciences physiques",
+          "institution": "Lycée Ennahda, Ahfir"
+        },
+        "en": {
+          "periodLabel": "2022–2023",
+          "title": "High School Diploma in Physical Sciences — French Option",
+          "description": "Baccalaureate with specialization in physical sciences",
+          "institution": "Ennahda High School, Ahfir"
+        }
+      }
+    }
+  ],
+  "interests": [
+    {
+      "slug": "swimming",
+      "iconKey": "waves",
+      "sortOrder": 1,
+      "translations": { "fr": { "label": "Natation" }, "en": { "label": "Swimming" } }
+    },
+    {
+      "slug": "chess",
+      "iconKey": "crown",
+      "sortOrder": 2,
+      "translations": { "fr": { "label": "Jeu d'échecs" }, "en": { "label": "Chess" } }
+    },
+    {
+      "slug": "travel",
+      "iconKey": "plane",
+      "sortOrder": 3,
+      "translations": { "fr": { "label": "Voyages" }, "en": { "label": "Travel" } }
+    }
+  ],
+  "socialLinks": [
+    {
+      "slug": "instagram",
+      "label": "Instagram",
+      "href": "https://instagram.com/suuf.iaane",
+      "handle": "@suuf.iaane",
+      "iconKey": "instagram",
+      "sortOrder": 1
+    },
+    {
+      "slug": "github",
+      "label": "GitHub",
+      "href": "https://github.com/suufiaane13",
+      "handle": "@suufiaane13",
+      "iconKey": "github",
+      "sortOrder": 2
+    },
+    {
+      "slug": "whatsapp",
+      "label": "WhatsApp",
+      "href": "https://wa.me/212602353136",
+      "handle": "+212 602 353 136",
+      "iconKey": "whatsapp",
+      "sortOrder": 3
+    }
+  ],
+  "spokenLanguages": [
+    {
+      "slug": "ar",
+      "flagEmoji": "🇲🇦",
+      "sortOrder": 1,
+      "translations": {
+        "fr": { "name": "Arabe", "level": "Langue maternelle" },
+        "en": { "name": "Arabic", "level": "Native language" }
+      }
+    },
+    {
+      "slug": "fr",
+      "flagEmoji": "🇫🇷",
+      "sortOrder": 2,
+      "translations": {
+        "fr": { "name": "Français", "level": "Courant" },
+        "en": { "name": "French", "level": "Fluent" }
+      }
+    },
+    {
+      "slug": "en",
+      "flagEmoji": "🇬🇧",
+      "sortOrder": 3,
+      "translations": {
+        "fr": { "name": "Anglais", "level": "Courant" },
+        "en": { "name": "English", "level": "Fluent" }
+      }
+    }
+  ]
+}
