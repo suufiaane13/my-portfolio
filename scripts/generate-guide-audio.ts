@@ -18,10 +18,10 @@ import { pipeline } from 'node:stream/promises'
 import { fileURLToPath } from 'node:url'
 import { fr } from '../src/i18n/locales/fr'
 import { en } from '../src/i18n/locales/en'
-import { buildGuideSpeechText } from '../src/lib/guideSpeechText'
 import { buildStaticPortfolio } from '../src/lib/staticPortfolio'
 import { buildChatKnowledge } from '../src/lib/portfolioChat/engine'
 import { getGuideReplyForTopic } from '../src/lib/portfolioChat/guide'
+import { resolveGuideSpeechText } from '../src/lib/portfolioChat/guideSpeechScripts'
 import { chunkIdForProject, chunkIdForTopic } from '../src/lib/portfolioChat/guideTopics'
 import type { Locale } from '../src/i18n/types'
 import type { GuideTopicId } from '../src/lib/portfolioChat/guideTopics'
@@ -85,14 +85,17 @@ async function downloadFile(url: string, destination: string, force = false) {
   await pipeline(response.body, createWriteStream(destination))
 }
 
-function getPiperExecutable(): string {
+function findPiperExecutable(): string | null {
   const candidates = [
     join(piperDir, 'piper.exe'),
     join(piperDir, 'piper', 'piper.exe'),
     join(toolsDir, 'piper.exe'),
   ]
+  return candidates.find((path) => existsSync(path)) ?? null
+}
 
-  const found = candidates.find((path) => existsSync(path))
+function getPiperExecutable(): string {
+  const found = findPiperExecutable()
   if (!found) {
     throw new Error('Piper executable not found after install')
   }
@@ -100,8 +103,11 @@ function getPiperExecutable(): string {
 }
 
 async function ensurePiper() {
-  const piperExe = join(piperDir, 'piper.exe')
-  if (existsSync(piperExe)) return
+  // Zip extracts to scripts/.tools/piper/piper/piper.exe on Windows — accept any layout
+  if (findPiperExecutable()) {
+    console.log('✅ Piper déjà installé — extraction ignorée')
+    return
+  }
 
   mkdirSync(toolsDir, { recursive: true })
   const zipPath = join(toolsDir, PIPER_ARCHIVE)
@@ -113,7 +119,14 @@ async function ensurePiper() {
   mkdirSync(piperDir, { recursive: true })
   const extract = spawnSync('tar', ['-xf', zipPath, '-C', piperDir], { stdio: 'inherit' })
   if (extract.status !== 0) {
-    throw new Error('Échec extraction Piper (tar). Extrayez manuellement le zip dans scripts/.tools/piper/')
+    // Partial extract / locked DLLs: continue if piper.exe is usable
+    if (findPiperExecutable()) {
+      console.warn('⚠️  Extraction tar incomplète, mais piper.exe est utilisable — on continue')
+      return
+    }
+    throw new Error(
+      'Échec extraction Piper (tar). Fermez les processus qui verrouillent scripts/.tools/piper/, puis relancez.',
+    )
   }
 }
 
@@ -153,7 +166,7 @@ function collectGuideEntries(): GuideAudioEntry[] {
         chunkId,
         title,
         text: reply.text,
-        speechText: buildGuideSpeechText(title, reply.text, locale),
+        speechText: resolveGuideSpeechText(chunkId, title, reply.text, locale),
       })
     }
 
@@ -169,7 +182,7 @@ function collectGuideEntries(): GuideAudioEntry[] {
         chunkId,
         title: project.title,
         text,
-        speechText: buildGuideSpeechText(project.title, text, locale),
+        speechText: resolveGuideSpeechText(chunkId, project.title, text, locale),
       })
     }
   }

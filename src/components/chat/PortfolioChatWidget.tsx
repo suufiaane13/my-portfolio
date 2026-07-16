@@ -131,7 +131,7 @@ export function PortfolioChatWidget() {
     intro,
   } = usePortfolioGuide()
 
-  const { supported: speechSupported, isSpeaking, speakAnswer, preloadAnswer, toggleSpeech } = useGuideSpeech({
+  const { supported: speechSupported, isSpeaking, preloadAnswer, toggleSpeech } = useGuideSpeech({
     isOpen,
     view,
     locale,
@@ -255,8 +255,7 @@ export function PortfolioChatWidget() {
                               if (chunkId) preloadAnswer(chunkId)
                             }}
                             onClick={() => {
-                              const answer = selectTopic(topicId)
-                              if (answer) speakAnswer(answer.chunkId, answer.title, answer.text)
+                              selectTopic(topicId)
                             }}
                             className={cn(
                               'portfolio-guide-topic flex flex-col items-center gap-2 rounded-xl border border-border',
@@ -305,8 +304,7 @@ export function PortfolioChatWidget() {
                             type="button"
                             onPointerEnter={() => preloadAnswer(`project-${project.slug}`)}
                             onClick={() => {
-                              const answer = selectProject(project.slug, project.title)
-                              if (answer) speakAnswer(answer.chunkId, answer.title, answer.text)
+                              selectProject(project.slug, project.title)
                             }}
                             className={cn(
                               'flex w-full items-center justify-between gap-3 rounded-xl border border-border',

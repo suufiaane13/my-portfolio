@@ -4,7 +4,7 @@ import {
   guideAudioUrl,
   isGuideAudioAvailable,
 } from '@/lib/portfolioChat/guideAudio'
-import { buildGuideSpeechText } from '@/lib/guideSpeechText'
+import { resolveGuideSpeechText } from '@/lib/portfolioChat/guideSpeechScripts'
 
 let activeUtterance: SpeechSynthesisUtterance | null = null
 let activeAudio: HTMLAudioElement | null = null
@@ -120,6 +120,7 @@ export function stopGuideSpeech(): void {
 }
 
 async function speakWithWebSpeech(
+  chunkId: string,
   title: string,
   body: string,
   locale: Locale,
@@ -127,7 +128,7 @@ async function speakWithWebSpeech(
 ): Promise<void> {
   if (!('speechSynthesis' in window)) return
 
-  const text = buildGuideSpeechText(title, body, locale)
+  const text = resolveGuideSpeechText(chunkId, title, body, locale)
   if (!text) return
 
   const startSpeaking = (voices: SpeechSynthesisVoice[]) => {
@@ -231,9 +232,9 @@ export async function speakGuideAnswer(
 
   const manifest = manifestCache ?? (await loadGuideAudioManifest())
   if (manifest && !isGuideAudioAvailable(manifest, locale, chunkId)) {
-    await speakWithWebSpeech(title, body, locale, options)
+    await speakWithWebSpeech(chunkId, title, body, locale, options)
     return
   }
 
-  await speakWithWebSpeech(title, body, locale, options)
+  await speakWithWebSpeech(chunkId, title, body, locale, options)
 }

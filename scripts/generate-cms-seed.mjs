@@ -33,6 +33,10 @@ const lines = [
   '',
   'begin;',
   '',
+  '-- Retirer l’ancienne expérience académique CMFP (remplacée par le stage FSO)',
+  "delete from public.experience_translations where experience_slug = 'cmfp';",
+  "delete from public.experiences where slug = 'cmfp';",
+  '',
 ]
 
 const p = snapshot.profile

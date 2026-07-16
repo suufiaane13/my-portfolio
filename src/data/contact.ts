@@ -16,13 +16,13 @@ export interface SocialLink {
 }
 
 export const whatsapp = {
-  value: '+212 602 353 136',
-  href: 'https://wa.me/212602353136',
+  value: '+212 641 454 572',
+  href: 'https://wa.me/212641454572',
 } as const
 
 export const contactValues = {
-  email: 'hjisfn@gmail.com',
-  address: 'Hay Saada Rue Khaibar N°07, Ahfir',
+  email: 'hji.sfn@gmail.com',
+  address: 'Oujda, Maroc',
 } as const
 
 export const socialLinks: SocialLink[] = [

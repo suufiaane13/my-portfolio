@@ -149,29 +149,17 @@ export function Navigation({ isDark, onToggleTheme }: NavigationProps) {
             </div>
 
             {!isAuthPage && (
-              <div className={navActionShellClass}>
+              <div className={cn(navActionShellClass, 'hidden sm:block')}>
                 <Link
                   to={authHref}
                   className={cn(
                     navActionClass({ active: isAdminArea || location.pathname === '/login' }),
                     navActionPillClass,
-                    'hidden sm:inline-flex',
                   )}
                   aria-label={authLabel}
                 >
                   <AuthIcon className="h-4 w-4 shrink-0" aria-hidden="true" />
                   {authLabel}
-                </Link>
-                <Link
-                  to={authHref}
-                  className={cn(
-                    navActionClass({ active: isAdminArea || location.pathname === '/login' }),
-                    navActionIconClass,
-                    'sm:hidden',
-                  )}
-                  aria-label={authLabel}
-                >
-                  <AuthIcon className="h-4 w-4" aria-hidden="true" />
                 </Link>
               </div>
             )}
@@ -305,22 +293,9 @@ export function Navigation({ isDark, onToggleTheme }: NavigationProps) {
             <Link
               to={authHref}
               onClick={() => setMenuOpen(false)}
-              className={cn(
-                'group flex items-center gap-2.5 rounded-xl border px-3 py-2.5 transition-all duration-200',
-                'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background',
-                'border-border bg-card/60 hover:border-primary/30 hover:bg-primary/5',
-              )}
+              className="mt-1 block px-1 py-1 text-center text-[11px] text-muted-foreground/55 transition-colors hover:text-muted-foreground"
             >
-              <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-muted text-foreground">
-                <AuthIcon className="h-4 w-4" aria-hidden="true" />
-              </span>
-              <span className="min-w-0 flex-1 text-left font-display text-sm font-semibold text-foreground">
-                {authLabel}
-              </span>
-              <ChevronRight
-                className="h-4 w-4 shrink-0 text-muted-foreground transition-transform group-hover:translate-x-0.5"
-                aria-hidden="true"
-              />
+              {authLabel}
             </Link>
           </div>
         </nav>

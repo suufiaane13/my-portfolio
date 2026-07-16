@@ -183,6 +183,14 @@ export async function fetchPortfolioContent(locale: Locale): Promise<PortfolioCo
 
   if (!profileRes.data) return null
 
+  // Incomplete CMS seed → keep static fallback (avoid empty projects/skills in prod)
+  const projectCount = (projectsRes.data as ProjectRow[] | null)?.length ?? 0
+  const skillCount = (skillsRes.data as SkillRow[] | null)?.length ?? 0
+  if (projectCount === 0 || skillCount === 0) {
+    console.warn('[portfolio] Supabase CMS incomplete (projects/skills empty) — using static content')
+    return null
+  }
+
   const projects = (projectsRes.data as ProjectRow[]).map((row) => ({
     slug: row.slug,
     tags: row.tags,

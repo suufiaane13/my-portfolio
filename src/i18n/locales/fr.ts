@@ -75,7 +75,7 @@ export const fr: Translations = {
     close: 'Fermer le guide',
     backToMenu: 'Retour au menu',
     chooseProject: 'Choisir un projet',
-    listenAgain: 'Réécouter',
+    listenAgain: 'Écouter',
     stopSpeech: 'Arrêter la lecture',
     speaking: 'Lecture en cours',
     menu: {
@@ -135,17 +135,17 @@ export const fr: Translations = {
   profile: {
     title: 'Développeur Full-Stack & UI/UX Designer',
     tagline:
-      'React, Laravel, Rust & Tauri — je construis des apps web, mobiles et outils pour startups et clients freelance.',
-    availability: 'Disponible pour freelance — hireable',
+      'Étudiant en Licence Professionnelle Informatique à SUP MTI — développement web (HTML, CSS, PHP, JavaScript, React, Laravel) et logiciel (Java, Kotlin).',
+    availability: 'À la recherche d’un poste — disponible pour missions',
     bio: [
-      'Développeur full-stack basé au Maroc, spécialisé en React, TypeScript, Laravel et applications mobile-first. Plus de 30 projets open source sur GitHub, du site vitrine à la gestion métier.',
-      'Mon approche combine design soigné, code maintenable et livraison rapide — dashboards, e-commerce, apps Android et outils métier offline.',
+      'Développeur Full-Stack et étudiant en Licence Professionnelle Informatique à SUP MTI, je suis à la recherche d’un poste me permettant de mettre en pratique mes compétences en développement web (HTML, CSS, PHP, JavaScript, React, Laravel) et logiciel (Java, Kotlin).',
+      'Curieux et rigoureux, je souhaite contribuer à des projets concrets au sein d’une équipe dynamique.',
     ],
     expertise: [
-      { title: 'Frontend', description: 'React, Vite, Tailwind CSS v4, TypeScript' },
-      { title: 'Backend', description: 'Laravel, PHP, Python, FastAPI, Supabase' },
-      { title: 'Mobile', description: 'Kotlin, Jetpack Compose, React Native' },
-      { title: 'Systèmes', description: 'Rust, Tauri, Docker, Oracle DB' },
+      { title: 'Frontend', description: 'HTML, CSS, JavaScript, React, TypeScript' },
+      { title: 'Backend', description: 'PHP, Laravel, Python, FastAPI, Supabase' },
+      { title: 'Mobile', description: 'Kotlin, Jetpack Compose, Java' },
+      { title: 'Systèmes', description: 'Docker, Git, MySQL, Oracle DB' },
     ],
   },
   skills: {
@@ -194,12 +194,12 @@ export const fr: Translations = {
         description:
           'Création du menu digital mobile-first : carte interactive, fiches macros, QR code par table et déploiement en production.',
       },
-      cmfp: {
-        period: '2023 — 2025',
-        role: 'Technicien Spécialisé — Développement Digital',
-        company: 'Centre Mixte de Formation Professionnelle, Oujda',
+      fsoStage: {
+        period: 'Mars 2025 (1 mois)',
+        role: 'Stagiaire informatique',
+        company: 'Service Informatique, Faculté des Sciences d’Oujda — Université Mohammed Premier',
         description:
-          'Projets académiques Laravel/Blade : bibliothèque, inventaire IT, e-learning, gestion commerciale. Bases solides PHP, MySQL et méthode Agile.',
+          'Stage pratique au service informatique : support, maintenance et accompagnement des besoins numériques de la faculté.',
       },
     },
   },
@@ -207,6 +207,12 @@ export const fr: Translations = {
     title: 'Formation',
     description: 'Mon parcours académique',
     items: {
+      licence: {
+        year: '2025–2026',
+        title: 'Licence Professionnelle en Informatique',
+        description: 'Formation en cours',
+        institution: 'École SUP MTI, Oujda — en cours',
+      },
       tsdd: {
         year: '2023–2025',
         title: 'Technicien Spécialisé en Développement Digital',

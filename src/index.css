@@ -133,6 +133,15 @@
   }
 }
 
+/* Instant theme switch: skip animating every transition-colors / transition-all element */
+html.theme-switching,
+html.theme-switching *,
+html.theme-switching *::before,
+html.theme-switching *::after {
+  transition: none !important;
+  animation: none !important;
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;

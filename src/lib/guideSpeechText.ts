@@ -1,236 +1,55 @@
 import type { Locale } from '@/i18n/types'
 
 /**
- * Locale-aware pronunciation map for tech terms, brands, and awkward acronyms.
- * Longer / more specific keys first (matched as whole words, case-insensitive).
- * Values are phonetic spellings tuned for Piper + Web Speech (not display text).
+ * Safe aliases only — no letter-by-letter dotted acronyms (H.T.M.L., C.S.S.).
+ * Longer keys first. Matched as whole words, case-insensitive.
  */
-const TECH_PRONUNCIATION: Record<Locale, Array<[string, string]>> = {
+const MINIMAL_SPEECH_ALIASES: Record<Locale, Array<[string, string]>> = {
   en: [
-    // Multi-word / versioned stacks
-    ['Jetpack Compose', 'Jet pack Compose'],
-    ['React Native', 'React Native'],
-    ['Tailwind CSS v4', 'Tailwind C S S version 4'],
-    ['Tailwind CSS', 'Tailwind C S S'],
-    ['Tailwind', 'Tailwind'],
-    ['Express.js', 'Express J S'],
-    ['ExpressJS', 'Express J S'],
-    ['Node.js', 'Node J S'],
-    ['NodeJS', 'Node J S'],
-    ['Next.js', 'Next J S'],
-    ['Vue.js', 'View J S'],
+    ['Git/GitHub', 'Git and GitHub'],
+    ['UI/UX', 'UI UX'],
     ['Kotlin/Compose', 'Kotlin Compose'],
-    ['Git/GitHub', 'Git and Git Hub'],
-    ['CI/CD', 'C I C D'],
-    ['UI/UX', 'U I U X'],
-    ['API REST', 'REST A P I'],
-    ['REST API', 'REST A P I'],
-    ['GraphQL', 'Graph Q L'],
-    ['PostgreSQL', 'Postgres Q L'],
-    ['TypeScript', 'Type Script'],
-    ['JavaScript', 'Java Script'],
-    ['MongoDB', 'Mongo D B'],
-    ['FastAPI', 'Fast A P I'],
-    ['NoSQL', 'No S Q L'],
-    ['MySQL', 'My sequel'],
-    ['HTML5', 'H T M L 5'],
-    ['HTML', 'H T M L'],
-    ['CSS3', 'C S S 3'],
-    ['CSS', 'C S S'],
-    ['JWT', 'J W T'],
-    ['OAuth', 'Oh auth'],
-    ['OpenAPI', 'Open A P I'],
+    ['Laravel/Blade', 'Laravel Blade'],
+    ['Oracle/FastAPI', 'Oracle FastAPI'],
     ['Full-Stack', 'full stack'],
     ['full-stack', 'full stack'],
-    ['Full Stack', 'full stack'],
-    ['fullstack', 'full stack'],
-    ['Front-end', 'front end'],
-    ['Back-end', 'back end'],
-    ['Frontend', 'front end'],
-    ['Backend', 'back end'],
+    ['Front-end', 'Frontend'],
+    ['Back-end', 'Backend'],
     ['mobile-first', 'mobile first'],
     ['open-source', 'open source'],
-    ['open source', 'open source'],
-    ['e-commerce', 'e commerce'],
-    ['e-learning', 'e learning'],
-    ['AI-generated', 'A I generated'],
-    // Platforms & brands
-    ['Supabase', 'Super base'],
-    ['GitHub', 'Git Hub'],
-    ['LinkedIn', 'Linkt in'],
-    ['Instagram', 'Instagram'],
-    ['WhatsApp', 'Whats App'],
-    ['Netlify', 'Net li fy'],
-    ['Vercel', 'Ver sell'],
-    ['Android', 'Android'],
-    ['Bootstrap', 'Boot strap'],
-    ['Laravel', 'Lara vel'],
-    ['Docker', 'Docker'],
-    ['Kotlin', 'Caught lin'],
-    ['Python', 'Pie thon'],
-    ['Oracle', 'Oracle'],
-    ['Figma', 'Fig ma'],
-    ['Canva', 'Can va'],
-    ['Tauri', 'Tow ree'],
-    ['Vite', 'Veet'],
-    ['React', 'React'],
-    ['Rust', 'Rust'],
-    ['Blade', 'Blade'],
-    ['Nginx', 'Engine X'],
-    ['Redis', 'Red iss'],
-    ['AWS', 'A W S'],
-    ['SaaS', 'sass'],
-    ['DevOps', 'Dev ops'],
-    ['Scrum', 'Scrum'],
-    ['Agile', 'Agile'],
-    // Roles & soft product terms
-    ['freelance', 'free lance'],
-    ['Freelance', 'free lance'],
-    ['freelancer', 'free lancer'],
-    ['hireable', 'hireable'],
-    ['Remote', 'remote'],
-    ['Responsive', 'responsive'],
-    ['Storage', 'storage'],
-    ['Auth', 'auth'],
-    // Acronyms (short — after longer phrases)
-    ['PWA', 'P W A'],
-    ['SQL', 'S Q L'],
-    ['API', 'A P I'],
-    ['PHP', 'P H P'],
-    ['SDK', 'S D K'],
-    ['CLI', 'C L I'],
-    ['IDE', 'I D E'],
-    ['UX', 'U X'],
-    ['UI', 'U I'],
-    ['QR', 'Q R'],
-    ['IT', 'I T'],
-    ['AI', 'A I'],
-    ['CV', 'C V'],
-    ['Git', 'Git'],
-    ['npm', 'N P M'],
-    ['JSON', 'Jason'],
-    ['XML', 'X M L'],
-    ['YAML', 'Yam el'],
-    ['HTTPS', 'H T T P S'],
-    ['HTTP', 'H T T P'],
-    ['URL', 'U R L'],
-    ['SEO', 'S E O'],
-    ['CMS', 'C M S'],
+    ['e-commerce', 'ecommerce'],
+    ['e-learning', 'elearning'],
+    ['Express.js', 'Express JS'],
+    ['Node.js', 'Node JS'],
+    ['Tailwind CSS v4', 'Tailwind CSS version 4'],
+    ['HTML5', 'HTML 5'],
+    ['CSS3', 'CSS 3'],
+    ['API REST', 'REST API'],
+    ['REST APIs', 'REST APIs'],
   ],
   fr: [
-    // Multi-word / versioned stacks
-    ['Jetpack Compose', 'Djet pack Compose'],
-    ['React Native', 'React Native'],
-    ['Tailwind CSS v4', 'Tail wind C S S version 4'],
-    ['Tailwind CSS', 'Tail wind C S S'],
-    ['Tailwind', 'Tail wind'],
-    ['Express.js', 'Express J S'],
-    ['ExpressJS', 'Express J S'],
-    ['Node.js', 'Node J S'],
-    ['NodeJS', 'Node J S'],
-    ['Next.js', 'Next J S'],
-    ['Vue.js', 'Vue J S'],
+    ['Git/GitHub', 'Git et GitHub'],
+    ['UI/UX', 'UI UX'],
     ['Kotlin/Compose', 'Kotlin Compose'],
-    ['Git/GitHub', 'guit et guit heub'],
-    ['CI/CD', 'C I C D'],
-    ['UI/UX', 'U I U X'],
-    ['API REST', 'A P I REST'],
-    ['REST API', 'REST A P I'],
-    ['GraphQL', 'Graph Q L'],
-    ['PostgreSQL', 'Postgres Q L'],
-    ['TypeScript', 'Type Script'],
-    ['JavaScript', 'Java Script'],
-    ['MongoDB', 'Mongo D B'],
-    ['FastAPI', 'Fast A P I'],
-    ['NoSQL', 'No S Q L'],
-    ['MySQL', 'Maï S Q L'],
-    ['HTML5', 'H T M L 5'],
-    ['HTML', 'H T M L'],
-    ['CSS3', 'C S S 3'],
-    ['CSS', 'C S S'],
-    ['JWT', 'J W T'],
-    ['OAuth', 'O auth'],
-    ['OpenAPI', 'Open A P I'],
+    ['Laravel/Blade', 'Laravel Blade'],
+    ['Oracle/FastAPI', 'Oracle FastAPI'],
     ['Full-Stack', 'full stack'],
     ['full-stack', 'full stack'],
-    ['Full Stack', 'full stack'],
-    ['fullstack', 'full stack'],
-    ['Front-end', 'front end'],
-    ['Back-end', 'back end'],
-    ['Frontend', 'front end'],
-    ['Backend', 'back end'],
+    ['Front-end', 'Frontend'],
+    ['Back-end', 'Backend'],
     ['mobile-first', 'mobile first'],
     ['open-source', 'open source'],
     ['open source', 'open source'],
-    ['e-commerce', 'e commerce'],
-    ['e-learning', 'e learning'],
-    ['générées par IA', 'générées par I A'],
-    ['AI-generated', 'générées par I A'],
-    // Platforms & brands
-    ['Supabase', 'Sou per beïss'],
-    ['GitHub', 'guit heub'],
-    ['LinkedIn', 'Linke dine'],
-    ['Instagram', 'Insta grame'],
-    ['WhatsApp', 'Ouats app'],
-    ['Netlify', 'Net li faï'],
-    ['Vercel', 'Ver cell'],
-    ['Android', 'An droïde'],
-    ['Bootstrap', 'Boot strap'],
-    ['Laravel', 'Lara vèl'],
-    ['Docker', 'Do keur'],
-    ['Kotlin', 'Cot line'],
-    ['Python', 'Paï thone'],
-    ['Oracle', 'Ora keul'],
-    ['Figma', 'Fig ma'],
-    ['Canva', 'Can va'],
-    ['Tauri', 'Taou ri'],
-    ['Vite', 'Veet'],
-    ['React', 'Ri acte'],
-    ['Rust', 'Rust'],
-    ['Blade', 'Blade'],
-    ['Nginx', 'Engine X'],
-    ['Redis', 'Ré diss'],
-    ['AWS', 'A W S'],
-    ['SaaS', 'sass'],
-    ['DevOps', 'Dev ops'],
-    ['Scrum', 'Scrum'],
-    ['Agile', 'A djaïl'],
-    // Roles & soft product terms
-    ['freelance', 'free lance'],
-    ['Freelance', 'free lance'],
-    ['freelancer', 'free lan seur'],
-    ['hireable', 'disponible'],
-    ['Remote', 'à distance'],
-    ['Responsive', 'resse ponsive'],
-    ['Storage', 'stockage'],
-    ['Auth', 'authentification'],
-    ['Présent', 'présent'],
-    ['Present', 'présent'],
-    // Acronyms (short — after longer phrases)
-    ['PWA', 'P W A'],
-    ['SQL', 'S Q L'],
-    ['API', 'A P I'],
-    ['PHP', 'P H P'],
-    ['SDK', 'S D K'],
-    ['CLI', 'C L I'],
-    ['IDE', 'I D E'],
-    ['UX', 'U X'],
-    ['UI', 'U I'],
-    ['QR', 'Q R'],
-    ['IT', 'I T'],
-    ['IA', 'I A'],
-    ['AI', 'I A'],
-    ['CV', 'C V'],
-    ['Git', 'guit'],
-    ['npm', 'N P M'],
-    ['JSON', 'Jason'],
-    ['XML', 'X M L'],
-    ['YAML', 'Yam el'],
-    ['HTTPS', 'H T T P S'],
-    ['HTTP', 'H T T P'],
-    ['URL', 'U R L'],
-    ['SEO', 'S E O'],
-    ['CMS', 'C M S'],
+    ['e-commerce', 'ecommerce'],
+    ['e-learning', 'elearning'],
+    ['Express.js', 'Express JS'],
+    ['Node.js', 'Node JS'],
+    ['Tailwind CSS v4', 'Tailwind CSS version 4'],
+    ['Tailwind CSS', 'Tailwind CSS'],
+    ['HTML5', 'HTML 5'],
+    ['CSS3', 'CSS 3'],
+    ['API REST', 'API REST'],
+    ['APIs REST', 'API REST'],
   ],
 }
 
@@ -256,17 +75,16 @@ function normalizeWhitespaceAndPunctuation(text: string, locale: Locale): string
   return text
     .replace(/\r\n/g, '\n')
     .replace(/\u00a0/g, ' ')
-    // Em / en dashes → pause-friendly separators
     .replace(/[—–―]/g, ', ')
-    // Middle dots / bullets between tags
     .replace(/[·•]/g, ', ')
+    // Keep compound hyphens handled by aliases; remaining word-internal hyphens → space
+    .replace(/(?<=\w)-(?=\w)/g, ' ')
     .replace(/\s*\/\s*/g, ', ')
     .replace(/&/g, ` ${andWord} `)
     .replace(/N°\s*/gi, numberWord)
     .replace(/°/g, ' ')
     .replace(/\n+/g, '. ')
     .replace(/\s+/g, ' ')
-    // Collapse "word. . word" and trailing punctuation noise
     .replace(/\.\s*\./g, '.')
     .replace(/,\s*,/g, ',')
     .replace(/\s+([,.!?])/g, '$1')
@@ -279,7 +97,7 @@ function expandCounts(text: string, locale: Locale): string {
   const plusWord = locale === 'fr' ? 'plus' : 'plus'
   return text
     .replace(/(\d+)\+/g, `$1 ${plusWord}`)
-    .replace(/\btop[-\s]?(\d+)\b/gi, locale === 'fr' ? 'top $1' : 'top $1')
+    .replace(/\btop[-\s]?(\d+)\b/gi, 'top $1')
     .replace(/\bv(\d+)\b/gi, locale === 'fr' ? 'version $1' : 'version $1')
 }
 
@@ -297,24 +115,20 @@ function expandEmail(text: string, locale: Locale): string {
 }
 
 function expandPhone(text: string, locale: Locale): string {
-  // +212 602 353 136 → grouped digits for clearer TTS
   return text.replace(/\+?\d[\d\s.-]{7,}\d/g, (raw) => {
     const digits = raw.replace(/\D/g, '')
     if (digits.length < 8) return raw
     const groups = digits.match(/.{1,3}/g)?.join(' ') ?? digits
-    if (locale === 'fr' && digits.startsWith('212')) {
-      return `plus ${groups}`
-    }
-    if (locale === 'en' && digits.startsWith('212')) {
+    if (digits.startsWith('212')) {
       return `plus ${groups}`
     }
     return groups
   })
 }
 
-function applyTechPronunciation(text: string, locale: Locale): string {
+function applyMinimalAliases(text: string, locale: Locale): string {
   let result = text
-  for (const [term, spoken] of TECH_PRONUNCIATION[locale]) {
+  for (const [term, spoken] of MINIMAL_SPEECH_ALIASES[locale]) {
     const pattern = new RegExp(`(?<![\\w])${escapeRegExp(term)}(?![\\w])`, 'gi')
     result = result.replace(pattern, spoken)
   }
@@ -331,10 +145,15 @@ function dedupeTitlePrefix(title: string, body: string): string {
     .trim()
 }
 
+/**
+ * Normalize sentence flow without turning acronyms into "H. T. M. L.".
+ * Only pad after a period that ends a real sentence (letter/digit before, space+capital after).
+ */
 function finalizeSentenceFlow(text: string): string {
   return text
     .replace(/\s*,\s*/g, ', ')
-    .replace(/\s*\.\s*/g, '. ')
+    .replace(/\.\s+/g, '. ')
+    .replace(/([a-zà-ÿ0-9)])\.(?=[A-ZÀ-Ÿ])/g, '$1. ')
     .replace(/\.\s*,/g, '.')
     .replace(/,\s*\./g, '.')
     .replace(/\s{2,}/g, ' ')
@@ -345,7 +164,9 @@ function finalizeSentenceFlow(text: string): string {
 
 /** Drop English "hireable" tag — redundant after availability phrasing. */
 function scrubHireableNoise(text: string): string {
-  return text.replace(/\s*[,—–-]\s*hireable\b/gi, '')
+  return text
+    .replace(/\s*[,—–-]\s*hireable\b/gi, '')
+    .replace(/\bhireable\b/gi, '')
 }
 
 /** Plus between words (Kotlin + Jetpack), not phone (+212) or counts (30+). */
@@ -354,11 +175,11 @@ function expandPlusSigns(text: string, locale: Locale): string {
   return text.replace(/(?<=\D)\s*\+\s*(?=\D)/g, ` ${andWord} `)
 }
 
-/** Full speech cleanup for guide TTS (Piper + Web Speech). */
+/** Light speech cleanup for guide TTS (Piper + Web Speech). */
 export function prepareGuideSpeechText(raw: string, locale: Locale): string {
   let text = stripMarkdownForSpeech(raw)
-  // Tech terms before slash/dash splits so "UI/UX" and "Git/GitHub" stay intact
-  text = applyTechPronunciation(text, locale)
+  // Aliases before slash/hyphen splits so compounds stay intact
+  text = applyMinimalAliases(text, locale)
   text = normalizeWhitespaceAndPunctuation(text, locale)
   text = expandCounts(text, locale)
   text = expandEmail(text, locale)
@@ -377,7 +198,6 @@ export function buildGuideSpeechText(title: string, body: string, locale: Locale
   if (!cleanBody) return cleanTitle
   if (!cleanTitle) return cleanBody
 
-  // Avoid "About. About. …" when body still starts with the topic label after cleanup
   if (cleanBody.toLowerCase().startsWith(cleanTitle.toLowerCase())) {
     return cleanBody
   }

@@ -1,19 +1,23 @@
 -- Refresh CMS — généré depuis supabase/seed/portfolio-snapshot.json
--- Owner: Soufiane HAJJI · 2026-06-12
+-- Owner: Soufiane HAJJI · 2026-07-16
 -- Idempotent : upsert (ré-exécutable sans doublons)
 
 begin;
+
+-- Retirer l’ancienne expérience académique CMFP (remplacée par le stage FSO)
+delete from public.experience_translations where experience_slug = 'cmfp';
+delete from public.experiences where slug = 'cmfp';
 
 insert into public.site_profile (
   id, name, avatar_url, logo_url, cv_url, cv_filename,
   github_url, github_handle, public_repos, member_since,
   email, whatsapp, whatsapp_href, address, published
 ) values (
-  'main', 'Soufiane HAJJI', '/hajji-bg.png', '/logo.png',
+  'main', 'Soufiane HAJJI', '/hajji.png', '/logo.png',
   '/CV_Soufiane.pdf', 'CV_Soufiane_HAJJI.pdf',
   'https://github.com/suufiaane13', '@suufiaane13', 33, 2022,
-  'hjisfn@gmail.com', '+212 602 353 136', 'https://wa.me/212602353136',
-  'Hay Saada Rue Khaibar N°07, Ahfir', true
+  'hji.sfn@gmail.com', '+212 641 454 572', 'https://wa.me/212641454572',
+  'Oujda, Maroc', true
 ) on conflict (id) do update set
   name = excluded.name,
   avatar_url = excluded.avatar_url,
@@ -34,8 +38,8 @@ insert into public.site_profile (
 insert into public.site_profile_translations
   (profile_id, locale, title, tagline, availability, bio_paragraph_1, bio_paragraph_2)
 values (
-  'main', 'fr', 'Développeur Full-Stack & UI/UX Designer', 'React, Laravel, Rust & Tauri — je construis des apps web, mobiles et outils pour startups et clients freelance.',
-  'Disponible pour freelance — hireable', 'Développeur full-stack basé au Maroc, spécialisé en React, TypeScript, Laravel et applications mobile-first. Plus de 30 projets open source sur GitHub, du site vitrine à la gestion métier.', 'Mon approche combine design soigné, code maintenable et livraison rapide — dashboards, e-commerce, apps Android et outils métier offline.'
+  'main', 'fr', 'Développeur Full-Stack & UI/UX Designer', 'Étudiant en Licence Professionnelle Informatique à SUP MTI — développement web (HTML, CSS, PHP, JavaScript, React, Laravel) et logiciel (Java, Kotlin).',
+  'À la recherche d’un poste — disponible pour missions', 'Développeur Full-Stack et étudiant en Licence Professionnelle Informatique à SUP MTI, je suis à la recherche d’un poste me permettant de mettre en pratique mes compétences en développement web (HTML, CSS, PHP, JavaScript, React, Laravel) et logiciel (Java, Kotlin).', 'Curieux et rigoureux, je souhaite contribuer à des projets concrets au sein d’une équipe dynamique.'
 ) on conflict (profile_id, locale) do update set
   title = excluded.title,
   tagline = excluded.tagline,
@@ -46,8 +50,8 @@ values (
 insert into public.site_profile_translations
   (profile_id, locale, title, tagline, availability, bio_paragraph_1, bio_paragraph_2)
 values (
-  'main', 'en', 'Full-Stack Developer & UI/UX Designer', 'React, Laravel, Rust & Tauri — I build web apps, mobile apps, and tools for startups and freelance clients.',
-  'Available for freelance — hireable', 'Full-stack developer based in Morocco, specializing in React, TypeScript, Laravel, and mobile-first applications. 30+ open-source projects on GitHub, from landing pages to business management tools.', 'My approach combines polished design, maintainable code, and fast delivery — dashboards, e-commerce, Android apps, and offline business tools.'
+  'main', 'en', 'Full-Stack Developer & UI/UX Designer', 'Professional Bachelor’s student in Computer Science at SUP MTI — web (HTML, CSS, PHP, JavaScript, React, Laravel) and software (Java, Kotlin).',
+  'Open to opportunities — available for work', 'Full-Stack developer and Professional Bachelor’s student in Computer Science at SUP MTI, I am looking for a role where I can apply my skills in web development (HTML, CSS, PHP, JavaScript, React, Laravel) and software (Java, Kotlin).', 'Curious and rigorous, I want to contribute to real projects within a dynamic team.'
 ) on conflict (profile_id, locale) do update set
   title = excluded.title,
   tagline = excluded.tagline,
@@ -60,11 +64,11 @@ values ('frontend', 'code', 1, true)
 on conflict (slug) do update set
   icon_key = excluded.icon_key, sort_order = excluded.sort_order, published = true;
 insert into public.expertise_translations (expertise_slug, locale, title, description)
-values ('frontend', 'fr', 'Frontend', 'React, Vite, Tailwind CSS v4, TypeScript')
+values ('frontend', 'fr', 'Frontend', 'HTML, CSS, JavaScript, React, TypeScript')
 on conflict (expertise_slug, locale) do update set
   title = excluded.title, description = excluded.description;
 insert into public.expertise_translations (expertise_slug, locale, title, description)
-values ('frontend', 'en', 'Frontend', 'React, Vite, Tailwind CSS v4, TypeScript')
+values ('frontend', 'en', 'Frontend', 'HTML, CSS, JavaScript, React, TypeScript')
 on conflict (expertise_slug, locale) do update set
   title = excluded.title, description = excluded.description;
 
@@ -73,11 +77,11 @@ values ('backend', 'database', 2, true)
 on conflict (slug) do update set
   icon_key = excluded.icon_key, sort_order = excluded.sort_order, published = true;
 insert into public.expertise_translations (expertise_slug, locale, title, description)
-values ('backend', 'fr', 'Backend', 'Laravel, PHP, Python, FastAPI, Supabase')
+values ('backend', 'fr', 'Backend', 'PHP, Laravel, Python, FastAPI, Supabase')
 on conflict (expertise_slug, locale) do update set
   title = excluded.title, description = excluded.description;
 insert into public.expertise_translations (expertise_slug, locale, title, description)
-values ('backend', 'en', 'Backend', 'Laravel, PHP, Python, FastAPI, Supabase')
+values ('backend', 'en', 'Backend', 'PHP, Laravel, Python, FastAPI, Supabase')
 on conflict (expertise_slug, locale) do update set
   title = excluded.title, description = excluded.description;
 
@@ -86,11 +90,11 @@ values ('mobile', 'smartphone', 3, true)
 on conflict (slug) do update set
   icon_key = excluded.icon_key, sort_order = excluded.sort_order, published = true;
 insert into public.expertise_translations (expertise_slug, locale, title, description)
-values ('mobile', 'fr', 'Mobile', 'Kotlin, Jetpack Compose, React Native')
+values ('mobile', 'fr', 'Mobile', 'Kotlin, Jetpack Compose, Java')
 on conflict (expertise_slug, locale) do update set
   title = excluded.title, description = excluded.description;
 insert into public.expertise_translations (expertise_slug, locale, title, description)
-values ('mobile', 'en', 'Mobile', 'Kotlin, Jetpack Compose, React Native')
+values ('mobile', 'en', 'Mobile', 'Kotlin, Jetpack Compose, Java')
 on conflict (expertise_slug, locale) do update set
   title = excluded.title, description = excluded.description;
 
@@ -99,11 +103,11 @@ values ('systems', 'globe', 4, true)
 on conflict (slug) do update set
   icon_key = excluded.icon_key, sort_order = excluded.sort_order, published = true;
 insert into public.expertise_translations (expertise_slug, locale, title, description)
-values ('systems', 'fr', 'Systèmes', 'Rust, Tauri, Docker, Oracle DB')
+values ('systems', 'fr', 'Systèmes', 'Docker, Git, MySQL, Oracle DB')
 on conflict (expertise_slug, locale) do update set
   title = excluded.title, description = excluded.description;
 insert into public.expertise_translations (expertise_slug, locale, title, description)
-values ('systems', 'en', 'Systems', 'Rust, Tauri, Docker, Oracle DB')
+values ('systems', 'en', 'Systems', 'Docker, Git, MySQL, Oracle DB')
 on conflict (expertise_slug, locale) do update set
   title = excluded.title, description = excluded.description;
 
@@ -437,28 +441,47 @@ values (
 
 insert into public.experiences (slug, sort_order, technologies, is_current, project_slug, published)
 values (
-  'cmfp', 3, array['PHP', 'Laravel', 'Blade', 'MySQL', 'Git'], false,
+  'fso-stage', 3, array['Support IT', 'Réseaux', 'Maintenance'], false,
   null, true
 ) on conflict (slug) do update set
   sort_order = excluded.sort_order, technologies = excluded.technologies,
   is_current = excluded.is_current, project_slug = excluded.project_slug, published = true;
 insert into public.experience_translations (experience_slug, locale, period, role, company, description)
 values (
-  'cmfp', 'fr', '2023 — 2025',
-  'Technicien Spécialisé — Développement Digital', 'Centre Mixte de Formation Professionnelle, Oujda', 'Projets académiques Laravel/Blade : bibliothèque, inventaire IT, e-learning, gestion commerciale. Bases solides PHP, MySQL et méthode Agile.'
+  'fso-stage', 'fr', 'Mars 2025 (1 mois)',
+  'Stagiaire informatique', 'Service Informatique, Faculté des Sciences d’Oujda — Université Mohammed Premier', 'Stage pratique au service informatique : support, maintenance et accompagnement des besoins numériques de la faculté.'
 ) on conflict (experience_slug, locale) do update set
   period = excluded.period, role = excluded.role,
   company = excluded.company, description = excluded.description;
 insert into public.experience_translations (experience_slug, locale, period, role, company, description)
 values (
-  'cmfp', 'en', '2023 — 2025',
-  'Specialized Technician — Digital Development', 'Professional Training Center, Oujda', 'Academic Laravel/Blade projects: library, IT inventory, e-learning, business management. Strong foundations in PHP, MySQL, and Agile methodology.'
+  'fso-stage', 'en', 'March 2025 (1 month)',
+  'IT Intern', 'IT Department, Faculty of Sciences of Oujda — Mohammed First University', 'Hands-on internship in the faculty IT department: support, maintenance, and helping with digital needs on campus.'
 ) on conflict (experience_slug, locale) do update set
   period = excluded.period, role = excluded.role,
   company = excluded.company, description = excluded.description;
 
 insert into public.education_entries (slug, sort_order, is_completed, published)
-values ('tsdd', 1, false, true)
+values ('licence', 1, false, true)
+on conflict (slug) do update set
+  sort_order = excluded.sort_order, is_completed = excluded.is_completed, published = true;
+insert into public.education_translations (education_slug, locale, period_label, title, description, institution)
+values (
+  'licence', 'fr', '2025–2026',
+  'Licence Professionnelle en Informatique', 'Formation en cours', 'École SUP MTI, Oujda — en cours'
+) on conflict (education_slug, locale) do update set
+  period_label = excluded.period_label, title = excluded.title,
+  description = excluded.description, institution = excluded.institution;
+insert into public.education_translations (education_slug, locale, period_label, title, description, institution)
+values (
+  'licence', 'en', '2025–2026',
+  'Professional Bachelor’s in Computer Science', 'Currently enrolled', 'SUP MTI School, Oujda — in progress'
+) on conflict (education_slug, locale) do update set
+  period_label = excluded.period_label, title = excluded.title,
+  description = excluded.description, institution = excluded.institution;
+
+insert into public.education_entries (slug, sort_order, is_completed, published)
+values ('tsdd', 2, true, true)
 on conflict (slug) do update set
   sort_order = excluded.sort_order, is_completed = excluded.is_completed, published = true;
 insert into public.education_translations (education_slug, locale, period_label, title, description, institution)
@@ -477,7 +500,7 @@ values (
   description = excluded.description, institution = excluded.institution;
 
 insert into public.education_entries (slug, sort_order, is_completed, published)
-values ('bac', 2, true, true)
+values ('bac', 3, true, true)
 on conflict (slug) do update set
   sort_order = excluded.sort_order, is_completed = excluded.is_completed, published = true;
 insert into public.education_translations (education_slug, locale, period_label, title, description, institution)
@@ -544,8 +567,8 @@ values (
   icon_key = excluded.icon_key, sort_order = excluded.sort_order, published = true;
 insert into public.social_links (slug, label, href, handle, icon_key, sort_order, published)
 values (
-  'whatsapp', 'WhatsApp', 'https://wa.me/212602353136',
-  '+212 602 353 136', 'whatsapp', 3, true
+  'whatsapp', 'WhatsApp', 'https://wa.me/212641454572',
+  '+212 641 454 572', 'whatsapp', 3, true
 ) on conflict (slug) do update set
   label = excluded.label, href = excluded.href, handle = excluded.handle,
   icon_key = excluded.icon_key, sort_order = excluded.sort_order, published = true;

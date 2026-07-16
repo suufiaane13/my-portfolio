@@ -1,10 +1,10 @@
 {
   "version": "1.0.0",
-  "exportedAt": "2026-06-12",
+  "exportedAt": "2026-07-16",
   "owner": "Soufiane HAJJI",
   "profile": {
     "name": "Soufiane HAJJI",
-    "avatarUrl": "/hajji-bg.png",
+    "avatarUrl": "/hajji.png",
     "logoUrl": "/logo.png",
     "cvUrl": "/CV_Soufiane.pdf",
     "cvFilename": "CV_Soufiane_HAJJI.pdf",
@@ -12,28 +12,28 @@
     "githubHandle": "@suufiaane13",
     "publicRepos": 33,
     "memberSince": 2022,
-    "email": "hjisfn@gmail.com",
-    "whatsapp": "+212 602 353 136",
-    "whatsappHref": "https://wa.me/212602353136",
-    "address": "Hay Saada Rue Khaibar N°07, Ahfir"
+    "email": "hji.sfn@gmail.com",
+    "whatsapp": "+212 641 454 572",
+    "whatsappHref": "https://wa.me/212641454572",
+    "address": "Oujda, Maroc"
   },
   "profileTranslations": {
     "fr": {
       "title": "Développeur Full-Stack & UI/UX Designer",
-      "tagline": "React, Laravel, Rust & Tauri — je construis des apps web, mobiles et outils pour startups et clients freelance.",
-      "availability": "Disponible pour freelance — hireable",
+      "tagline": "Étudiant en Licence Professionnelle Informatique à SUP MTI — développement web (HTML, CSS, PHP, JavaScript, React, Laravel) et logiciel (Java, Kotlin).",
+      "availability": "À la recherche d’un poste — disponible pour missions",
       "bio": [
-        "Développeur full-stack basé au Maroc, spécialisé en React, TypeScript, Laravel et applications mobile-first. Plus de 30 projets open source sur GitHub, du site vitrine à la gestion métier.",
-        "Mon approche combine design soigné, code maintenable et livraison rapide — dashboards, e-commerce, apps Android et outils métier offline."
+        "Développeur Full-Stack et étudiant en Licence Professionnelle Informatique à SUP MTI, je suis à la recherche d’un poste me permettant de mettre en pratique mes compétences en développement web (HTML, CSS, PHP, JavaScript, React, Laravel) et logiciel (Java, Kotlin).",
+        "Curieux et rigoureux, je souhaite contribuer à des projets concrets au sein d’une équipe dynamique."
       ]
     },
     "en": {
       "title": "Full-Stack Developer & UI/UX Designer",
-      "tagline": "React, Laravel, Rust & Tauri — I build web apps, mobile apps, and tools for startups and freelance clients.",
-      "availability": "Available for freelance — hireable",
+      "tagline": "Professional Bachelor’s student in Computer Science at SUP MTI — web (HTML, CSS, PHP, JavaScript, React, Laravel) and software (Java, Kotlin).",
+      "availability": "Open to opportunities — available for work",
       "bio": [
-        "Full-stack developer based in Morocco, specializing in React, TypeScript, Laravel, and mobile-first applications. 30+ open-source projects on GitHub, from landing pages to business management tools.",
-        "My approach combines polished design, maintainable code, and fast delivery — dashboards, e-commerce, Android apps, and offline business tools."
+        "Full-Stack developer and Professional Bachelor’s student in Computer Science at SUP MTI, I am looking for a role where I can apply my skills in web development (HTML, CSS, PHP, JavaScript, React, Laravel) and software (Java, Kotlin).",
+        "Curious and rigorous, I want to contribute to real projects within a dynamic team."
       ]
     }
   },
@@ -43,8 +43,8 @@
       "iconKey": "code",
       "sortOrder": 1,
       "translations": {
-        "fr": { "title": "Frontend", "description": "React, Vite, Tailwind CSS v4, TypeScript" },
-        "en": { "title": "Frontend", "description": "React, Vite, Tailwind CSS v4, TypeScript" }
+        "fr": { "title": "Frontend", "description": "HTML, CSS, JavaScript, React, TypeScript" },
+        "en": { "title": "Frontend", "description": "HTML, CSS, JavaScript, React, TypeScript" }
       }
     },
     {
@@ -52,8 +52,8 @@
       "iconKey": "database",
       "sortOrder": 2,
       "translations": {
-        "fr": { "title": "Backend", "description": "Laravel, PHP, Python, FastAPI, Supabase" },
-        "en": { "title": "Backend", "description": "Laravel, PHP, Python, FastAPI, Supabase" }
+        "fr": { "title": "Backend", "description": "PHP, Laravel, Python, FastAPI, Supabase" },
+        "en": { "title": "Backend", "description": "PHP, Laravel, Python, FastAPI, Supabase" }
       }
     },
     {
@@ -61,8 +61,8 @@
       "iconKey": "smartphone",
       "sortOrder": 3,
       "translations": {
-        "fr": { "title": "Mobile", "description": "Kotlin, Jetpack Compose, React Native" },
-        "en": { "title": "Mobile", "description": "Kotlin, Jetpack Compose, React Native" }
+        "fr": { "title": "Mobile", "description": "Kotlin, Jetpack Compose, Java" },
+        "en": { "title": "Mobile", "description": "Kotlin, Jetpack Compose, Java" }
       }
     },
     {
@@ -70,8 +70,8 @@
       "iconKey": "globe",
       "sortOrder": 4,
       "translations": {
-        "fr": { "title": "Systèmes", "description": "Rust, Tauri, Docker, Oracle DB" },
-        "en": { "title": "Systems", "description": "Rust, Tauri, Docker, Oracle DB" }
+        "fr": { "title": "Systèmes", "description": "Docker, Git, MySQL, Oracle DB" },
+        "en": { "title": "Systems", "description": "Docker, Git, MySQL, Oracle DB" }
       }
     }
   ],
@@ -292,32 +292,51 @@
       }
     },
     {
-      "slug": "cmfp",
+      "slug": "fso-stage",
       "sortOrder": 3,
-      "technologies": ["PHP", "Laravel", "Blade", "MySQL", "Git"],
+      "technologies": ["Support IT", "Réseaux", "Maintenance"],
       "isCurrent": false,
       "projectSlug": null,
       "translations": {
         "fr": {
-          "period": "2023 — 2025",
-          "role": "Technicien Spécialisé — Développement Digital",
-          "company": "Centre Mixte de Formation Professionnelle, Oujda",
-          "description": "Projets académiques Laravel/Blade : bibliothèque, inventaire IT, e-learning, gestion commerciale. Bases solides PHP, MySQL et méthode Agile."
+          "period": "Mars 2025 (1 mois)",
+          "role": "Stagiaire informatique",
+          "company": "Service Informatique, Faculté des Sciences d’Oujda — Université Mohammed Premier",
+          "description": "Stage pratique au service informatique : support, maintenance et accompagnement des besoins numériques de la faculté."
         },
         "en": {
-          "period": "2023 — 2025",
-          "role": "Specialized Technician — Digital Development",
-          "company": "Professional Training Center, Oujda",
-          "description": "Academic Laravel/Blade projects: library, IT inventory, e-learning, business management. Strong foundations in PHP, MySQL, and Agile methodology."
+          "period": "March 2025 (1 month)",
+          "role": "IT Intern",
+          "company": "IT Department, Faculty of Sciences of Oujda — Mohammed First University",
+          "description": "Hands-on internship in the faculty IT department: support, maintenance, and helping with digital needs on campus."
         }
       }
     }
   ],
   "education": [
     {
-      "slug": "tsdd",
+      "slug": "licence",
       "sortOrder": 1,
       "isCompleted": false,
+      "translations": {
+        "fr": {
+          "periodLabel": "2025–2026",
+          "title": "Licence Professionnelle en Informatique",
+          "description": "Formation en cours",
+          "institution": "École SUP MTI, Oujda — en cours"
+        },
+        "en": {
+          "periodLabel": "2025–2026",
+          "title": "Professional Bachelor’s in Computer Science",
+          "description": "Currently enrolled",
+          "institution": "SUP MTI School, Oujda — in progress"
+        }
+      }
+    },
+    {
+      "slug": "tsdd",
+      "sortOrder": 2,
+      "isCompleted": true,
       "translations": {
         "fr": {
           "periodLabel": "2023–2025",
@@ -335,7 +354,7 @@
     },
     {
       "slug": "bac",
-      "sortOrder": 2,
+      "sortOrder": 3,
       "isCompleted": true,
       "translations": {
         "fr": {
@@ -393,8 +412,8 @@
     {
       "slug": "whatsapp",
       "label": "WhatsApp",
-      "href": "https://wa.me/212602353136",
-      "handle": "+212 602 353 136",
+      "href": "https://wa.me/212641454572",
+      "handle": "+212 641 454 572",
       "iconKey": "whatsapp",
       "sortOrder": 3
     }

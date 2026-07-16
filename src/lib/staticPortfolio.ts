@@ -20,7 +20,8 @@ export function buildStaticPortfolio(_locale: Locale, t: Translations): Portfoli
   const experienceKeyMap: Record<string, keyof typeof t.experience.items> = {
     freelance: 'freelance',
     'pure-power': 'purePower',
-    cmfp: 'cmfp',
+    purePower: 'purePower',
+    fsoStage: 'fsoStage',
   }
 
   return {
@@ -90,7 +91,7 @@ export function buildStaticPortfolio(_locale: Locale, t: Translations): Portfoli
       const i18nKey = experienceKeyMap[item.key] ?? item.key
       const copy = t.experience.items[i18nKey as keyof typeof t.experience.items]
       return {
-        slug: item.key === 'purePower' ? 'pure-power' : item.key,
+        slug: item.key === 'purePower' ? 'pure-power' : item.key === 'fsoStage' ? 'fso-stage' : item.key,
         sortOrder: index + 1,
         technologies: [...item.technologies],
         isCurrent: Boolean(item.current),
@@ -106,7 +107,7 @@ export function buildStaticPortfolio(_locale: Locale, t: Translations): Portfoli
       return {
         slug: item.key,
         sortOrder: index + 1,
-        isCompleted: item.key === 'bac',
+        isCompleted: item.key !== 'licence',
         periodLabel: copy.year,
         title: copy.title,
         description: copy.description,

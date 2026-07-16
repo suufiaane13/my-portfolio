@@ -233,13 +233,14 @@ export interface Translations {
     items: {
       freelance: ExperienceTranslation
       purePower: ExperienceTranslation
-      cmfp: ExperienceTranslation
+      fsoStage: ExperienceTranslation
     }
   }
   education: {
     title: string
     description: string
     items: {
+      licence: EducationTranslation
       tsdd: EducationTranslation
       bac: EducationTranslation
     }

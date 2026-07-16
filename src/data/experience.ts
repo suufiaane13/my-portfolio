@@ -1,4 +1,4 @@
-export type ExperienceKey = 'freelance' | 'purePower' | 'cmfp'
+export type ExperienceKey = 'freelance' | 'purePower' | 'fsoStage'
 
 export interface ExperienceItem {
   key: ExperienceKey
@@ -19,7 +19,7 @@ export const experience: ExperienceItem[] = [
     projectId: 'pure-power-menu',
   },
   {
-    key: 'cmfp',
-    technologies: ['PHP', 'Laravel', 'Blade', 'MySQL', 'Git'],
+    key: 'fsoStage',
+    technologies: ['Support IT', 'Réseaux', 'Maintenance'],
   },
 ]

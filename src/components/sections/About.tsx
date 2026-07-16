@@ -36,13 +36,21 @@ export function About() {
               )}
             >
               {!imageLoaded && (
-                <div className="absolute inset-0 animate-pulse bg-muted" aria-hidden="true" />
+                <div
+                  className="absolute inset-0 overflow-hidden bg-muted"
+                  aria-hidden="true"
+                  aria-busy="true"
+                >
+                  <div className="absolute inset-0 animate-pulse bg-gradient-to-br from-muted via-muted-foreground/[0.08] to-muted" />
+                  <div className="absolute inset-x-[22%] top-[14%] aspect-square animate-pulse rounded-full bg-muted-foreground/15" />
+                  <div className="absolute inset-x-[12%] bottom-0 h-[46%] animate-pulse rounded-t-[48%] bg-muted-foreground/12" />
+                </div>
               )}
               <img
                 src={profile.avatarUrl}
                 alt={`${profile.name} — ${profile.title}`}
                 className={cn(
-                  'h-full w-full object-cover object-[center_12%] transition-opacity duration-700',
+                  'relative h-full w-full object-cover object-[center_12%] transition-opacity duration-700',
                   imageLoaded ? 'opacity-100' : 'opacity-0',
                 )}
                 width={384}

@@ -75,7 +75,7 @@ export const en: Translations = {
     close: 'Close guide',
     backToMenu: 'Back to menu',
     chooseProject: 'Choose a project',
-    listenAgain: 'Listen again',
+    listenAgain: 'Listen',
     stopSpeech: 'Stop speaking',
     speaking: 'Speaking',
     menu: {
@@ -135,17 +135,17 @@ export const en: Translations = {
   profile: {
     title: 'Full-Stack Developer & UI/UX Designer',
     tagline:
-      'React, Laravel, Rust & Tauri — I build web apps, mobile apps, and tools for startups and freelance clients.',
-    availability: 'Available for freelance — hireable',
+      'Professional Bachelor’s student in Computer Science at SUP MTI — web (HTML, CSS, PHP, JavaScript, React, Laravel) and software (Java, Kotlin).',
+    availability: 'Open to opportunities — available for work',
     bio: [
-      'Full-stack developer based in Morocco, specializing in React, TypeScript, Laravel, and mobile-first applications. 30+ open-source projects on GitHub, from landing pages to business management tools.',
-      'My approach combines polished design, maintainable code, and fast delivery — dashboards, e-commerce, Android apps, and offline business tools.',
+      'Full-Stack developer and Professional Bachelor’s student in Computer Science at SUP MTI, I am looking for a role where I can apply my skills in web development (HTML, CSS, PHP, JavaScript, React, Laravel) and software (Java, Kotlin).',
+      'Curious and rigorous, I want to contribute to real projects within a dynamic team.',
     ],
     expertise: [
-      { title: 'Frontend', description: 'React, Vite, Tailwind CSS v4, TypeScript' },
-      { title: 'Backend', description: 'Laravel, PHP, Python, FastAPI, Supabase' },
-      { title: 'Mobile', description: 'Kotlin, Jetpack Compose, React Native' },
-      { title: 'Systems', description: 'Rust, Tauri, Docker, Oracle DB' },
+      { title: 'Frontend', description: 'HTML, CSS, JavaScript, React, TypeScript' },
+      { title: 'Backend', description: 'PHP, Laravel, Python, FastAPI, Supabase' },
+      { title: 'Mobile', description: 'Kotlin, Jetpack Compose, Java' },
+      { title: 'Systems', description: 'Docker, Git, MySQL, Oracle DB' },
     ],
   },
   skills: {
@@ -194,12 +194,12 @@ export const en: Translations = {
         description:
           'Built a mobile-first digital menu: interactive menu, macro cards, per-table QR codes, and production deployment.',
       },
-      cmfp: {
-        period: '2023 — 2025',
-        role: 'Specialized Technician — Digital Development',
-        company: 'Professional Training Center, Oujda',
+      fsoStage: {
+        period: 'March 2025 (1 month)',
+        role: 'IT Intern',
+        company: 'IT Department, Faculty of Sciences of Oujda — Mohammed First University',
         description:
-          'Academic Laravel/Blade projects: library, IT inventory, e-learning, business management. Strong foundations in PHP, MySQL, and Agile methodology.',
+          'Hands-on internship in the faculty IT department: support, maintenance, and helping with digital needs on campus.',
       },
     },
   },
@@ -207,6 +207,12 @@ export const en: Translations = {
     title: 'Education',
     description: 'My academic background',
     items: {
+      licence: {
+        year: '2025–2026',
+        title: 'Professional Bachelor’s in Computer Science',
+        description: 'Currently enrolled',
+        institution: 'SUP MTI School, Oujda — in progress',
+      },
       tsdd: {
         year: '2023–2025',
         title: 'Specialized Technician in Digital Development',
