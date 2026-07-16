@@ -109,7 +109,8 @@ export const en: Translations = {
       fallback:
         'I couldn’t find a precise answer. Here are some options, or contact {{name}} directly.',
       projectPrefix: '**{{title}}**',
-      cvAvailable: 'My CV is available for download on the portfolio.',
+      cvAvailable:
+        'My CV is available for download. Use the “Download my CV” button at the top of the page, or the button below.',
       gameIntro:
         'The portfolio includes a memory matching game with a top-5 leaderboard. Play a round and try to beat your personal best!',
       coreStack: 'Core stack',

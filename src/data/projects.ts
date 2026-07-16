@@ -21,7 +21,7 @@ export const projects: Project[] = [
   },
   {
     id: 'pure-power-menu',
-    tags: ['TypeScript', 'React', 'Tailwind CSS v4', 'Vite'],
+    tags: ['TypeScript', 'React', 'Tailwind CSS', 'Vite'],
     image: '/projects/pure-power.png',
     github: 'https://github.com/suufiaane13/pure-power-menu',
     demo: 'https://pure-power-menu.netlify.app/',

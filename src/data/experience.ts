@@ -15,7 +15,7 @@ export const experience: ExperienceItem[] = [
   },
   {
     key: 'purePower',
-    technologies: ['React', 'TypeScript', 'Tailwind CSS v4', 'Vite'],
+    technologies: ['React', 'TypeScript', 'Tailwind CSS', 'Vite'],
     projectId: 'pure-power-menu',
   },
   {

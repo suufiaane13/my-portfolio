@@ -17,6 +17,7 @@ import {
 } from 'lucide-react'
 import { useEffect } from 'react'
 import { createPortal } from 'react-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { Button } from '@/components/ui/Button'
 import { GithubIcon } from '@/components/shared/SocialIcons'
 import { GUIDE_TOPIC_IDS, type GuideTopicId } from '@/lib/portfolioChat/guideTopics'
@@ -27,7 +28,7 @@ import { useGuideSpeech } from '@/hooks/useGuideSpeech'
 import { useTranslation } from '@/i18n/LanguageProvider'
 import type { Locale } from '@/i18n/types'
 import { trackEvent } from '@/services/analytics'
-import { cn } from '@/lib/utils'
+import { cn, scrollToSection } from '@/lib/utils'
 import './PortfolioChatWidget.css'
 
 const TOPIC_ICONS: Record<GuideTopicId, typeof User> = {
@@ -88,14 +89,28 @@ function GuideMark({
 function GuideActionButton({
   action,
   locale,
+  onBeforeNavigate,
 }: {
   action: ChatReplyAction
   locale: Locale
+  onBeforeNavigate?: () => void
 }) {
+  const navigate = useNavigate()
+  const location = useLocation()
+
   const handleClick = () => {
     if (action.type === 'section' && action.sectionId) {
-      const el = document.getElementById(action.sectionId)
-      el?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+      const sectionId = action.sectionId
+      onBeforeNavigate?.()
+
+      const scroll = () => scrollToSection(`#${sectionId}`)
+
+      // Wait for panel close (body overflow unlock) + optional route change
+      const delay = location.pathname !== '/' ? 180 : 80
+      if (location.pathname !== '/') {
+        navigate('/')
+      }
+      window.setTimeout(scroll, delay)
       return
     }
     if (action.type === 'link' && action.href) {
@@ -110,11 +125,16 @@ function GuideActionButton({
         void trackEvent({ eventType: 'cv_download', path: '/', locale })
         return
       }
-      if (action.href.startsWith('/') || action.href.startsWith('#')) {
-        window.location.href = action.href
-      } else {
-        window.open(action.href, '_blank', 'noopener,noreferrer')
+      onBeforeNavigate?.()
+      if (action.href.startsWith('#')) {
+        scrollToSection(action.href)
+        return
       }
+      if (action.href.startsWith('/')) {
+        navigate(action.href)
+        return
+      }
+      window.open(action.href, '_blank', 'noopener,noreferrer')
     }
   }
 
@@ -350,7 +370,7 @@ export function PortfolioChatWidget() {
                   <div className="space-y-3">
                     <div className="flex items-start justify-between gap-2">
                       <h3 className="font-display text-base font-semibold text-foreground">{answerTitle}</h3>
-                      {speechSupported && (
+                      {speechSupported && answerChunkId !== 'contact-main' && (
                         <Button
                           variant="ghost"
                           size="icon"
@@ -381,6 +401,7 @@ export function PortfolioChatWidget() {
                               key={`${action.label}-${action.href ?? action.sectionId}`}
                               action={action}
                               locale={locale}
+                              onBeforeNavigate={close}
                             />
                           ))}
                         </div>

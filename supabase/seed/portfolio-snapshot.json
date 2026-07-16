@@ -183,7 +183,7 @@
     },
     {
       "slug": "pure-power-menu",
-      "tags": ["TypeScript", "React", "Tailwind CSS v4", "Vite"],
+      "tags": ["TypeScript", "React", "Tailwind CSS", "Vite"],
       "imageUrl": "/projects/pure-power.png",
       "githubUrl": "https://github.com/suufiaane13/pure-power-menu",
       "demoUrl": "https://pure-power-menu.netlify.app/",
@@ -273,7 +273,7 @@
     {
       "slug": "pure-power",
       "sortOrder": 2,
-      "technologies": ["React", "TypeScript", "Tailwind CSS v4", "Vite"],
+      "technologies": ["React", "TypeScript", "Tailwind CSS", "Vite"],
       "isCurrent": false,
       "projectSlug": "pure-power-menu",
       "translations": {

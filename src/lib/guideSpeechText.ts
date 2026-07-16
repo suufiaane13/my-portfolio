@@ -26,6 +26,7 @@ const MINIMAL_SPEECH_ALIASES: Record<Locale, Array<[string, string]>> = {
     ['CSS3', 'CSS 3'],
     ['API REST', 'REST API'],
     ['REST APIs', 'REST APIs'],
+    ['Supabase', 'Super base'],
   ],
   fr: [
     ['Git/GitHub', 'Git et GitHub'],
@@ -50,6 +51,7 @@ const MINIMAL_SPEECH_ALIASES: Record<Locale, Array<[string, string]>> = {
     ['CSS3', 'CSS 3'],
     ['API REST', 'API REST'],
     ['APIs REST', 'API REST'],
+    ['Supabase', 'Soupa base'],
   ],
 }
 
@@ -101,6 +103,46 @@ function expandCounts(text: string, locale: Locale): string {
     .replace(/\bv(\d+)\b/gi, locale === 'fr' ? 'version $1' : 'version $1')
 }
 
+/** Spoken forms for portfolio years — Piper mangles bare "2025" / "2023–2025". */
+const YEAR_WORDS: Record<string, Record<Locale, string>> = {
+  '2020': { fr: 'deux mille vingt', en: 'twenty twenty' },
+  '2021': { fr: 'deux mille vingt et un', en: 'twenty twenty one' },
+  '2022': { fr: 'deux mille vingt-deux', en: 'twenty twenty two' },
+  '2023': { fr: 'deux mille vingt-trois', en: 'twenty twenty three' },
+  '2024': { fr: 'deux mille vingt-quatre', en: 'twenty twenty four' },
+  '2025': { fr: 'deux mille vingt-cinq', en: 'twenty twenty five' },
+  '2026': { fr: 'deux mille vingt-six', en: 'twenty twenty six' },
+  '2027': { fr: 'deux mille vingt-sept', en: 'twenty twenty seven' },
+  '2028': { fr: 'deux mille vingt-huit', en: 'twenty twenty eight' },
+  '2029': { fr: 'deux mille vingt-neuf', en: 'twenty twenty nine' },
+  '2030': { fr: 'deux mille trente', en: 'twenty thirty' },
+}
+
+function speakYear(year: string, locale: Locale): string {
+  return YEAR_WORDS[year]?.[locale] ?? year
+}
+
+function expandYears(text: string, locale: Locale): string {
+  const joiner = locale === 'fr' ? ' à ' : ' to '
+
+  // Ranges: 2023–2025, 2023-2025, 2023 — 2025 (before dashes are stripped)
+  let result = text.replace(
+    /\b(20\d{2})\s*[–—−\-]\s*(20\d{2})\b/g,
+    (_m, start: string, end: string) => `${speakYear(start, locale)}${joiner}${speakYear(end, locale)}`,
+  )
+
+  // Adjacent years already space-separated in scripts: "2025 2026"
+  result = result.replace(
+    /\b(20\d{2})\s+(20\d{2})\b/g,
+    (_m, start: string, end: string) => `${speakYear(start, locale)}${joiner}${speakYear(end, locale)}`,
+  )
+
+  // Standalone years
+  result = result.replace(/\b(20\d{2})\b/g, (year) => speakYear(year, locale))
+
+  return result
+}
+
 function expandEmail(text: string, locale: Locale): string {
   const at = locale === 'fr' ? ' arobase ' : ' at '
   const dot = locale === 'fr' ? ' point ' : ' dot '
@@ -114,7 +156,7 @@ function expandEmail(text: string, locale: Locale): string {
   )
 }
 
-function expandPhone(text: string, locale: Locale): string {
+function expandPhone(text: string): string {
   return text.replace(/\+?\d[\d\s.-]{7,}\d/g, (raw) => {
     const digits = raw.replace(/\D/g, '')
     if (digits.length < 8) return raw
@@ -180,10 +222,12 @@ export function prepareGuideSpeechText(raw: string, locale: Locale): string {
   let text = stripMarkdownForSpeech(raw)
   // Aliases before slash/hyphen splits so compounds stay intact
   text = applyMinimalAliases(text, locale)
+  // Years before dash/comma normalization (keeps 2023–2025 as a range)
+  text = expandYears(text, locale)
   text = normalizeWhitespaceAndPunctuation(text, locale)
   text = expandCounts(text, locale)
   text = expandEmail(text, locale)
-  text = expandPhone(text, locale)
+  text = expandPhone(text)
   text = expandPlusSigns(text, locale)
   text = scrubHireableNoise(text)
   text = finalizeSentenceFlow(text)

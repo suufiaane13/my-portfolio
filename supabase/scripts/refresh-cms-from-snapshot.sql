@@ -322,7 +322,7 @@ values (
 
 insert into public.projects (slug, tags, image_url, github_url, demo_url, featured, year, sort_order, published)
 values (
-  'pure-power-menu', array['TypeScript', 'React', 'Tailwind CSS v4', 'Vite'], '/projects/pure-power.png',
+  'pure-power-menu', array['TypeScript', 'React', 'Tailwind CSS', 'Vite'], '/projects/pure-power.png',
   'https://github.com/suufiaane13/pure-power-menu', 'https://pure-power-menu.netlify.app/', true,
   2026, 2, true
 ) on conflict (slug) do update set
@@ -419,7 +419,7 @@ values (
 
 insert into public.experiences (slug, sort_order, technologies, is_current, project_slug, published)
 values (
-  'pure-power', 2, array['React', 'TypeScript', 'Tailwind CSS v4', 'Vite'], false,
+  'pure-power', 2, array['React', 'TypeScript', 'Tailwind CSS', 'Vite'], false,
   'pure-power-menu', true
 ) on conflict (slug) do update set
   sort_order = excluded.sort_order, technologies = excluded.technologies,
