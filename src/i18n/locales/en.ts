@@ -52,6 +52,8 @@ export const en: Translations = {
     gameHintBadge: 'Portfolio mini-game',
     gameHintDismiss: 'Dismiss',
     contact: 'Contact',
+    login: 'Login',
+    admin: 'Admin',
     menu: 'Menu',
     home: 'Back to home',
     mainNav: 'Main navigation',
@@ -68,6 +70,7 @@ export const en: Translations = {
     title: 'Portfolio guide',
     subtitle: 'Pick a topic to learn more',
     badge: 'Guide',
+    fabName: 'Guide Soufiane',
     open: 'Open guide',
     close: 'Close guide',
     backToMenu: 'Back to menu',
@@ -111,6 +114,9 @@ export const en: Translations = {
         'The portfolio includes a memory matching game with a top-5 leaderboard. Play a round and try to beat your personal best!',
       coreStack: 'Core stack',
       location: 'Address',
+      emailLabel: 'Email',
+      whatsappLabel: 'WhatsApp',
+      socialTitle: 'Social',
     },
   },
   newsletter: {
@@ -130,6 +136,7 @@ export const en: Translations = {
     title: 'Full-Stack Developer & UI/UX Designer',
     tagline:
       'React, Laravel, Rust & Tauri — I build web apps, mobile apps, and tools for startups and freelance clients.',
+    availability: 'Available for freelance — hireable',
     bio: [
       'Full-stack developer based in Morocco, specializing in React, TypeScript, Laravel, and mobile-first applications. 30+ open-source projects on GitHub, from landing pages to business management tools.',
       'My approach combines polished design, maintainable code, and fast delivery — dashboards, e-commerce, Android apps, and offline business tools.',
@@ -295,7 +302,7 @@ export const en: Translations = {
       success: 'Score saved!',
       successRank: 'Score saved — you rank #{{rank}}!',
       submitError: 'Could not save score. Please try again.',
-      rateLimit: 'Too many attempts — try again in a minute.',
+      rateLimit: 'Limit reached: 3 scores max / hour. You can keep playing — register again in {{minutes}} min.',
       wakingUp: 'Server is waking up… Try again in a few seconds.',
     },
     cards: {
@@ -383,6 +390,7 @@ export const en: Translations = {
     invalidCredentials: 'Invalid email or password',
     notAdmin: 'This account does not have admin rights',
     notConfigured: 'Supabase is not configured',
+    rateLimit: 'Too many sign-in attempts — try again in {{minutes}} min.',
     backToSite: 'Back to site',
     forgotPassword: 'Forgot password?',
     forgotPasswordTitle: 'Reset password',
@@ -410,6 +418,18 @@ export const en: Translations = {
     themeDark: 'Dark mode',
     openMenu: 'Open menu',
     closeMenu: 'Close menu',
+    pagination: {
+      previous: 'Previous',
+      next: 'Next',
+      pageOf: 'Page {{page}} / {{pages}}',
+      showing: '{{from}}–{{to}} of {{total}}',
+    },
+    deleteDialog: {
+      title: 'Confirm deletion',
+      cancel: 'Cancel',
+      confirm: 'Delete',
+      deleting: 'Deleting…',
+    },
     nav: {
       dashboard: 'Dashboard',
       content: 'Content',

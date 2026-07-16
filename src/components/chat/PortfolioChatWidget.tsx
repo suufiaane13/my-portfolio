@@ -1,6 +1,7 @@
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
 import {
   ArrowLeft,
+  Bot,
   Briefcase,
   ChevronRight,
   Code2,
@@ -9,14 +10,12 @@ import {
   Gamepad2,
   GraduationCap,
   Mail,
-  MessageCircle,
-  Sparkles,
   User,
   Volume2,
   VolumeX,
   X,
 } from 'lucide-react'
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { createPortal } from 'react-dom'
 import { Button } from '@/components/ui/Button'
 import { GithubIcon } from '@/components/shared/SocialIcons'
@@ -60,27 +59,26 @@ function renderMessageText(text: string) {
   })
 }
 
-function GuideMark({ logoUrl, sizeClass }: { logoUrl: string; sizeClass: string }) {
-  const [useIcon, setUseIcon] = useState(false)
-
+function GuideMark({
+  sizeClass,
+  animated = false,
+}: {
+  sizeClass: string
+  animated?: boolean
+}) {
   return (
     <span
       className={cn(
-        'relative flex shrink-0 items-center justify-center overflow-hidden rounded-full',
-        'border-2 border-primary/30 bg-black p-1.5',
+        'portfolio-guide-mark relative flex shrink-0 items-center justify-center rounded-full',
+        'border-2 border-primary/40 bg-primary/15 text-primary shadow-sm shadow-primary/20',
         sizeClass,
       )}
+      aria-hidden="true"
     >
-      {useIcon ? (
-        <Sparkles className="h-[55%] w-[55%] text-primary" aria-hidden="true" />
-      ) : (
-        <img
-          src={logoUrl || '/logo.png'}
-          alt=""
-          className="h-full w-full object-contain"
-          onError={() => setUseIcon(true)}
-        />
-      )}
+      <Bot
+        className={cn('h-[55%] w-[55%]', animated && 'portfolio-guide-mark__icon')}
+        strokeWidth={2.25}
+      />
     </span>
   )
 }
@@ -167,19 +165,23 @@ export function PortfolioChatWidget() {
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={reduceMotion ? undefined : { opacity: 0, scale: 0.9, y: 12 }}
             className={cn(
-              'portfolio-chat-fab fixed bottom-6 left-6 z-40 flex items-center gap-2 rounded-full',
-              'border border-primary/30 bg-card pl-1.5 pr-4 py-1.5 text-left',
-              'transition-transform hover:scale-[1.02] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring',
+              'fixed bottom-6 left-6 z-40 flex items-center justify-center bg-transparent p-0',
+              'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2',
             )}
             onClick={toggle}
             aria-label={t.chatbot.open}
+            whileHover={reduceMotion ? undefined : { scale: 1.06 }}
+            whileTap={reduceMotion ? undefined : { scale: 0.96 }}
           >
-            <GuideMark logoUrl={profile.logoUrl} sizeClass="h-11 w-11" />
-            <span className="hidden min-w-0 sm:block">
-              <span className="block text-xs font-medium text-muted-foreground">{t.chatbot.badge}</span>
-              <span className="block truncate text-sm font-semibold text-foreground">{profile.name.split(' ')[0]}</span>
+            <span
+              className={cn(
+                'portfolio-chat-fab flex items-center justify-center rounded-full',
+                'border border-primary/30 bg-card p-1.5',
+                !reduceMotion && 'portfolio-chat-fab--live',
+              )}
+            >
+              <GuideMark sizeClass="h-12 w-12" animated={!reduceMotion} />
             </span>
-            <MessageCircle className="h-5 w-5 text-primary sm:hidden" aria-hidden="true" />
           </motion.button>
         )}
       </AnimatePresence>
@@ -223,7 +225,7 @@ export function PortfolioChatWidget() {
                     <ArrowLeft className="h-4 w-4" />
                   </Button>
                 )}
-                <GuideMark logoUrl={profile.logoUrl} sizeClass="h-10 w-10" />
+                <GuideMark sizeClass="h-10 w-10" />
                 <div className="min-w-0 flex-1">
                   <p className="truncate font-display text-sm font-semibold text-foreground">
                     {t.chatbot.title}

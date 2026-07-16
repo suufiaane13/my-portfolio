@@ -24,6 +24,12 @@ import { useGameSounds } from '@/hooks/useGameSounds'
 import { usePortfolioContent } from '@/hooks/PortfolioContentProvider'
 import { useMemoryGame } from '@/hooks/useMemoryGame'
 import { useTranslation } from '@/i18n/LanguageProvider'
+import {
+  checkClientRateLimit,
+  formatRetryMinutes,
+  GAME_SCORE_RATE_LIMIT,
+  recordClientRateLimitAttempt,
+} from '@/lib/clientRateLimit'
 import { cn } from '@/lib/utils'
 import { trackEvent } from '@/services/analytics'
 import {
@@ -152,10 +158,31 @@ export function MemoryGame() {
       return
     }
 
+    const gate = checkClientRateLimit(
+      GAME_SCORE_RATE_LIMIT.key,
+      GAME_SCORE_RATE_LIMIT.maxAttempts,
+      GAME_SCORE_RATE_LIMIT.windowMs,
+    )
+    if (!gate.allowed) {
+      setSubmitError(
+        t.memoryGame.leaderboard.rateLimit.replace(
+          '{{minutes}}',
+          String(formatRetryMinutes(gate.retryAfterMs)),
+        ),
+      )
+      return
+    }
+
     setIsSubmitting(true)
     setSubmitError(null)
 
     try {
+      recordClientRateLimitAttempt(
+        GAME_SCORE_RATE_LIMIT.key,
+        GAME_SCORE_RATE_LIMIT.maxAttempts,
+        GAME_SCORE_RATE_LIMIT.windowMs,
+      )
+
       const result = await submitScore({
         playerName: trimmedName,
         gridSize,
@@ -177,7 +204,9 @@ export function MemoryGame() {
     } catch (error) {
       if (error instanceof ScoreServiceError) {
         if (error.code === 'rate_limit') {
-          setSubmitError(t.memoryGame.leaderboard.rateLimit)
+          setSubmitError(
+            t.memoryGame.leaderboard.rateLimit.replace('{{minutes}}', '60'),
+          )
         } else if (error.code === 'validation') {
           setSubmitError(t.memoryGame.leaderboard.nameError)
         } else if (error.code === 'waking_up') {

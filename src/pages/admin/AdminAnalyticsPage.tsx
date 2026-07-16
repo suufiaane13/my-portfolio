@@ -1,5 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
+import { AdminPagination } from '@/components/admin/AdminPagination'
 import { Card } from '@/components/ui/Card'
+import { ADMIN_PAGE_SIZE, useClientPagination } from '@/hooks/useClientPagination'
 import { useTranslation } from '@/i18n/LanguageProvider'
 import {
   aggregateEventsByDay,
@@ -22,7 +24,7 @@ export function AdminAnalyticsPage() {
     let cancelled = false
     setIsLoading(true)
 
-    void fetchPortfolioEvents(days).then((data) => {
+    void fetchPortfolioEvents(days, 1000).then((data) => {
       if (cancelled) return
       setEvents(data)
       setIsLoading(false)
@@ -36,6 +38,10 @@ export function AdminAnalyticsPage() {
   const summary = useMemo(() => aggregateEventTypes(events), [events])
   const daily = useMemo(() => aggregateEventsByDay(events), [events])
   const maxDaily = useMemo(() => Math.max(1, ...daily.map((d) => d.count)), [daily])
+  const { page, setPage, pageCount, pageItems, total, pageSize } = useClientPagination(
+    events,
+    ADMIN_PAGE_SIZE,
+  )
 
   const eventLabel = (type: string) =>
     t.admin.analytics.eventTypes[type as keyof typeof t.admin.analytics.eventTypes] ?? type
@@ -102,39 +108,48 @@ export function AdminAnalyticsPage() {
             </Card>
           )}
 
-          <Card className="overflow-x-auto">
-            <table className="min-w-full text-sm">
-              <thead>
-                <tr className="border-b border-border text-left text-muted-foreground">
-                  <th className="px-4 py-3 font-medium">{t.admin.analytics.columns.type}</th>
-                  <th className="px-4 py-3 font-medium">{t.admin.analytics.columns.path}</th>
-                  <th className="px-4 py-3 font-medium">{t.admin.analytics.columns.detail}</th>
-                  <th className="px-4 py-3 font-medium">{t.admin.analytics.columns.date}</th>
-                </tr>
-              </thead>
-              <tbody>
-                {events.length === 0 ? (
-                  <tr>
-                    <td colSpan={4} className="px-4 py-8 text-center text-muted-foreground">
-                      {t.admin.analytics.empty}
-                    </td>
+          <Card className="overflow-hidden">
+            <div className="overflow-x-auto">
+              <table className="min-w-full text-sm">
+                <thead>
+                  <tr className="border-b border-border text-left text-muted-foreground">
+                    <th className="px-4 py-3 font-medium">{t.admin.analytics.columns.type}</th>
+                    <th className="px-4 py-3 font-medium">{t.admin.analytics.columns.path}</th>
+                    <th className="px-4 py-3 font-medium">{t.admin.analytics.columns.detail}</th>
+                    <th className="px-4 py-3 font-medium">{t.admin.analytics.columns.date}</th>
                   </tr>
-                ) : (
-                  events.map((event) => (
-                    <tr key={event.id} className="border-b border-border/70">
-                      <td className="px-4 py-3 font-medium">{eventLabel(event.eventType)}</td>
-                      <td className="px-4 py-3 text-muted-foreground">{event.path ?? '—'}</td>
-                      <td className="px-4 py-3 text-muted-foreground">
-                        {event.sectionId ?? event.projectId ?? '—'}
-                      </td>
-                      <td className="px-4 py-3 text-muted-foreground">
-                        {new Date(event.createdAt).toLocaleString()}
+                </thead>
+                <tbody>
+                  {total === 0 ? (
+                    <tr>
+                      <td colSpan={4} className="px-4 py-8 text-center text-muted-foreground">
+                        {t.admin.analytics.empty}
                       </td>
                     </tr>
-                  ))
-                )}
-              </tbody>
-            </table>
+                  ) : (
+                    pageItems.map((event) => (
+                      <tr key={event.id} className="border-b border-border/70">
+                        <td className="px-4 py-3 font-medium">{eventLabel(event.eventType)}</td>
+                        <td className="px-4 py-3 text-muted-foreground">{event.path ?? '—'}</td>
+                        <td className="px-4 py-3 text-muted-foreground">
+                          {event.sectionId ?? event.projectId ?? '—'}
+                        </td>
+                        <td className="px-4 py-3 text-muted-foreground">
+                          {new Date(event.createdAt).toLocaleString()}
+                        </td>
+                      </tr>
+                    ))
+                  )}
+                </tbody>
+              </table>
+            </div>
+            <AdminPagination
+              page={page}
+              pageCount={pageCount}
+              total={total}
+              pageSize={pageSize}
+              onPageChange={setPage}
+            />
           </Card>
         </>
       )}

@@ -127,7 +127,7 @@ async function speakWithWebSpeech(
 ): Promise<void> {
   if (!('speechSynthesis' in window)) return
 
-  const text = buildGuideSpeechText(title, body)
+  const text = buildGuideSpeechText(title, body, locale)
   if (!text) return
 
   const startSpeaking = (voices: SpeechSynthesisVoice[]) => {
@@ -135,8 +135,9 @@ async function speakWithWebSpeech(
     const utterance = new SpeechSynthesisUtterance(text)
     utterance.lang = locale === 'fr' ? 'fr-FR' : 'en-US'
     if (voice) utterance.voice = voice
-    utterance.rate = 1.12
-    utterance.pitch = 0.92
+    // Slightly slower for technical terms / acronyms clarity
+    utterance.rate = locale === 'fr' ? 1.02 : 1.05
+    utterance.pitch = 0.94
 
     const finish = () => {
       clearResumeTimer()

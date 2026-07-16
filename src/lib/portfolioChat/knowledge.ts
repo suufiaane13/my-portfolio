@@ -154,8 +154,8 @@ export function buildChatKnowledge(
     keywords: uniqueKeywords('contact email whatsapp message contacter hire recruter'),
     title: t.nav.contact,
     body: [
-      profile.email ? `Email: ${profile.email}` : '',
-      profile.whatsapp ? `WhatsApp: ${profile.whatsapp}` : '',
+      profile.email ? `${t.chatbot.templates.emailLabel}: ${profile.email}` : '',
+      profile.whatsapp ? `${t.chatbot.templates.whatsappLabel}: ${profile.whatsapp}` : '',
       profile.address ? `${t.chatbot.templates.location}: ${profile.address}` : '',
     ]
       .filter(Boolean)
@@ -163,10 +163,10 @@ export function buildChatKnowledge(
     sectionId: 'contact',
     links: [
       ...(profile.whatsappHref
-        ? [{ label: 'WhatsApp', href: profile.whatsappHref, external: true }]
+        ? [{ label: t.chatbot.templates.whatsappLabel, href: profile.whatsappHref, external: true }]
         : []),
       ...(profile.email
-        ? [{ label: 'Email', href: `mailto:${profile.email}`, external: true }]
+        ? [{ label: t.chatbot.templates.emailLabel, href: `mailto:${profile.email}`, external: true }]
         : []),
     ],
   })
@@ -175,7 +175,7 @@ export function buildChatKnowledge(
     id: 'social-links',
     intent: 'social',
     keywords: uniqueKeywords('social github instagram reseaux links'),
-    title: 'Social',
+    title: t.chatbot.templates.socialTitle,
     body: content.socialLinks.map((link) => `• **${link.label}** — ${link.handle}`).join('\n'),
     links: content.socialLinks.map((link) => ({
       label: link.label,

@@ -85,7 +85,8 @@ Deno.serve(async (req) => {
     const ipHash = await hashIp(ip, salt)
 
     const oneHourAgo = new Date(Date.now() - 60 * 60 * 1000).toISOString()
-    const maxPerHour = Number.parseInt(Deno.env.get('SCORE_RATE_LIMIT_MAX') ?? '5', 10)
+    // Play is unlimited; only score registration is capped (default 3 / hour / IP).
+    const maxPerHour = Number.parseInt(Deno.env.get('SCORE_RATE_LIMIT_MAX') ?? '3', 10)
 
     const { count, error: countError } = await supabase
       .from('memory_scores')

@@ -1,7 +1,10 @@
+import { useEffect, useState } from 'react'
 import { usePortfolioContent } from '@/hooks/PortfolioContentProvider'
 import { cn } from '@/lib/utils'
 
 type BrandLogoSize = 'xs' | 'sm' | 'md' | 'lg'
+
+const LOGO_FALLBACK = '/logo.png'
 
 const sizeClasses: Record<BrandLogoSize, string> = {
   xs: 'h-9 w-9',
@@ -20,16 +23,27 @@ interface BrandLogoProps {
 export function BrandLogo({ size = 'sm', className, framed = false }: BrandLogoProps) {
   const { content } = usePortfolioContent()
   const { profile } = content
+  const preferred = profile.logoUrl?.trim() || LOGO_FALLBACK
+  const [src, setSrc] = useState(preferred)
+
+  useEffect(() => {
+    setSrc(preferred)
+  }, [preferred])
+
+  const handleError = () => {
+    if (src !== LOGO_FALLBACK) setSrc(LOGO_FALLBACK)
+  }
 
   if (!framed) {
     return (
       <img
-        src={profile.logoUrl}
+        src={src}
         alt={`Logo ${profile.name}`}
         className={cn('shrink-0 object-contain', sizeClasses[size], className)}
         width={64}
         height={64}
         decoding="async"
+        onError={handleError}
       />
     )
   }
@@ -43,12 +57,13 @@ export function BrandLogo({ size = 'sm', className, framed = false }: BrandLogoP
       )}
     >
       <img
-        src={profile.logoUrl}
+        src={src}
         alt={`Logo ${profile.name}`}
         className="h-full w-full object-contain"
         width={64}
         height={64}
         decoding="async"
+        onError={handleError}
       />
     </div>
   )

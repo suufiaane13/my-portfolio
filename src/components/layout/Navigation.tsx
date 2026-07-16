@@ -1,4 +1,4 @@
-import { ChevronRight, Gamepad2, Menu } from 'lucide-react'
+import { ChevronRight, Gamepad2, LayoutDashboard, LogIn, Menu } from 'lucide-react'
 import { useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { Sheet } from '@/components/ui/Sheet'
@@ -18,6 +18,7 @@ import { GithubIcon } from '@/components/shared/SocialIcons'
 import { LanguageToggle } from '@/components/shared/LanguageToggle'
 import { ThemeToggle } from '@/components/shared/ThemeToggle'
 import { navItems } from '@/data/navigation'
+import { useAuth } from '@/hooks/AuthProvider'
 import { usePortfolioContent } from '@/hooks/PortfolioContentProvider'
 import { useScrollSpy, useScrolled } from '@/hooks/useScrollSpy'
 import { useTranslation } from '@/i18n/LanguageProvider'
@@ -33,9 +34,18 @@ export function Navigation({ isDark, onToggleTheme }: NavigationProps) {
   const { t } = useTranslation()
   const { content } = usePortfolioContent()
   const { profile } = content
+  const { session } = useAuth()
   const location = useLocation()
   const isHome = location.pathname === '/'
   const isGamePage = location.pathname === '/game'
+  const isAuthPage =
+    location.pathname === '/login' ||
+    location.pathname === '/forgot-password' ||
+    location.pathname === '/reset-password'
+  const isAdminArea = location.pathname.startsWith('/admin')
+  const authHref = session ? '/admin' : '/login'
+  const authLabel = session ? t.nav.admin : t.nav.login
+  const AuthIcon = session ? LayoutDashboard : LogIn
   const [menuOpen, setMenuOpen] = useState(false)
   const isScrolled = useScrolled()
   const activeSection = useScrollSpy(
@@ -138,6 +148,34 @@ export function Navigation({ isDark, onToggleTheme }: NavigationProps) {
               <ThemeToggle isDark={isDark} onToggle={onToggleTheme} />
             </div>
 
+            {!isAuthPage && (
+              <div className={navActionShellClass}>
+                <Link
+                  to={authHref}
+                  className={cn(
+                    navActionClass({ active: isAdminArea || location.pathname === '/login' }),
+                    navActionPillClass,
+                    'hidden sm:inline-flex',
+                  )}
+                  aria-label={authLabel}
+                >
+                  <AuthIcon className="h-4 w-4 shrink-0" aria-hidden="true" />
+                  {authLabel}
+                </Link>
+                <Link
+                  to={authHref}
+                  className={cn(
+                    navActionClass({ active: isAdminArea || location.pathname === '/login' }),
+                    navActionIconClass,
+                    'sm:hidden',
+                  )}
+                  aria-label={authLabel}
+                >
+                  <AuthIcon className="h-4 w-4" aria-hidden="true" />
+                </Link>
+              </div>
+            )}
+
             {isHome && (
               <div className={navActionShellClass}>
                 <button
@@ -230,7 +268,7 @@ export function Navigation({ isDark, onToggleTheme }: NavigationProps) {
             )
           })}
 
-          <div className="mt-3 border-t border-border/80 pt-3 pb-6">
+          <div className="mt-3 space-y-2 border-t border-border/80 pt-3 pb-6">
             <Link
               to="/game"
               onClick={() => {
@@ -260,6 +298,27 @@ export function Navigation({ isDark, onToggleTheme }: NavigationProps) {
               </span>
               <ChevronRight
                 className="h-4 w-4 shrink-0 text-primary/60 transition-transform group-hover:translate-x-0.5"
+                aria-hidden="true"
+              />
+            </Link>
+
+            <Link
+              to={authHref}
+              onClick={() => setMenuOpen(false)}
+              className={cn(
+                'group flex items-center gap-2.5 rounded-xl border px-3 py-2.5 transition-all duration-200',
+                'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background',
+                'border-border bg-card/60 hover:border-primary/30 hover:bg-primary/5',
+              )}
+            >
+              <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-muted text-foreground">
+                <AuthIcon className="h-4 w-4" aria-hidden="true" />
+              </span>
+              <span className="min-w-0 flex-1 text-left font-display text-sm font-semibold text-foreground">
+                {authLabel}
+              </span>
+              <ChevronRight
+                className="h-4 w-4 shrink-0 text-muted-foreground transition-transform group-hover:translate-x-0.5"
                 aria-hidden="true"
               />
             </Link>

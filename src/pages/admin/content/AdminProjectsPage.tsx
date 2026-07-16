@@ -2,6 +2,7 @@ import { Image, Plus, Settings, Sparkles, Trash2 } from 'lucide-react'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { toast } from 'sonner'
 import { Button } from '@/components/ui/Button'
+import { ConfirmDeleteDialog } from '@/components/admin/ConfirmDeleteDialog'
 import { ContentEditorToolbar, stickyBelowToolbarClass } from '@/components/admin/content/ContentEditorToolbar'
 import {
   ContentMasterDetail,
@@ -38,6 +39,8 @@ export function AdminProjectsPage() {
   const [locale, setLocale] = useState<Locale>('fr')
   const [isLoading, setIsLoading] = useState(true)
   const [isSaving, setIsSaving] = useState(false)
+  const [pendingDelete, setPendingDelete] = useState(false)
+  const [isDeleting, setIsDeleting] = useState(false)
 
   const load = useCallback(async () => {
     setIsLoading(true)
@@ -136,16 +139,17 @@ export function AdminProjectsPage() {
     await load()
   }
 
-  const handleDelete = async () => {
+  const handleConfirmDelete = async () => {
     if (!draft || isNew) return
-    if (!window.confirm(t.admin.content.confirmDelete)) return
-
+    setIsDeleting(true)
     const ok = await deleteAdminProject(draft.slug)
+    setIsDeleting(false)
     if (!ok) {
       toast.error(t.admin.content.deleteError)
       return
     }
     toast.success(t.admin.content.deleteSuccess)
+    setPendingDelete(false)
     setSelectedId(null)
     setDraft(null)
     setIsNew(false)
@@ -205,7 +209,7 @@ export function AdminProjectsPage() {
                   type="button"
                   size="sm"
                   variant="outline"
-                  onClick={() => void handleDelete()}
+                  onClick={() => setPendingDelete(true)}
                   className="text-destructive hover:text-destructive"
                 >
                   <Trash2 className="h-4 w-4" />
@@ -371,6 +375,14 @@ export function AdminProjectsPage() {
           </>
         )}
       </ContentMasterDetail>
+
+      <ConfirmDeleteDialog
+        open={pendingDelete}
+        onClose={() => setPendingDelete(false)}
+        onConfirm={handleConfirmDelete}
+        description={t.admin.content.confirmDelete}
+        isLoading={isDeleting}
+      />
     </div>
   )
 }

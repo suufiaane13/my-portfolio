@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { buildChatKnowledge } from '@/lib/portfolioChat/engine'
 import { getGuideReplyForProject, getGuideReplyForTopic } from '@/lib/portfolioChat/guide'
 import { chunkIdForProject, chunkIdForTopic, GUIDE_TOPIC_IDS, type GuideTopicId } from '@/lib/portfolioChat/guideTopics'
@@ -29,6 +29,15 @@ export function usePortfolioGuide() {
     () => buildChatKnowledge(content, locale, t),
     [content, locale, t],
   )
+
+  // Clear open answer when language changes so bubbles never mix FR/EN copy.
+  useEffect(() => {
+    setView('menu')
+    setReply(null)
+    setAnswerTitle('')
+    setAnswerChunkId('')
+    setAnswerSource('menu')
+  }, [locale])
 
   const topicLabels = useMemo(
     () =>

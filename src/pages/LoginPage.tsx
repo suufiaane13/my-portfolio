@@ -4,12 +4,18 @@ import { useEffect, useMemo, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { Link, Navigate, useLocation, useNavigate } from 'react-router-dom'
 import { Toaster, toast } from 'sonner'
+import { BrandLogo } from '@/components/shared/BrandLogo'
 import { Button } from '@/components/ui/Button'
 import { Card } from '@/components/ui/Card'
 import { Input } from '@/components/ui/Input'
 import { useAuth } from '@/hooks/AuthProvider'
-import { usePortfolioContent } from '@/hooks/PortfolioContentProvider'
 import { useTranslation } from '@/i18n/LanguageProvider'
+import {
+  AUTH_RATE_LIMIT,
+  checkClientRateLimit,
+  formatRetryMinutes,
+  recordClientRateLimitAttempt,
+} from '@/lib/clientRateLimit'
 import { isSupabaseConfigured } from '@/lib/supabase'
 import { getLoginSchema, type LoginFormValues } from '@/lib/validators'
 import { AuthServiceError, signInWithPassword } from '@/services/auth'
@@ -19,8 +25,6 @@ export function LoginPage() {
   const navigate = useNavigate()
   const location = useLocation()
   const { session, isLoading } = useAuth()
-  const { content } = usePortfolioContent()
-  const { profile } = content
   const [isSubmitting, setIsSubmitting] = useState(false)
   const schema = useMemo(() => getLoginSchema(t), [t])
 
@@ -46,8 +50,25 @@ export function LoginPage() {
   const onSubmit = handleSubmit(async (values) => {
     if (!isSupabaseConfigured() || isSubmitting) return
 
+    const gate = checkClientRateLimit(
+      AUTH_RATE_LIMIT.key,
+      AUTH_RATE_LIMIT.maxAttempts,
+      AUTH_RATE_LIMIT.windowMs,
+    )
+    if (!gate.allowed) {
+      toast.error(
+        t.auth.rateLimit.replace('{{minutes}}', String(formatRetryMinutes(gate.retryAfterMs))),
+      )
+      return
+    }
+
     setIsSubmitting(true)
     try {
+      recordClientRateLimitAttempt(
+        AUTH_RATE_LIMIT.key,
+        AUTH_RATE_LIMIT.maxAttempts,
+        AUTH_RATE_LIMIT.windowMs,
+      )
       await signInWithPassword(values.email, values.password)
       toast.success(t.auth.loginSuccess)
       navigate(from, { replace: true })
@@ -74,11 +95,13 @@ export function LoginPage() {
     <div className="flex min-h-screen items-center justify-center bg-background px-4 py-10">
       <div className="w-full max-w-md">
         <div className="mb-8 text-center">
-          <img
-            src={profile.logoUrl}
-            alt=""
-            className="mx-auto mb-4 h-14 w-14 rounded-xl object-contain"
-          />
+          <Link
+            to="/"
+            className="mx-auto mb-4 inline-flex rounded-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            aria-label={t.auth.backToSite}
+          >
+            <BrandLogo size="lg" framed className="mx-auto" />
+          </Link>
           <h1 className="font-display text-2xl font-bold text-foreground">{t.auth.loginTitle}</h1>
           <p className="mt-2 text-sm text-muted-foreground">{t.auth.loginDescription}</p>
         </div>

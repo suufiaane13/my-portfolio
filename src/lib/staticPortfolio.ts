@@ -36,7 +36,7 @@ export function buildStaticPortfolio(_locale: Locale, t: Translations): Portfoli
       memberSince: staticProfile.stats.memberSince,
       title: t.profile.title,
       tagline: t.profile.tagline,
-      availability: staticProfile.availability,
+      availability: t.profile.availability,
       bio: t.profile.bio,
       email: contactValues.email,
       whatsapp: whatsapp.value,

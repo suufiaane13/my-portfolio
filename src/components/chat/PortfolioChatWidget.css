@@ -2,12 +2,47 @@
   box-shadow:
     0 8px 24px rgb(37 99 235 / 0.25),
     0 2px 8px rgb(0 0 0 / 0.2);
+  will-change: transform;
 }
 
 .portfolio-chat-fab:hover {
   box-shadow:
     0 12px 32px rgb(37 99 235 / 0.35),
     0 4px 12px rgb(0 0 0 / 0.25);
+}
+
+.portfolio-chat-fab--live {
+  animation: portfolio-guide-float 3.2s ease-in-out infinite;
+}
+
+.portfolio-chat-fab--live:hover {
+  animation-play-state: paused;
+}
+
+.portfolio-guide-mark__icon {
+  animation: portfolio-guide-icon-soft 2.4s ease-in-out infinite;
+}
+
+@keyframes portfolio-guide-float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-4px);
+  }
+}
+
+@keyframes portfolio-guide-icon-soft {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.06);
+    opacity: 0.92;
+  }
 }
 
 .portfolio-chat-panel {
@@ -51,7 +86,10 @@
 
 @media (prefers-reduced-motion: reduce) {
   .portfolio-chat-fab,
-  .portfolio-chat-chip {
+  .portfolio-chat-fab--live,
+  .portfolio-chat-chip,
+  .portfolio-guide-mark__icon {
+    animation: none !important;
     transition: none;
   }
 }

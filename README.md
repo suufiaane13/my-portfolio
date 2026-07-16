@@ -1,104 +1,111 @@
-# Portfolio Soufiane HAJJI
+# Portfolio — Soufiane HAJJI
 
-Portfolio personnel full-stack — développeur & UI/UX designer. Site vitrine bilingue (FR/EN), back-office admin, contenu géré via Supabase, déployé sur Netlify.
+Personal full-stack portfolio for a developer and UI/UX designer. Bilingual public site (French / English), integrated CMS, and Supabase backend, deployed as a static SPA on Netlify.
 
-**Stack :** React 19 · Vite 8 · TypeScript · Tailwind CSS v4 · Supabase · Netlify
+| Layer | Stack |
+|-------|--------|
+| Frontend | React 19, TypeScript, Vite 8, Tailwind CSS v4, Framer Motion |
+| Backend | Supabase (PostgreSQL, Auth, Storage, Edge Functions) |
+| Email | Resend (via Edge Functions) |
+| Hosting | Netlify |
 
 ---
 
-## Aperçu
+## Overview
 
-Le site combine une expérience publique soignée (animations, dark mode, responsive) avec un **CMS intégré** pour modifier profil, projets, compétences et parcours sans toucher au code. Les données vivent dans PostgreSQL (Supabase) ; si Supabase est indisponible, un **fallback statique** (`src/data/` + i18n) prend le relais.
+The application pairs a polished public experience (responsive layout, dark mode, motion) with an admin CMS to manage profile, projects, skills, and career content without editing source code.
+
+Content is stored in PostgreSQL (Supabase). If Supabase is unreachable, a static fallback (`src/data/` + i18n) keeps the site available.
 
 ```mermaid
 flowchart TB
-  subgraph public [Site public]
-    Home[HomePage sections]
-    Game[Jeu memoire /game]
-    Chat[Assistant portfolio]
+  subgraph public [Public site]
+    Home[Home sections]
+    Game[Memory game /game]
+    Guide[Portfolio guide]
   end
 
   subgraph admin [Admin /admin]
-    CMS[CMS contenu]
-    Inbox[Messages contact]
-    Stats[Analytics et scores]
+    CMS[Content CMS]
+    Inbox[Contact messages]
+    Ops[Analytics and scores]
   end
 
   subgraph supabase [Supabase]
     DB[(PostgreSQL + RLS)]
-    Storage[Bucket portfolio]
+    Storage[Storage bucket]
     Edge[Edge Functions]
   end
 
   Home --> DB
   Game --> Edge
-  Chat --> Home
+  Guide --> Home
   CMS --> DB
   CMS --> Storage
   Inbox --> DB
   Edge --> DB
-  Edge --> Resend[Resend emails]
+  Edge --> Resend[Resend]
 ```
 
 ---
 
-## Fonctionnalités
+## Features
 
-### Site public
+### Public site
 
-| Fonctionnalité | Détail |
-|----------------|--------|
-| **Sections** | Hero, À propos, Compétences, Expérience, Formation, Projets, Intérêts, Langues, Contact |
-| **i18n** | Français / Anglais — contenu CMS + traductions UI |
-| **Thème** | Dark / light, transitions de langue |
-| **Projets** | Filtres par tag, modal détail (description longue, liens Demo / GitHub) |
-| **Contact** | Formulaire → Edge Function → email Resend |
-| **Newsletter** | Inscription dans la section Contact |
-| **Jeu mémoire** | Page `/game`, classement top 5, record personnel local |
-| **Assistant** | Chatbot client-side (sans API LLM) — réponses basées sur le contenu CMS |
-| **Analytics** | Événements page, sections, clics projet, contact, jeu, chat (Plausible optionnel) |
+| Feature | Description |
+|---------|-------------|
+| Sections | Hero, About, Skills, Experience, Education, Projects, Interests, Languages, Contact |
+| i18n | French / English — CMS entity copy + UI strings |
+| Theme | Dark / light with language transition |
+| Projects | Tag filters, detail dialog, demo and GitHub links |
+| Contact | Form → Edge Function → Resend email |
+| Newsletter | Subscription from the Contact section |
+| Memory game | `/game` with leaderboard and local personal best |
+| Portfolio guide | Client-side menu assistant (no LLM API), CMS-backed answers, optional Piper TTS |
+| Analytics | Custom events (page, section, project, contact, game, guide) + optional Plausible |
 
-### Administration (`/admin`)
+### Admin (`/admin`)
 
-| Module | Route | Rôle |
-|--------|-------|------|
-| Dashboard | `/admin` | Vue d’ensemble |
-| **CMS** | `/admin/content/*` | Profil, projets, skills, expérience, formation |
-| Messages | `/admin/messages` | Contact reçus, statuts, suppression |
-| Analytics | `/admin/analytics` | Journal d’événements + graphique activité |
-| Scores jeu | `/admin/scores` | Modération leaderboard |
-| Newsletter | `/admin/newsletter` | Abonnés |
+| Module | Route | Purpose |
+|--------|-------|---------|
+| Dashboard | `/admin` | Overview metrics |
+| Content CMS | `/admin/content/*` | Profile, projects, skills, experience, education |
+| Messages | `/admin/messages` | Contact inbox, status, delete |
+| Analytics | `/admin/analytics` | Event log and activity chart |
+| Game scores | `/admin/scores` | Leaderboard moderation |
+| Newsletter | `/admin/newsletter` | Subscriber list |
 
-**CMS — points clés :**
+CMS capabilities:
 
-- Contenu bilingue FR/EN par entité
-- Upload Supabase Storage : avatar, logo, CV, images projets (bucket `portfolio`)
-- Toggle publié / brouillon, validation basique (slugs, URLs)
-- CRUD projets, réseaux sociaux, intérêts, langues parlées
+- Bilingual FR/EN fields per entity
+- Supabase Storage uploads (avatar, logo, CV, project images — bucket `portfolio`)
+- Publish / draft toggle and basic validation (slugs, URLs)
+- CRUD for projects, social links, interests, spoken languages
 
-**Auth admin :** Supabase Auth + `app_metadata.role = "admin"`. Reset mot de passe : `/forgot-password` → `/reset-password`.
-
----
-
-## Prérequis
-
-- **Node.js** 20+
-- Projet **Supabase** (Auth, Database, Storage, Edge Functions)
-- Compte **Resend** (emails contact / notifications)
-- Hébergement **Netlify** (ou équivalent statique + variables d’env)
+Admin auth uses Supabase Auth with `app_metadata.role = "admin"`. Password recovery: `/forgot-password` → `/reset-password`.
 
 ---
 
-## Installation locale
+## Prerequisites
+
+- Node.js 20+
+- Supabase project (Auth, Database, Storage, Edge Functions)
+- Resend account (contact email delivery)
+- Netlify (or any static host with environment variables)
+
+---
+
+## Local setup
 
 ```bash
-git clone <repo-url>
-cd susu_portfolio
+git clone https://github.com/suufiaane13/my-portfolio.git
+cd my-portfolio
 npm install
 cp .env.example .env
 ```
 
-Renseigner dans `.env` :
+Configure `.env`:
 
 ```env
 VITE_SUPABASE_URL=https://xxxx.supabase.co
@@ -107,51 +114,49 @@ VITE_SITE_URL=http://localhost:5173
 ```
 
 ```bash
-npm run dev      # http://localhost:5173
-npm run build    # production → dist/
-npm run preview  # prévisualiser le build
-npm run lint     # ESLint
+npm run dev       # http://localhost:5173
+npm run build     # production build → dist/
+npm run preview   # preview production build
+npm run lint      # ESLint
 ```
 
 ---
 
-## Variables d’environnement
+## Environment variables
 
-| Variable | Où | Description |
-|----------|-----|-------------|
-| `VITE_SUPABASE_URL` | `.env` + Netlify | URL du projet Supabase |
-| `VITE_SUPABASE_ANON_KEY` | `.env` + Netlify | Clé anon (publique, RLS) |
-| `VITE_SITE_URL` | `.env` + Netlify | URL canonique (SEO, OG, emails) |
-| `VITE_PLAUSIBLE_DOMAIN` | `.env` (opt.) | Analytics Plausible |
-| Secrets Resend, rate limits… | **Supabase → Edge Functions → Secrets** | Jamais dans le repo client |
+| Variable | Scope | Description |
+|----------|-------|-------------|
+| `VITE_SUPABASE_URL` | Client + Netlify | Supabase project URL |
+| `VITE_SUPABASE_ANON_KEY` | Client + Netlify | Anon key (public; protected by RLS) |
+| `VITE_SITE_URL` | Client + Netlify | Canonical site URL (SEO, OG, emails) |
+| `VITE_PLAUSIBLE_DOMAIN` | Client (optional) | Plausible analytics domain |
+| Resend, rate limits, IP salt | Supabase Edge Function secrets only | Never commit to the client repo |
 
-Liste complète et commentaires : [`.env.example`](.env.example).
+Full reference: [`.env.example`](.env.example).
 
 ---
 
 ## Supabase
 
-### 1. Migrations
-
-Appliquer toutes les migrations dans l’ordre :
+### Migrations
 
 ```bash
-supabase link --project-ref <votre-ref>
+supabase link --project-ref <project-ref>
 supabase db push
 ```
 
-Ou exécuter les fichiers SQL dans **SQL Editor** (`supabase/migrations/`).
+Alternatively, run SQL files from `supabase/migrations/` in the SQL Editor (order by filename).
 
-Tables principales : contenu portfolio (projets, skills, profil…), `contact_messages`, `memory_leaderboard`, `analytics_events`, `newsletter_subscribers`, vues i18n, RLS admin.
+Main domains: portfolio content tables and i18n views, `contact_messages`, memory scores / leaderboard, `portfolio_events`, `newsletter_subscribers`, admin RLS, Storage policies.
 
-### 2. Edge Functions
+### Edge Functions
 
-| Function | Rôle |
+| Function | Role |
 |----------|------|
-| `contact` | Formulaire contact + email Resend |
-| `submit-score` | Scores jeu mémoire |
-| `track-event` | Analytics |
-| `subscribe-newsletter` | Inscription newsletter |
+| `contact` | Contact form + Resend emails |
+| `submit-score` | Memory game score submission |
+| `track-event` | Analytics ingestion |
+| `subscribe-newsletter` | Newsletter signup |
 
 ```bash
 supabase functions deploy contact
@@ -160,145 +165,165 @@ supabase functions deploy track-event
 supabase functions deploy subscribe-newsletter
 ```
 
-Secrets requis (Dashboard) : `RESEND_API_KEY`, `CONTACT_TO_EMAIL`, `CONTACT_FROM_EMAIL`, `PORTFOLIO_SITE_URL`, rate limits — voir `.env.example`.
+Required secrets (Supabase Dashboard → Edge Functions → Secrets): `RESEND_API_KEY`, `CONTACT_TO_EMAIL`, `CONTACT_FROM_EMAIL`, `PORTFOLIO_SITE_URL`, rate-limit and hashing settings — see `.env.example`.
 
-### 3. Storage
+### Storage
 
-Migration `20250614000000_portfolio_storage.sql` — bucket public **`portfolio`** :
+Migration `20250614000000_portfolio_storage.sql` creates the public `portfolio` bucket with folders:
 
-- `avatar/`, `logo/`, `cv/`, `projects/`
+`avatar/`, `logo/`, `cv/`, `projects/`
 
-Upload depuis l’admin CMS ou URLs manuelles.
+Uploads are managed from the admin CMS (or via direct public URLs).
 
-### 4. Compte admin
+### Admin account
 
-1. **Authentication → Users** : créer un utilisateur, désactiver les inscriptions publiques
-2. Attribuer le rôle admin (SQL Editor) :
+1. Authentication → Users: create a user; disable public sign-ups.
+2. Grant admin role (SQL Editor):
 
 ```sql
--- Voir supabase/scripts/set-admin-role.sql
+-- See supabase/scripts/set-admin-role.sql
 update auth.users
 set raw_app_meta_data = raw_app_meta_data || '{"role":"admin"}'::jsonb
-where email = 'votre@email.com';
+where email = 'you@example.com';
 ```
 
-3. **Auth → URL Configuration** : Site URL + Redirect URLs (`/login`, `/reset-password`)
+3. Authentication → URL Configuration: set Site URL and Redirect URLs (`/login`, `/reset-password`).
 
-### 5. Peupler le CMS (seed)
+### CMS seed
 
-Données de référence : [`supabase/seed/portfolio-snapshot.json`](supabase/seed/portfolio-snapshot.json)
+Reference snapshot: [`supabase/seed/portfolio-snapshot.json`](supabase/seed/portfolio-snapshot.json)
 
 ```bash
 npm run cms:seed:sql
 supabase db query -f supabase/scripts/refresh-cms-from-snapshot.sql --linked
 ```
 
-Ré-exécutable (upsert) pour réinitialiser le contenu depuis le snapshot.
+Idempotent upsert — safe to re-run to reset content from the snapshot.
 
-### 6. Plan gratuit — keep-alive
+### Free plan keep-alive
 
-Le workflow [`.github/workflows/supabase-keepalive.yml`](.github/workflows/supabase-keepalive.yml) ping Supabase 2×/semaine. Configurer les secrets GitHub `SUPABASE_URL` et `SUPABASE_ANON_KEY`.
+Free-tier Supabase projects pause after approximately **7 days** of database inactivity. This repository includes a scheduled GitHub Action that performs a read-only REST ping twice per week.
+
+Workflow: [`.github/workflows/supabase-keepalive.yml`](.github/workflows/supabase-keepalive.yml)
+
+**Repository secrets** (Settings → Secrets and variables → Actions → Repository secrets) — not Environment secrets:
+
+| Secret | Value |
+|--------|--------|
+| `SUPABASE_URL` | Same as `VITE_SUPABASE_URL` |
+| `SUPABASE_ANON_KEY` | Same as `VITE_SUPABASE_ANON_KEY` |
+
+Schedule: Monday and Thursday 08:00 UTC (`workflow_dispatch` available for manual runs).
+
+For production uptime without relying on cron, use the Supabase Pro plan (no inactivity pause).
 
 ---
 
-## Guide portfolio (sans IA)
+## Portfolio guide
 
-Assistant **100 % client-side** — pas d’API OpenAI, pas de modèle local, **pas de champ texte libre**.
+Client-side assistant — no OpenAI API, no local LLM, no free-text input.
 
-- Menu par **catégories** (À propos, Compétences, Projets, Contact…)
-- Sous-menu **Projets** avec fiche détaillée par projet
-- Réponses tirées du CMS + liens actionnables (sections, GitHub, WhatsApp, CV, jeu)
-- **Synthèse vocale** : fichiers audio Piper pré-générés (lecture instantanée) + fallback Web Speech
-- Widget flottant bas-gauche sur `/` et `/game`
-- Code : `src/lib/portfolioChat/`, `src/hooks/usePortfolioGuide.ts`, `src/components/chat/PortfolioChatWidget.tsx`
+- Topic menu (About, Skills, Projects, Contact, etc.)
+- Project submenu with per-project detail
+- Answers derived from CMS content, with actionable links (sections, GitHub, WhatsApp, CV, game)
+- Speech: pre-generated Piper WAV files + Web Speech API fallback
+- Floating widget on `/` and `/game`
 
-### Audio guide (Piper TTS)
+Source: `src/lib/portfolioChat/`, `src/hooks/usePortfolioGuide.ts`, `src/components/chat/PortfolioChatWidget.tsx`
 
-Voix open source : **fr_FR-tom-medium** (FR) · **en_US-ryan-medium** (EN).
+### Guide audio (Piper TTS)
+
+Voices: `fr_FR-tom-medium` (FR), `en_US-ryan-medium` (EN).
 
 ```bash
-npm run guide:audio        # génère public/audio/guide/{fr,en}/*.wav
-npm run guide:audio:force  # régénère tout
+npm run guide:audio         # generate public/audio/guide/{fr,en}/*.wav
+npm run guide:audio:force   # regenerate all files
 ```
 
-À relancer après modification du contenu CMS / textes du guide. Fichiers servis statiquement — **0 € d’API**, lecture au clic sans latence de synthèse.
+Re-run after CMS or guide text changes. Audio is served statically (no TTS API cost).
 
 ---
 
-## Assets publics
+## Public assets
 
-Fichiers dans `public/` — inventaire : [`public/ASSETS.md`](public/ASSETS.md).
+Inventory: [`public/ASSETS.md`](public/ASSETS.md)
 
-| Fichier | Usage |
-|---------|--------|
-| `logo.png` | Navbar, footer, guide portfolio, OG |
-| `hajji-bg.png` | Fallback photo profil |
+| File | Usage |
+|------|--------|
+| `logo.png` | Navbar, footer, guide, Open Graph fallback |
+| `hajji.png` | Profile photo fallback |
 | `favicon.svg` | Favicon |
-| `placeholder-project.svg` | Projets sans capture |
-| `CV_Soufiane.pdf` | CV (ou upload CMS) |
+| `placeholder-project.svg` | Projects without a screenshot |
+| `CV_Soufiane.pdf` | CV download (or CMS Storage URL) |
 
-Images projets : upload admin → Storage, ou fichiers dans `public/projects/`.
+Project images: upload via admin → Storage, or place files under `public/projects/`.
 
 ---
 
-## Déploiement (Netlify)
+## Deployment (Netlify)
 
-1. Connecter le repo
-2. Build command : `npm run build`
-3. Publish directory : `dist`
-4. Variables d’environnement :
+1. Connect the GitHub repository
+2. Build command: `npm run build`
+3. Publish directory: `dist`
+4. Environment variables:
    - `VITE_SUPABASE_URL`
    - `VITE_SUPABASE_ANON_KEY`
-   - `VITE_SITE_URL` (URL Netlify finale)
-5. Redéployer après changement des variables
+   - `VITE_SITE_URL` (production URL)
+5. Redeploy after changing environment variables
 
 ---
 
-## Structure du projet
+## Project structure
 
 ```
 src/
   components/
-    sections/       # Hero, About, Skills, Projects, Contact…
-    chat/           # Assistant portfolio
-    admin/          # Layout, CMS, formulaires
-    layout/         # Navigation, Footer, Container
-    ui/             # Button, Card, Dialog, Input…
-  hooks/            # Auth, contenu portfolio, chat, thème
-  services/         # Supabase, contact, analytics, CMS admin
+    sections/       # Public page sections + memory game
+    chat/           # Portfolio guide widget
+    admin/          # Admin layout and CMS UI
+    layout/         # Navigation, footer, container
+    ui/             # Shared primitives
+  hooks/            # Auth, content, guide, theme, game
+  services/         # Supabase clients, contact, analytics, admin CRUD
   lib/
-    portfolioChat/  # Moteur guide (knowledge, topics, réponses)
+    portfolioChat/  # Guide knowledge and topics
     staticPortfolio.ts
   i18n/             # FR / EN
-  data/             # Fallback statique si Supabase indisponible
+  data/             # Static fallback when Supabase is down
   pages/            # Home, Game, Admin, Auth
 
 supabase/
-  migrations/       # Schéma PostgreSQL + RLS + seeds
-  functions/        # Edge Functions Deno
+  migrations/       # Schema, RLS, seeds
+  functions/        # Deno Edge Functions
   seed/             # portfolio-snapshot.json
-  scripts/          # set-admin-role.sql, refresh-cms-from-snapshot.sql
+  scripts/          # Admin role + CMS refresh SQL
 
 scripts/
-  generate-cms-seed.mjs   # Génère le SQL seed depuis le snapshot
+  generate-cms-seed.mjs
+  generate-guide-audio.ts
   generate-logo-base64.mjs
+
+.github/workflows/
+  supabase-keepalive.yml
 ```
 
 ---
 
-## Scripts npm
+## npm scripts
 
-| Commande | Description |
-|----------|-------------|
-| `npm run dev` | Serveur de développement Vite |
-| `npm run build` | Build production TypeScript + Vite |
-| `npm run preview` | Prévisualiser `dist/` |
+| Command | Description |
+|---------|-------------|
+| `npm run dev` | Vite development server |
+| `npm run build` | TypeScript check + production build |
+| `npm run preview` | Serve `dist/` locally |
 | `npm run lint` | ESLint |
-| `npm run cms:seed:sql` | Génère `supabase/scripts/refresh-cms-from-snapshot.sql` |
-| `npm run logo:generate` | Met à jour le logo base64 pour les emails |
+| `npm run cms:seed:sql` | Generate CMS refresh SQL from snapshot |
+| `npm run guide:audio` | Generate Piper guide audio (incremental) |
+| `npm run guide:audio:force` | Regenerate all guide audio |
+| `npm run logo:generate` | Refresh base64 logo for contact email templates |
 
 ---
 
-## Licence
+## License
 
-Projet privé — © Soufiane HAJJI.
+Private project. All rights reserved — Soufiane HAJJI.

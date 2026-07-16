@@ -4,10 +4,10 @@ import { useEffect, useMemo, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { Link, useNavigate } from 'react-router-dom'
 import { toast } from 'sonner'
+import { BrandLogo } from '@/components/shared/BrandLogo'
 import { Button } from '@/components/ui/Button'
 import { Card } from '@/components/ui/Card'
 import { Input } from '@/components/ui/Input'
-import { usePortfolioContent } from '@/hooks/PortfolioContentProvider'
 import { useTranslation } from '@/i18n/LanguageProvider'
 import { isSupabaseConfigured } from '@/lib/supabase'
 import { getResetPasswordSchema, type ResetPasswordFormValues } from '@/lib/validators'
@@ -16,8 +16,6 @@ import { AuthServiceError, updatePassword } from '@/services/auth'
 export function ResetPasswordPage() {
   const { t } = useTranslation()
   const navigate = useNavigate()
-  const { content } = usePortfolioContent()
-  const { profile } = content
   const [isSubmitting, setIsSubmitting] = useState(false)
   const schema = useMemo(() => getResetPasswordSchema(t), [t])
 
@@ -57,11 +55,13 @@ export function ResetPasswordPage() {
     <div className="flex min-h-screen items-center justify-center bg-background px-4 py-10">
       <div className="w-full max-w-md">
         <div className="mb-8 text-center">
-          <img
-            src={profile.logoUrl}
-            alt=""
-            className="mx-auto mb-4 h-14 w-14 rounded-xl object-contain"
-          />
+          <Link
+            to="/"
+            className="mx-auto mb-4 inline-flex rounded-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            aria-label={t.auth.backToSite}
+          >
+            <BrandLogo size="lg" framed className="mx-auto" />
+          </Link>
           <h1 className="font-display text-2xl font-bold text-foreground">
             {t.auth.resetPasswordTitle}
           </h1>

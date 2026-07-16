@@ -1,9 +1,12 @@
 import { CheckCircle2, Mail, MailOpen, Search, Trash2 } from 'lucide-react'
 import { useEffect, useMemo, useState } from 'react'
 import { toast } from 'sonner'
+import { AdminPagination } from '@/components/admin/AdminPagination'
+import { ConfirmDeleteDialog } from '@/components/admin/ConfirmDeleteDialog'
 import { StatusBadge } from '@/components/admin/StatusBadge'
 import { Button } from '@/components/ui/Button'
 import { Card } from '@/components/ui/Card'
+import { ADMIN_PAGE_SIZE, useClientPagination } from '@/hooks/useClientPagination'
 import { useTranslation } from '@/i18n/LanguageProvider'
 import { cn } from '@/lib/utils'
 import {
@@ -22,6 +25,8 @@ export function AdminMessagesPage() {
   const [search, setSearch] = useState('')
   const [selectedId, setSelectedId] = useState<string | null>(null)
   const [isLoading, setIsLoading] = useState(true)
+  const [pendingDeleteId, setPendingDeleteId] = useState<string | null>(null)
+  const [isDeleting, setIsDeleting] = useState(false)
 
   useEffect(() => {
     document.title = `${t.admin.nav.messages} — ${t.admin.title}`
@@ -49,9 +54,14 @@ export function AdminMessagesPage() {
     )
   }, [messages, search])
 
+  const { page, setPage, pageCount, pageItems, total, pageSize } = useClientPagination(
+    filteredMessages,
+    ADMIN_PAGE_SIZE,
+  )
+
   const selected =
     filteredMessages.find((message) => message.id === selectedId) ??
-    filteredMessages[0] ??
+    pageItems[0] ??
     null
 
   const handleStatusChange = async (id: string, status: ContactMessageStatus) => {
@@ -64,16 +74,19 @@ export function AdminMessagesPage() {
     await loadMessages(filter === 'all' ? undefined : filter)
   }
 
-  const handleDelete = async (id: string) => {
-    if (!window.confirm(t.admin.messages.confirmDelete)) return
+  const handleConfirmDelete = async () => {
+    if (!pendingDeleteId) return
+    setIsDeleting(true)
+    const ok = await deleteContactMessage(pendingDeleteId)
+    setIsDeleting(false)
 
-    const ok = await deleteContactMessage(id)
     if (!ok) {
       toast.error(t.admin.messages.deleteError)
       return
     }
     toast.success(t.admin.messages.deleteSuccess)
-    if (selectedId === id) setSelectedId(null)
+    if (selectedId === pendingDeleteId) setSelectedId(null)
+    setPendingDeleteId(null)
     await loadMessages(filter === 'all' ? undefined : filter)
   }
 
@@ -117,7 +130,7 @@ export function AdminMessagesPage() {
 
       {isLoading ? (
         <p className="text-sm text-muted-foreground">{t.common.loading}</p>
-      ) : filteredMessages.length === 0 ? (
+      ) : total === 0 ? (
         <Card className="p-8 text-center text-sm text-muted-foreground">
           {t.admin.messages.empty}
         </Card>
@@ -125,7 +138,7 @@ export function AdminMessagesPage() {
         <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.2fr)]">
           <Card className="overflow-hidden">
             <ul className="divide-y divide-border">
-              {filteredMessages.map((message) => (
+              {pageItems.map((message) => (
                 <li key={message.id}>
                   <button
                     type="button"
@@ -150,6 +163,13 @@ export function AdminMessagesPage() {
                 </li>
               ))}
             </ul>
+            <AdminPagination
+              page={page}
+              pageCount={pageCount}
+              total={total}
+              pageSize={pageSize}
+              onPageChange={setPage}
+            />
           </Card>
 
           {selected && (
@@ -216,7 +236,7 @@ export function AdminMessagesPage() {
                 <Button
                   size="sm"
                   variant="outline"
-                  onClick={() => void handleDelete(selected.id)}
+                  onClick={() => setPendingDeleteId(selected.id)}
                   className="text-destructive hover:text-destructive"
                 >
                   <Trash2 className="h-4 w-4" />
@@ -227,6 +247,14 @@ export function AdminMessagesPage() {
           )}
         </div>
       )}
+
+      <ConfirmDeleteDialog
+        open={Boolean(pendingDeleteId)}
+        onClose={() => setPendingDeleteId(null)}
+        onConfirm={handleConfirmDelete}
+        description={t.admin.messages.confirmDelete}
+        isLoading={isDeleting}
+      />
     </div>
   )
 }

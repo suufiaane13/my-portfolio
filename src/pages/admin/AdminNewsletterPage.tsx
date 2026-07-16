@@ -1,7 +1,10 @@
 import { Trash2 } from 'lucide-react'
 import { useCallback, useEffect, useState } from 'react'
 import { toast } from 'sonner'
+import { AdminPagination } from '@/components/admin/AdminPagination'
+import { ConfirmDeleteDialog } from '@/components/admin/ConfirmDeleteDialog'
 import { Card } from '@/components/ui/Card'
+import { ADMIN_PAGE_SIZE, useClientPagination } from '@/hooks/useClientPagination'
 import { useTranslation } from '@/i18n/LanguageProvider'
 import {
   deleteNewsletterSubscriber,
@@ -13,6 +16,12 @@ export function AdminNewsletterPage() {
   const { t } = useTranslation()
   const [subscribers, setSubscribers] = useState<NewsletterSubscriber[]>([])
   const [isLoading, setIsLoading] = useState(true)
+  const [pendingDelete, setPendingDelete] = useState<NewsletterSubscriber | null>(null)
+  const [isDeleting, setIsDeleting] = useState(false)
+  const { page, setPage, pageCount, pageItems, total, pageSize } = useClientPagination(
+    subscribers,
+    ADMIN_PAGE_SIZE,
+  )
 
   const load = useCallback(async () => {
     setIsLoading(true)
@@ -26,15 +35,18 @@ export function AdminNewsletterPage() {
     void load()
   }, [t, load])
 
-  const handleDelete = async (subscriber: NewsletterSubscriber) => {
-    if (!window.confirm(t.admin.newsletter.confirmDelete)) return
+  const handleConfirmDelete = async () => {
+    if (!pendingDelete) return
+    setIsDeleting(true)
+    const ok = await deleteNewsletterSubscriber(pendingDelete.id)
+    setIsDeleting(false)
 
-    const ok = await deleteNewsletterSubscriber(subscriber.id)
     if (!ok) {
       toast.error(t.admin.newsletter.deleteError)
       return
     }
     toast.success(t.admin.newsletter.deleteSuccess)
+    setPendingDelete(null)
     await load()
   }
 
@@ -45,49 +57,68 @@ export function AdminNewsletterPage() {
         <p className="mt-2 text-sm text-muted-foreground">{t.admin.newsletter.subtitle}</p>
       </div>
 
-      <Card className="overflow-x-auto">
+      <Card className="overflow-hidden">
         {isLoading ? (
           <p className="px-4 py-8 text-sm text-muted-foreground">{t.common.loading}</p>
-        ) : subscribers.length === 0 ? (
+        ) : total === 0 ? (
           <p className="px-4 py-8 text-center text-sm text-muted-foreground">
             {t.admin.newsletter.empty}
           </p>
         ) : (
-          <table className="min-w-full text-sm">
-            <thead>
-              <tr className="border-b border-border text-left text-muted-foreground">
-                <th className="px-4 py-3 font-medium">{t.admin.newsletter.columns.email}</th>
-                <th className="px-4 py-3 font-medium">{t.admin.newsletter.columns.locale}</th>
-                <th className="px-4 py-3 font-medium">{t.admin.newsletter.columns.source}</th>
-                <th className="px-4 py-3 font-medium">{t.admin.newsletter.columns.date}</th>
-                <th className="px-4 py-3 font-medium" />
-              </tr>
-            </thead>
-            <tbody>
-              {subscribers.map((subscriber) => (
-                <tr key={subscriber.id} className="border-b border-border/70">
-                  <td className="px-4 py-3 font-medium">{subscriber.email}</td>
-                  <td className="px-4 py-3 text-muted-foreground">{subscriber.locale}</td>
-                  <td className="px-4 py-3 text-muted-foreground">{subscriber.source}</td>
-                  <td className="px-4 py-3 text-muted-foreground">
-                    {new Date(subscriber.subscribedAt).toLocaleString()}
-                  </td>
-                  <td className="px-4 py-3 text-right">
-                    <button
-                      type="button"
-                      onClick={() => void handleDelete(subscriber)}
-                      className="inline-flex items-center gap-1 rounded-lg px-2 py-1 text-xs font-medium text-destructive transition-colors hover:bg-destructive/10"
-                    >
-                      <Trash2 className="h-3.5 w-3.5" />
-                      {t.admin.newsletter.delete}
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+          <>
+            <div className="overflow-x-auto">
+              <table className="min-w-full text-sm">
+                <thead>
+                  <tr className="border-b border-border text-left text-muted-foreground">
+                    <th className="px-4 py-3 font-medium">{t.admin.newsletter.columns.email}</th>
+                    <th className="px-4 py-3 font-medium">{t.admin.newsletter.columns.locale}</th>
+                    <th className="px-4 py-3 font-medium">{t.admin.newsletter.columns.source}</th>
+                    <th className="px-4 py-3 font-medium">{t.admin.newsletter.columns.date}</th>
+                    <th className="px-4 py-3 font-medium" />
+                  </tr>
+                </thead>
+                <tbody>
+                  {pageItems.map((subscriber) => (
+                    <tr key={subscriber.id} className="border-b border-border/70">
+                      <td className="px-4 py-3 font-medium">{subscriber.email}</td>
+                      <td className="px-4 py-3 text-muted-foreground">{subscriber.locale}</td>
+                      <td className="px-4 py-3 text-muted-foreground">{subscriber.source}</td>
+                      <td className="px-4 py-3 text-muted-foreground">
+                        {new Date(subscriber.subscribedAt).toLocaleString()}
+                      </td>
+                      <td className="px-4 py-3 text-right">
+                        <button
+                          type="button"
+                          onClick={() => setPendingDelete(subscriber)}
+                          className="inline-flex items-center gap-1 rounded-lg px-2 py-1 text-xs font-medium text-destructive transition-colors hover:bg-destructive/10"
+                        >
+                          <Trash2 className="h-3.5 w-3.5" />
+                          {t.admin.newsletter.delete}
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+            <AdminPagination
+              page={page}
+              pageCount={pageCount}
+              total={total}
+              pageSize={pageSize}
+              onPageChange={setPage}
+            />
+          </>
         )}
       </Card>
+
+      <ConfirmDeleteDialog
+        open={Boolean(pendingDelete)}
+        onClose={() => setPendingDelete(null)}
+        onConfirm={handleConfirmDelete}
+        description={t.admin.newsletter.confirmDelete}
+        isLoading={isDeleting}
+      />
     </div>
   )
 }

@@ -52,6 +52,8 @@ export const fr: Translations = {
     gameHintBadge: 'Mini-jeu sur le portfolio',
     gameHintDismiss: 'Fermer',
     contact: 'Contact',
+    login: 'Connexion',
+    admin: 'Admin',
     menu: 'Menu',
     home: "Retour à l'accueil",
     mainNav: 'Navigation principale',
@@ -68,6 +70,7 @@ export const fr: Translations = {
     title: 'Guide du portfolio',
     subtitle: 'Choisissez un sujet pour en savoir plus',
     badge: 'Guide',
+    fabName: 'Guide Soufiane',
     open: 'Ouvrir le guide',
     close: 'Fermer le guide',
     backToMenu: 'Retour au menu',
@@ -111,6 +114,9 @@ export const fr: Translations = {
         'Le portfolio inclut un mini-jeu mémoire avec classement top 5. Lancez une partie et tentez de battre votre record !',
       coreStack: 'Stack clé',
       location: 'Adresse',
+      emailLabel: 'Email',
+      whatsappLabel: 'WhatsApp',
+      socialTitle: 'Réseaux',
     },
   },
   newsletter: {
@@ -130,6 +136,7 @@ export const fr: Translations = {
     title: 'Développeur Full-Stack & UI/UX Designer',
     tagline:
       'React, Laravel, Rust & Tauri — je construis des apps web, mobiles et outils pour startups et clients freelance.',
+    availability: 'Disponible pour freelance — hireable',
     bio: [
       'Développeur full-stack basé au Maroc, spécialisé en React, TypeScript, Laravel et applications mobile-first. Plus de 30 projets open source sur GitHub, du site vitrine à la gestion métier.',
       'Mon approche combine design soigné, code maintenable et livraison rapide — dashboards, e-commerce, apps Android et outils métier offline.',
@@ -295,7 +302,7 @@ export const fr: Translations = {
       success: 'Score enregistré !',
       successRank: 'Score enregistré — vous êtes {{rank}}ᵉ !',
       submitError: 'Impossible d’enregistrer le score. Réessayez.',
-      rateLimit: 'Trop de tentatives — réessayez dans une minute.',
+      rateLimit: 'Limite atteinte : 3 scores max / heure. Tu peux rejouer — nouvel enregistrement dans {{minutes}} min.',
       wakingUp: 'Le serveur se réveille… Réessayez dans quelques secondes.',
     },
     cards: {
@@ -383,6 +390,7 @@ export const fr: Translations = {
     invalidCredentials: 'Email ou mot de passe incorrect',
     notAdmin: 'Ce compte n’a pas les droits administrateur',
     notConfigured: 'Supabase n’est pas configuré',
+    rateLimit: 'Trop de tentatives de connexion — réessayez dans {{minutes}} min.',
     backToSite: 'Retour au site',
     forgotPassword: 'Mot de passe oublié ?',
     forgotPasswordTitle: 'Réinitialiser le mot de passe',
@@ -410,6 +418,18 @@ export const fr: Translations = {
     themeDark: 'Mode sombre',
     openMenu: 'Ouvrir le menu',
     closeMenu: 'Fermer le menu',
+    pagination: {
+      previous: 'Précédent',
+      next: 'Suivant',
+      pageOf: 'Page {{page}} / {{pages}}',
+      showing: '{{from}}–{{to}} sur {{total}}',
+    },
+    deleteDialog: {
+      title: 'Confirmer la suppression',
+      cancel: 'Annuler',
+      confirm: 'Supprimer',
+      deleting: 'Suppression…',
+    },
     nav: {
       dashboard: 'Tableau de bord',
       content: 'Contenu',

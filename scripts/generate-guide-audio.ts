@@ -153,7 +153,7 @@ function collectGuideEntries(): GuideAudioEntry[] {
         chunkId,
         title,
         text: reply.text,
-        speechText: buildGuideSpeechText(title, reply.text),
+        speechText: buildGuideSpeechText(title, reply.text, locale),
       })
     }
 
@@ -169,7 +169,7 @@ function collectGuideEntries(): GuideAudioEntry[] {
         chunkId,
         title: project.title,
         text,
-        speechText: buildGuideSpeechText(project.title, text),
+        speechText: buildGuideSpeechText(project.title, text, locale),
       })
     }
   }
@@ -185,7 +185,8 @@ function synthesizeWithPiper(
 ) {
   const result = spawnSync(
     piperExe,
-    ['--model', modelPath, '--output_file', outputPath, '--length_scale', '0.88'],
+    // Slightly slower than default for clearer tech acronyms
+    ['--model', modelPath, '--output_file', outputPath, '--length_scale', '0.95'],
     {
       input: text,
       encoding: 'utf8',

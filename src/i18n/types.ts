@@ -72,6 +72,8 @@ export interface Translations {
     gameHintBadge: string
     gameHintDismiss: string
     contact: string
+    login: string
+    admin: string
     menu: string
     home: string
     mainNav: string
@@ -146,6 +148,8 @@ export interface Translations {
     title: string
     subtitle: string
     badge: string
+    /** FAB label under badge, e.g. Guide Soufiane */
+    fabName: string
     open: string
     close: string
     backToMenu: string
@@ -185,6 +189,9 @@ export interface Translations {
       gameIntro: string
       coreStack: string
       location: string
+      emailLabel: string
+      whatsappLabel: string
+      socialTitle: string
     }
   }
   newsletter: {
@@ -203,6 +210,7 @@ export interface Translations {
   profile: {
     title: string
     tagline: string
+    availability: string
     bio: [string, string]
     expertise: ExpertiseTranslation[]
   }
@@ -333,6 +341,8 @@ export interface Translations {
     invalidCredentials: string
     notAdmin: string
     notConfigured: string
+    /** Use {{minutes}} placeholder */
+    rateLimit: string
     backToSite: string
     forgotPassword: string
     forgotPasswordTitle: string
@@ -360,6 +370,18 @@ export interface Translations {
     themeDark: string
     openMenu: string
     closeMenu: string
+    pagination: {
+      previous: string
+      next: string
+      pageOf: string
+      showing: string
+    }
+    deleteDialog: {
+      title: string
+      cancel: string
+      confirm: string
+      deleting: string
+    }
     nav: {
       dashboard: string
       content: string
