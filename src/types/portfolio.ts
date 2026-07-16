@@ -67,6 +67,7 @@ export interface ProfileContent {
   avatarUrl: string
   logoUrl: string
   cvUrl: string
+  cvFilename: string
   githubUrl: string
   githubHandle: string
   publicRepos: number

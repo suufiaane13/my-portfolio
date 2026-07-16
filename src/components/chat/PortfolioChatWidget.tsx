@@ -25,6 +25,8 @@ import type { ChatReplyAction } from '@/lib/portfolioChat/types'
 import { usePortfolioGuide } from '@/hooks/usePortfolioGuide'
 import { useGuideSpeech } from '@/hooks/useGuideSpeech'
 import { useTranslation } from '@/i18n/LanguageProvider'
+import type { Locale } from '@/i18n/types'
+import { trackEvent } from '@/services/analytics'
 import { cn } from '@/lib/utils'
 import './PortfolioChatWidget.css'
 
@@ -83,7 +85,13 @@ function GuideMark({
   )
 }
 
-function GuideActionButton({ action }: { action: ChatReplyAction }) {
+function GuideActionButton({
+  action,
+  locale,
+}: {
+  action: ChatReplyAction
+  locale: Locale
+}) {
   const handleClick = () => {
     if (action.type === 'section' && action.sectionId) {
       const el = document.getElementById(action.sectionId)
@@ -91,6 +99,17 @@ function GuideActionButton({ action }: { action: ChatReplyAction }) {
       return
     }
     if (action.type === 'link' && action.href) {
+      if (action.download) {
+        const anchor = document.createElement('a')
+        anchor.href = action.href
+        anchor.download = action.download
+        anchor.rel = 'noopener'
+        document.body.appendChild(anchor)
+        anchor.click()
+        anchor.remove()
+        void trackEvent({ eventType: 'cv_download', path: '/', locale })
+        return
+      }
       if (action.href.startsWith('/') || action.href.startsWith('#')) {
         window.location.href = action.href
       } else {
@@ -361,6 +380,7 @@ export function PortfolioChatWidget() {
                             <GuideActionButton
                               key={`${action.label}-${action.href ?? action.sectionId}`}
                               action={action}
+                              locale={locale}
                             />
                           ))}
                         </div>

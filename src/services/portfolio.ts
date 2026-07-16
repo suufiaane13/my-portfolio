@@ -72,6 +72,7 @@ type ProfileRow = {
   avatar_url: string
   logo_url: string
   cv_url: string
+  cv_filename: string
   github_url: string
   github_handle: string
   public_repos: number
@@ -220,6 +221,7 @@ export async function fetchPortfolioContent(locale: Locale): Promise<PortfolioCo
       avatarUrl: profileRow.avatar_url,
       logoUrl: profileRow.logo_url,
       cvUrl: profileRow.cv_url,
+      cvFilename: profileRow.cv_filename || 'CV_Soufiane_HAJJI.pdf',
       githubUrl: profileRow.github_url,
       githubHandle: profileRow.github_handle,
       publicRepos: profileRow.public_repos,

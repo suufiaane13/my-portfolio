@@ -8,7 +8,7 @@ Fichiers servis depuis `public/` :
 | `hajji-bg.png` | ✅ présent | Photo profil (fallback statique + chaîne de secours) |
 | `favicon.svg` | ✅ présent | Favicon, dernier fallback image |
 | `placeholder-project.svg` | ✅ présent | Projets sans capture |
-| `CV_Soufiane.pdf` | ❌ à ajouter | Bouton téléchargement CV (Hero) — ou upload via CMS |
+| `soufiane.pdf` | ✅ présent | Bouton Hero « Télécharger mon CV » |
 | `projects/world-explorer.png` | ❌ à ajouter | Capture projet — ou upload via CMS Storage |
 | `projects/yobo.png` | ❌ à ajouter | Capture projet — ou upload via CMS Storage |
 

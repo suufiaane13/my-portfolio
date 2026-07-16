@@ -20,6 +20,8 @@ export interface ChatLink {
   label: string
   href: string
   external?: boolean
+  /** If set, trigger a file download (same behavior as Hero CV button). */
+  download?: string
 }
 
 export interface ChatChunk {
@@ -43,6 +45,7 @@ export interface ChatReplyAction {
   href?: string
   sectionId?: string
   query?: string
+  download?: string
 }
 
 export interface ChatReply {

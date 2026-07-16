@@ -4,7 +4,7 @@ export const profile = {
   githubHandle: '@suufiaane13',
   avatar: '/hajji.png',
   logo: '/logo.png',
-  cvUrl: '/CV_Soufiane.pdf',
+  cvUrl: '/soufiane.pdf',
   cvFilename: 'CV_Soufiane_HAJJI.pdf',
   stats: {
     publicRepos: 33,

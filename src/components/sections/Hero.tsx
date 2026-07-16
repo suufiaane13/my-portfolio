@@ -97,9 +97,7 @@ export function Hero() {
           {profile.cvUrl && (
             <a
               href={profile.cvUrl}
-              download
-              target="_blank"
-              rel="noopener noreferrer"
+              download={profile.cvFilename || 'CV_Soufiane_HAJJI.pdf'}
               onClick={() =>
                 trackEvent({ eventType: 'cv_download', path: '/', locale })
               }

@@ -20,6 +20,7 @@ function chunkToActions(chunk: ChatChunk, t: Translations): ChatReplyAction[] {
       label: link.label,
       type: 'link',
       href: link.href,
+      download: link.download,
     })
   }
 

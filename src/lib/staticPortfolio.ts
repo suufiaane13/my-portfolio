@@ -31,6 +31,7 @@ export function buildStaticPortfolio(_locale: Locale, t: Translations): Portfoli
       avatarUrl: staticProfile.avatar,
       logoUrl: staticProfile.logo,
       cvUrl: staticProfile.cvUrl,
+      cvFilename: staticProfile.cvFilename,
       githubUrl: staticProfile.github,
       githubHandle: staticProfile.githubHandle,
       publicRepos: staticProfile.stats.publicRepos,

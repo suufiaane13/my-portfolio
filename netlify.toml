@@ -2,6 +2,12 @@
   command = "npm run build"
   publish = "dist"
 
+# Missing PDFs → real 404 (avoid SPA fallback serving index.html as a fake .htm download)
+[[redirects]]
+  from = "/*.pdf"
+  to = "/.netlify/not-found"
+  status = 404
+
 [[redirects]]
   from = "/*"
   to = "/index.html"

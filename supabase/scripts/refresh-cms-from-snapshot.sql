@@ -14,7 +14,7 @@ insert into public.site_profile (
   email, whatsapp, whatsapp_href, address, published
 ) values (
   'main', 'Soufiane HAJJI', '/hajji.png', '/logo.png',
-  '/CV_Soufiane.pdf', 'CV_Soufiane_HAJJI.pdf',
+  '/soufiane.pdf', 'CV_Soufiane_HAJJI.pdf',
   'https://github.com/suufiaane13', '@suufiaane13', 33, 2022,
   'hji.sfn@gmail.com', '+212 641 454 572', 'https://wa.me/212641454572',
   'Oujda, Maroc', true

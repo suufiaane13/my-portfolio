@@ -210,7 +210,15 @@ export function buildChatKnowledge(
     keywords: uniqueKeywords('cv resume curriculum vitae pdf download telecharger'),
     title: t.hero.downloadCv,
     body: t.chatbot.templates.cvAvailable,
-    links: profile.cvUrl ? [{ label: t.hero.downloadCv, href: profile.cvUrl, external: true }] : [],
+    links: profile.cvUrl
+      ? [
+          {
+            label: t.hero.downloadCv,
+            href: profile.cvUrl,
+            download: profile.cvFilename || 'CV_Soufiane_HAJJI.pdf',
+          },
+        ]
+      : [],
     sectionId: 'hero',
   })
 
