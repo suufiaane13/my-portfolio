@@ -1,11 +1,13 @@
 import { Container } from '@/components/layout/Container'
 import { BrandLockup } from '@/components/shared/BrandLogo'
-import { profile } from '@/data/profile'
-import { socialLinks } from '@/data/contact'
+import { usePortfolioContent } from '@/hooks/PortfolioContentProvider'
 import { useTranslation } from '@/i18n/LanguageProvider'
+import { getSocialLinkIcon } from '@/lib/socialLinkIcons'
 
 export function Footer() {
   const { t } = useTranslation()
+  const { content } = usePortfolioContent()
+  const { profile, socialLinks } = content
   const year = new Date().getFullYear()
 
   return (
@@ -20,10 +22,10 @@ export function Footer() {
 
           <div className="flex flex-wrap items-center justify-center gap-4 sm:gap-6">
             {socialLinks.map((social) => {
-              const Icon = social.icon
+              const Icon = getSocialLinkIcon(social.iconKey)
               return (
                 <a
-                  key={social.label}
+                  key={social.slug}
                   href={social.href}
                   target="_blank"
                   rel="noopener noreferrer"

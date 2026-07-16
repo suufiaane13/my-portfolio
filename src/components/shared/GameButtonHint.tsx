@@ -1,10 +1,11 @@
 import { AnimatePresence, motion } from 'framer-motion'
-import { Gamepad2, X } from 'lucide-react'
-import { type ReactNode, useMemo } from 'react'
-import { Link } from 'react-router-dom'
+import { Gamepad2, Sparkles, X } from 'lucide-react'
+import { type ReactNode, useEffect } from 'react'
+import { useNavOverlay } from '@/components/layout/NavOverlayContext'
 import { useGameButtonHint } from '@/hooks/useGameButtonHint'
 import { useTranslation } from '@/i18n/LanguageProvider'
 import { cn } from '@/lib/utils'
+import './GameButtonHint.css'
 
 interface GameButtonHintProps {
   enabled: boolean
@@ -14,60 +15,79 @@ interface GameButtonHintProps {
 
 export function GameButtonHint({ enabled, className, children }: GameButtonHintProps) {
   const { t } = useTranslation()
+  const { active, openOverlay, closeOverlay } = useNavOverlay()
   const { visible, dismiss } = useGameButtonHint(enabled)
 
-  const message = useMemo(() => {
-    const messages = t.nav.gameHintMessages
-    return messages[Math.floor(Math.random() * messages.length)] ?? messages[0]
-  }, [visible, t.nav.gameHintMessages])
+  useEffect(() => {
+    if (visible && active !== 'lang') {
+      openOverlay('game-hint')
+    }
+  }, [active, openOverlay, visible])
+
+  useEffect(() => {
+    if (active === 'lang' && visible) {
+      dismiss()
+    }
+  }, [active, dismiss, visible])
+
+  useEffect(() => {
+    if (!visible && active === 'game-hint') {
+      closeOverlay()
+    }
+  }, [active, closeOverlay, visible])
+
+  const handleDismiss = () => {
+    dismiss()
+    if (active === 'game-hint') {
+      closeOverlay()
+    }
+  }
 
   return (
     <div className={cn('relative', className)}>
       {children}
 
       <AnimatePresence>
-        {visible && (
+        {visible && active !== 'lang' && (
           <motion.div
             role="status"
-            initial={{ opacity: 0, y: 6, scale: 0.96 }}
+            initial={{ opacity: 0, y: 8, scale: 0.94 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 4, scale: 0.98 }}
-            transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
+            exit={{ opacity: 0, y: 6, scale: 0.96 }}
+            transition={{ duration: 0.24, ease: [0.22, 1, 0.36, 1] }}
             className={cn(
-              'z-[60]',
-              'max-sm:fixed max-sm:inset-x-4 max-sm:top-[4.25rem] max-sm:w-auto',
-              'sm:absolute sm:right-0 sm:top-[calc(100%+0.5rem)] sm:w-[min(16.5rem,calc(100vw-2rem))]',
+              'game-hint z-[60]',
+              'max-sm:fixed max-sm:inset-x-4 max-sm:top-[4.25rem]',
+              'sm:absolute sm:right-0 sm:top-[calc(100%+0.625rem)] sm:w-[min(18rem,calc(100vw-2rem))]',
             )}
           >
             <div
-              className="pointer-events-none absolute -top-1.5 right-3 hidden h-3 w-3 rotate-45 border-l border-t border-primary/25 bg-card sm:block"
+              className="game-hint__arrow pointer-events-none absolute -top-[7px] right-4 hidden h-3.5 w-3.5 rotate-45 border border-border border-b-0 border-r-0 bg-card sm:block"
               aria-hidden="true"
             />
 
-            <div className="relative overflow-hidden rounded-xl border border-primary/25 bg-card p-3 shadow-lg shadow-primary/10">
-              <button
-                type="button"
-                onClick={dismiss}
-                className="absolute right-1.5 top-1.5 rounded-md p-1 text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
-                aria-label={t.nav.gameHintDismiss}
-              >
-                <X className="h-3.5 w-3.5" aria-hidden="true" />
-              </button>
-
-              <div className="flex gap-2.5 pr-5">
-                <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-primary/12 text-primary">
+            <div className="game-hint__panel overflow-hidden rounded-2xl border border-border bg-card text-card-foreground shadow-xl">
+              <div className="game-hint__header flex items-center gap-2 px-3 py-2.5">
+                <span className="game-hint__icon flex h-8 w-8 shrink-0 items-center justify-center rounded-xl">
                   <Gamepad2 className="h-4 w-4" aria-hidden="true" />
                 </span>
-                <div className="min-w-0 text-left">
-                  <p className="text-sm font-medium leading-snug text-foreground">{message}</p>
-                  <Link
-                    to="/game"
-                    onClick={dismiss}
-                    className="mt-1.5 inline-flex text-xs font-semibold text-primary transition-colors hover:underline"
-                  >
-                    {t.nav.gameHintCta} →
-                  </Link>
+                <div className="min-w-0 flex-1">
+                  <p className="font-display text-sm font-semibold leading-none text-foreground">
+                    {t.nav.game}
+                  </p>
+                  <p className="mt-1 flex items-center gap-1 text-[0.6875rem] font-medium text-muted-foreground">
+                    <Sparkles className="h-3 w-3 shrink-0 text-[var(--game-hint-accent)]" aria-hidden="true" />
+                    {t.nav.gameHintBadge}
+                  </p>
                 </div>
+                <button
+                  type="button"
+                  onClick={handleDismiss}
+                  className="shrink-0 rounded-lg p-1.5 text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+                  aria-label={t.nav.gameHintDismiss}
+                >
+                  <X className="h-3.5 w-3.5" aria-hidden="true" />
+                </button>
               </div>
             </div>
           </motion.div>

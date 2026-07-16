@@ -65,9 +65,11 @@ export interface Translations {
     education: string
     projects: string
     interests: string
+    languages: string
     game: string
     gameHintMessages: readonly string[]
     gameHintCta: string
+    gameHintBadge: string
     gameHintDismiss: string
     contact: string
     menu: string
@@ -95,6 +97,9 @@ export interface Translations {
     winTitle: string
     winMessage: string
     winStats: string
+    personalBest: string
+    personalBestStats: string
+    newRecord: string
     backToPortfolio: string
     leaderboard: {
       title: string
@@ -108,6 +113,7 @@ export interface Translations {
       successRank: string
       submitError: string
       rateLimit: string
+      wakingUp: string
     }
     cards: {
       compass: string
@@ -133,7 +139,62 @@ export interface Translations {
   hero: {
     viewProjects: string
     contactMe: string
+    downloadCv: string
     aboutAria: string
+  }
+  chatbot: {
+    title: string
+    subtitle: string
+    badge: string
+    open: string
+    close: string
+    backToMenu: string
+    chooseProject: string
+    listenAgain: string
+    stopSpeech: string
+    speaking: string
+    menu: {
+      about: string
+      freelance: string
+      skills: string
+      projects: string
+      experience: string
+      education: string
+      contact: string
+      cv: string
+      game: string
+    }
+    quickReplies: {
+      skills: string
+      projects: string
+      freelance: string
+      contact: string
+      cv: string
+      game: string
+    }
+    actions: {
+      viewSection: string
+    }
+    templates: {
+      intro: string
+      greeting: string
+      thanks: string
+      fallback: string
+      projectPrefix: string
+      cvAvailable: string
+      gameIntro: string
+      coreStack: string
+      location: string
+    }
+  }
+  newsletter: {
+    title: string
+    description: string
+    placeholder: string
+    subscribe: string
+    success: string
+    alreadySubscribed: string
+    error: string
   }
   about: {
     title: string
@@ -193,13 +254,17 @@ export interface Translations {
     chess: string
     travel: string
   }
+  languages: {
+    title: string
+    description: string
+    footnote: string
+  }
   contact: {
     title: string
     description: string
     info: string
     spokenLanguages: string
     formTitle: string
-    formDescription: string
     name: string
     namePlaceholder: string
     email: string
@@ -250,5 +315,279 @@ export interface Translations {
     submitError: string
     rateLimit: string
     rateLimitDescription: string
+    wakingUp: string
+    wakingUpDescription: string
+  }
+  auth: {
+    loginTitle: string
+    loginDescription: string
+    email: string
+    emailPlaceholder: string
+    password: string
+    passwordPlaceholder: string
+    passwordMin: string
+    signIn: string
+    signingIn: string
+    loginSuccess: string
+    loginError: string
+    invalidCredentials: string
+    notAdmin: string
+    notConfigured: string
+    backToSite: string
+    forgotPassword: string
+    forgotPasswordTitle: string
+    forgotPasswordDescription: string
+    sendResetLink: string
+    sendingReset: string
+    resetEmailSent: string
+    resetEmailError: string
+    backToLogin: string
+    resetPasswordTitle: string
+    resetPasswordDescription: string
+    newPassword: string
+    confirmPassword: string
+    passwordMismatch: string
+    updatePassword: string
+    updatingPassword: string
+    passwordUpdated: string
+    passwordUpdateError: string
+  }
+  admin: {
+    title: string
+    navLabel: string
+    signOut: string
+    themeLight: string
+    themeDark: string
+    openMenu: string
+    closeMenu: string
+    nav: {
+      dashboard: string
+      content: string
+      messages: string
+      analytics: string
+      scores: string
+      newsletter: string
+    }
+    dashboard: {
+      welcome: string
+      subtitle: string
+      unreadMessages: string
+      events7d: string
+      events30d: string
+      totalScores: string
+      newsletterSubscribers: string
+      quickLinks: string
+      topEvents: string
+      noEvents: string
+    }
+    messages: {
+      subtitle: string
+      empty: string
+      updateSuccess: string
+      updateError: string
+      filters: {
+        all: string
+      }
+      status: {
+        new: string
+        read: string
+        replied: string
+        spam: string
+      }
+      actions: {
+        reply: string
+        markRead: string
+        markReplied: string
+        markSpam: string
+      }
+      searchPlaceholder: string
+      delete: string
+      confirmDelete: string
+      deleteSuccess: string
+      deleteError: string
+    }
+    analytics: {
+      subtitle: string
+      empty: string
+      columns: {
+        type: string
+        path: string
+        detail: string
+        date: string
+      }
+      eventTypes: Record<string, string>
+      dailyChart: string
+      dailyChartDesc: string
+    }
+    newsletter: {
+      subtitle: string
+      empty: string
+      delete: string
+      confirmDelete: string
+      deleteSuccess: string
+      deleteError: string
+      columns: {
+        email: string
+        locale: string
+        source: string
+        date: string
+      }
+    }
+    scores: {
+      subtitle: string
+      empty: string
+      delete: string
+      confirmDelete: string
+      deleteSuccess: string
+      deleteError: string
+      columns: {
+        rank: string
+        player: string
+        grid: string
+        moves: string
+        time: string
+        date: string
+      }
+    }
+    content: {
+      hubTitle: string
+      hubDescription: string
+      backToDashboard: string
+      backToHub: string
+      edit: string
+      save: string
+      saveSuccess: string
+      saveError: string
+      create: string
+      createSuccess: string
+      createExperience: string
+      createEducation: string
+      createCategory: string
+      createSkill: string
+      createInterest: string
+      createLanguage: string
+      createSocial: string
+      delete: string
+      confirmDelete: string
+      confirmDeleteItem: string
+      deleteSuccess: string
+      deleteError: string
+      upload: string
+      uploading: string
+      uploadSuccess: string
+      uploadError: string
+      uploadInvalidType: string
+      uploadTooLarge: string
+      uploadNotConfigured: string
+      orUploadUrl: string
+      currentFile: string
+      noFileSelected: string
+      expandSection: string
+      collapseSection: string
+      uploadAvatarHint: string
+      uploadCvHint: string
+      uploadProjectHint: string
+      uploadMissingSlug: string
+      published: string
+      validation: {
+        slugRequired: string
+        slugInvalid: string
+        titleRequired: string
+        urlInvalid: string
+      }
+      draft: string
+      empty: string
+      preview: string
+      selectItem: string
+      backToList: string
+      allPublished: string
+      draftsCount: string
+      itemCount: string
+      tabs: {
+        identity: string
+        texts: string
+        links: string
+        more: string
+      }
+      groups: {
+        identity: string
+        identityDesc: string
+        publicTexts: string
+        publicTextsDesc: string
+        linksMedia: string
+        linksMediaDesc: string
+        github: string
+        githubDesc: string
+        expertise: string
+        expertiseDesc: string
+        interests: string
+        interestsDesc: string
+        languages: string
+        languagesDesc: string
+        social: string
+        socialDesc: string
+        content: string
+        contentDesc: string
+        media: string
+        mediaDesc: string
+        options: string
+        optionsDesc: string
+      }
+      sections: {
+        profile: { title: string; description: string }
+        projects: { title: string; description: string }
+        skills: { title: string; description: string }
+        experience: { title: string; description: string }
+        education: { title: string; description: string }
+      }
+      fields: {
+        title: string
+        description: string
+        longDescription: string
+        imageUrl: string
+        githubUrl: string
+        demoUrl: string
+        tags: string
+        year: string
+        sortOrder: string
+        featured: string
+        skills: string
+        period: string
+        role: string
+        company: string
+        technologies: string
+        projectSlug: string
+        isCurrent: string
+        institution: string
+        isCompleted: string
+        name: string
+        label: string
+        email: string
+        avatarUrl: string
+        avatar: string
+        cvUrl: string
+        cv: string
+        logo: string
+        projectImage: string
+        publicRepos: string
+        memberSince: string
+        whatsappHref: string
+        iconKey: string
+        isCore: string
+        githubHandle: string
+        tagline: string
+        availability: string
+        bio: string
+        expertise: string
+        interests: string
+        level: string
+        socialLinks: string
+        address: string
+        whatsapp: string
+        handle: string
+        slug: string
+        flagEmoji: string
+      }
+    }
   }
 }

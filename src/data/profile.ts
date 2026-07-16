@@ -3,7 +3,7 @@ export const profile = {
   availability: 'Disponible pour freelance — hireable',
   github: 'https://github.com/suufiaane13',
   githubHandle: '@suufiaane13',
-  avatar: '/hajji.png',
+  avatar: '/hajji-bg.png',
   logo: '/logo.png',
   cvUrl: '/CV_Soufiane.pdf',
   cvFilename: 'CV_Soufiane_HAJJI.pdf',

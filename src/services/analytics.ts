@@ -11,6 +11,8 @@ export type PortfolioEventType =
   | 'game_score_submit'
   | 'lang_switch'
   | 'theme_switch'
+  | 'chat_query'
+  | 'guide_topic'
 
 export interface TrackEventPayload {
   eventType: PortfolioEventType

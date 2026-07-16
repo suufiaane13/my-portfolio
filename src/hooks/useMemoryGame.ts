@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import {
   getCardsForGrid,
   getPairCount,
@@ -12,6 +12,9 @@ export interface GameCard {
   isFlipped: boolean
   isMatched: boolean
 }
+
+/** Time to show both cards on a mismatch before flipping them back. */
+export const MISMATCH_REVIEW_MS = 650
 
 function shuffle<T>(items: T[]): T[] {
   const array = [...items]
@@ -42,6 +45,57 @@ function formatTime(seconds: number) {
   return `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`
 }
 
+type CardClickResult =
+  | { kind: 'noop' }
+  | { kind: 'flip'; cards: GameCard[] }
+  | { kind: 'match'; cards: GameCard[]; isWon: boolean }
+  | { kind: 'mismatch'; cards: GameCard[]; firstIndex: number; secondIndex: number }
+
+function resolveCardClick(cards: GameCard[], index: number): CardClickResult {
+  const target = cards[index]
+  if (!target || target.isMatched || target.isFlipped) {
+    return { kind: 'noop' }
+  }
+
+  const openIndices = cards
+    .map((card, cardIndex) => (card.isFlipped && !card.isMatched ? cardIndex : -1))
+    .filter((cardIndex) => cardIndex >= 0)
+
+  if (openIndices.length >= 2) {
+    return { kind: 'noop' }
+  }
+
+  const next = cards.map((card, cardIndex) =>
+    cardIndex === index ? { ...card, isFlipped: true } : card,
+  )
+
+  const newOpenIndices = next
+    .map((card, cardIndex) => (card.isFlipped && !card.isMatched ? cardIndex : -1))
+    .filter((cardIndex) => cardIndex >= 0)
+
+  if (newOpenIndices.length < 2) {
+    return { kind: 'flip', cards: next }
+  }
+
+  const [firstIndex, secondIndex] = newOpenIndices
+
+  if (next[firstIndex].cardId === next[secondIndex].cardId) {
+    const matched = next.map((card, cardIndex) =>
+      cardIndex === firstIndex || cardIndex === secondIndex
+        ? { ...card, isMatched: true, isFlipped: true }
+        : card,
+    )
+
+    return {
+      kind: 'match',
+      cards: matched,
+      isWon: matched.every((card) => card.isMatched),
+    }
+  }
+
+  return { kind: 'mismatch', cards: next, firstIndex, secondIndex }
+}
+
 interface UseMemoryGameOptions {
   gridSize: GridSize
   onFlip?: () => void
@@ -63,18 +117,32 @@ export function useMemoryGame({
   const [isLocked, setIsLocked] = useState(false)
   const [hasStarted, setHasStarted] = useState(false)
   const [isWon, setIsWon] = useState(false)
+  const [mismatchIndices, setMismatchIndices] = useState<[number, number] | null>(null)
+  const mismatchTimeoutRef = useRef<number | null>(null)
 
   const pairCount = getPairCount(gridSize)
   const matchedCount = useMemo(() => cards.filter((card) => card.isMatched).length / 2, [cards])
 
-  const resetGame = useCallback((size: GridSize) => {
-    setCards(createDeck(size))
-    setMoves(0)
-    setSeconds(0)
-    setIsLocked(false)
-    setHasStarted(false)
-    setIsWon(false)
+  const clearMismatchTimeout = useCallback(() => {
+    if (mismatchTimeoutRef.current !== null) {
+      window.clearTimeout(mismatchTimeoutRef.current)
+      mismatchTimeoutRef.current = null
+    }
   }, [])
+
+  const resetGame = useCallback(
+    (size: GridSize) => {
+      clearMismatchTimeout()
+      setCards(createDeck(size))
+      setMoves(0)
+      setSeconds(0)
+      setIsLocked(false)
+      setHasStarted(false)
+      setIsWon(false)
+      setMismatchIndices(null)
+    },
+    [clearMismatchTimeout],
+  )
 
   const restart = useCallback(() => {
     resetGame(gridSize)
@@ -94,70 +162,61 @@ export function useMemoryGame({
     return () => window.clearInterval(timer)
   }, [hasStarted, isWon])
 
+  useEffect(() => () => clearMismatchTimeout(), [clearMismatchTimeout])
+
   const handleCardClick = useCallback(
     (index: number) => {
       if (isLocked || isWon) return
 
-      setCards((current) => {
-        const target = current[index]
-        if (!target || target.isMatched || target.isFlipped) return current
+      const result = resolveCardClick(cards, index)
+      if (result.kind === 'noop') return
 
-        const openIndices = current
-          .map((card, cardIndex) => (card.isFlipped && !card.isMatched ? cardIndex : -1))
-          .filter((cardIndex) => cardIndex >= 0)
+      onFlip?.()
+      if (!hasStarted) setHasStarted(true)
+      setCards(result.cards)
 
-        if (openIndices.length >= 2) return current
+      if (result.kind === 'flip') return
 
-        const next = current.map((card, cardIndex) =>
-          cardIndex === index ? { ...card, isFlipped: true } : card,
-        )
+      setMoves((value) => value + 1)
 
-        onFlip?.()
-        if (!hasStarted) setHasStarted(true)
-
-        const newOpenIndices = next
-          .map((card, cardIndex) => (card.isFlipped && !card.isMatched ? cardIndex : -1))
-          .filter((cardIndex) => cardIndex >= 0)
-
-        if (newOpenIndices.length < 2) return next
-
-        const [firstIndex, secondIndex] = newOpenIndices
-        setMoves((value) => value + 1)
-        setIsLocked(true)
-
-        if (next[firstIndex].cardId === next[secondIndex].cardId) {
-          onMatch?.()
-          const matched = next.map((card, cardIndex) =>
-            cardIndex === firstIndex || cardIndex === secondIndex
-              ? { ...card, isMatched: true, isFlipped: true }
-              : card,
-          )
-
-          if (matched.every((card) => card.isMatched)) {
-            setIsWon(true)
-            onWin?.()
-          }
-
-          setIsLocked(false)
-          return matched
+      if (result.kind === 'match') {
+        onMatch?.()
+        if (result.isWon) {
+          setIsWon(true)
+          onWin?.()
         }
+        return
+      }
 
-        onMismatch?.()
-        window.setTimeout(() => {
-          setCards((latest) =>
-            latest.map((card, cardIndex) =>
-              cardIndex === firstIndex || cardIndex === secondIndex
-                ? { ...card, isFlipped: false }
-                : card,
-            ),
-          )
-          setIsLocked(false)
-        }, 1000)
+      onMismatch?.()
+      setIsLocked(true)
+      setMismatchIndices([result.firstIndex, result.secondIndex])
 
-        return next
-      })
+      clearMismatchTimeout()
+      mismatchTimeoutRef.current = window.setTimeout(() => {
+        mismatchTimeoutRef.current = null
+        setCards((latest) =>
+          latest.map((card, cardIndex) =>
+            cardIndex === result.firstIndex || cardIndex === result.secondIndex
+              ? { ...card, isFlipped: false }
+              : card,
+          ),
+        )
+        setMismatchIndices(null)
+        setIsLocked(false)
+      }, MISMATCH_REVIEW_MS)
     },
-    [hasStarted, isLocked, isWon, onFlip, onMatch, onMismatch, onWin],
+    [
+      cards,
+      clearMismatchTimeout,
+      hasStarted,
+      isLocked,
+      isWon,
+      onFlip,
+      onMatch,
+      onMismatch,
+      onWin,
+    ],
   )
 
   return {
@@ -169,6 +228,7 @@ export function useMemoryGame({
     isWon,
     matchedCount,
     pairCount,
+    mismatchIndices,
     handleCardClick,
     restart,
   }

@@ -16,11 +16,8 @@ import type { PortfolioProject } from '@/types/portfolio'
 
 const PLACEHOLDER = '/placeholder-project.svg'
 
-function projectActionsGridClass(actionCount: number) {
-  return cn(
-    'grid gap-2',
-    actionCount === 1 ? 'grid-cols-1 sm:mx-auto sm:max-w-[11.5rem]' : 'grid-cols-2',
-  )
+function projectActionsGridClass(externalCount: number) {
+  return cn('grid gap-2', externalCount <= 1 ? 'grid-cols-1' : 'grid-cols-2')
 }
 
 function ProjectCard({
@@ -31,7 +28,7 @@ function ProjectCard({
   onOpen: (project: PortfolioProject) => void
 }) {
   const { t } = useTranslation()
-  const actionCount = (project.githubUrl ? 1 : 0) + 1
+  const externalActionCount = (project.githubUrl ? 1 : 0) + (project.demoUrl ? 1 : 0)
 
   return (
     <Card className="group overflow-hidden border-border transition-all duration-300 hover:border-primary/40 hover:shadow-xl hover:shadow-primary/10">
@@ -77,38 +74,41 @@ function ProjectCard({
           ))}
         </div>
 
-        <div className={projectActionsGridClass(actionCount)}>
-          {project.githubUrl && (
-            <Button
-              variant="outline"
-              size="sm"
-              className="min-w-0 w-full"
-              onClick={() => window.open(project.githubUrl, '_blank', 'noopener,noreferrer')}
-            >
-              <GithubIcon className="h-4 w-4 shrink-0" />
-              {t.common.github}
-            </Button>
+        <div className="space-y-2">
+          {externalActionCount > 0 && (
+            <div className={projectActionsGridClass(externalActionCount)}>
+              {project.githubUrl && (
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="min-w-0 w-full"
+                  onClick={() => window.open(project.githubUrl, '_blank', 'noopener,noreferrer')}
+                >
+                  <GithubIcon className="h-4 w-4 shrink-0" />
+                  {t.common.github}
+                </Button>
+              )}
+              {project.demoUrl && (
+                <Button
+                  size="sm"
+                  className="min-w-0 w-full"
+                  onClick={() => window.open(project.demoUrl, '_blank', 'noopener,noreferrer')}
+                >
+                  <ExternalLink className="h-4 w-4 shrink-0" />
+                  {t.common.demo}
+                </Button>
+              )}
+            </div>
           )}
-          {project.demoUrl ? (
-            <Button
-              size="sm"
-              className="min-w-0 w-full"
-              onClick={() => window.open(project.demoUrl, '_blank', 'noopener,noreferrer')}
-            >
-              <ExternalLink className="h-4 w-4 shrink-0" />
-              {t.common.demo}
-            </Button>
-          ) : (
-            <Button
-              variant="outline"
-              size="sm"
-              className="min-w-0 w-full"
-              onClick={() => onOpen(project)}
-            >
-              <Eye className="h-4 w-4 shrink-0" />
-              {t.common.details}
-            </Button>
-          )}
+          <Button
+            variant={externalActionCount > 0 ? 'outline' : 'primary'}
+            size="sm"
+            className="min-w-0 w-full"
+            onClick={() => onOpen(project)}
+          >
+            <Eye className="h-4 w-4 shrink-0" />
+            {t.common.details}
+          </Button>
         </div>
       </div>
     </Card>

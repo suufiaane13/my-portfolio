@@ -1,5 +1,6 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
+import { AuthProvider } from '@/hooks/AuthProvider'
 import { initLocale, LanguageProvider } from '@/i18n/LanguageProvider'
 import { initTheme } from '@/hooks/useTheme'
 import App from './App.tsx'
@@ -11,7 +12,9 @@ initLocale()
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <LanguageProvider>
-      <App />
+      <AuthProvider>
+        <App />
+      </AuthProvider>
     </LanguageProvider>
   </StrictMode>,
 )

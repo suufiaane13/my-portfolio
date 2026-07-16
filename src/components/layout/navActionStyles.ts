@@ -1,8 +1,11 @@
 import { cn } from '@/lib/utils'
 
-/** Groupe visuel des actions navbar (jeu, langue, thème, menu) */
-export const navActionGroupClass =
-  'flex items-center gap-0.5 rounded-[0.875rem] border border-border/80 bg-card/60 p-1 shadow-sm backdrop-blur-sm sm:gap-1'
+/** Groupe des actions navbar (jeu, langue, thème) — boutons séparés */
+export const navActionGroupClass = 'flex items-center gap-2 sm:gap-2.5'
+
+/** Cadre individuel par bouton */
+export const navActionShellClass =
+  'rounded-xl border border-border/80 bg-card/60 p-1 shadow-sm backdrop-blur-sm'
 
 export function navActionClass({
   active = false,

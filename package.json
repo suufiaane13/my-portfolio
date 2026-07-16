@@ -8,7 +8,10 @@
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "logo:generate": "node scripts/generate-logo-base64.mjs"
+    "logo:generate": "node scripts/generate-logo-base64.mjs",
+    "cms:seed:sql": "node scripts/generate-cms-seed.mjs",
+    "guide:audio": "npx vite-node scripts/generate-guide-audio.ts",
+    "guide:audio:force": "npx vite-node scripts/generate-guide-audio.ts --force"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.4.0",
@@ -37,6 +40,7 @@
     "eslint-plugin-react-refresh": "^0.5.2",
     "globals": "^17.6.0",
     "tailwindcss": "^4.3.0",
+    "tsx": "^4.21.0",
     "typescript": "~6.0.2",
     "typescript-eslint": "^8.59.2",
     "vite": "^8.0.12"

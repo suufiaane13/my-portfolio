@@ -1,6 +1,9 @@
 import { getSupabase } from '@/lib/supabase'
+import { withTimeout } from '@/lib/withTimeout'
 import type { Locale } from '@/i18n/types'
 import type { PortfolioContent } from '@/types/portfolio'
+
+const FETCH_TIMEOUT_MS = 12_000
 
 type ProjectRow = {
   slug: string
@@ -73,11 +76,31 @@ type ProfileRow = {
   github_handle: string
   public_repos: number
   member_since: number
+  email: string
+  whatsapp: string
+  whatsapp_href: string
+  address: string
   title: string
   tagline: string
   availability: string
   bio_paragraph_1: string
   bio_paragraph_2: string
+}
+
+type SocialLinkRow = {
+  slug: string
+  label: string
+  href: string
+  handle: string
+  icon_key: string
+  sort_order: number
+}
+
+type SpokenLanguageRow = {
+  slug: string
+  flag_emoji: string
+  sort_order: number
+  spoken_language_translations: { locale: string; name: string; level: string }[]
 }
 
 function groupSkills(rows: SkillRow[]) {
@@ -106,6 +129,30 @@ export async function fetchPortfolioContent(locale: Locale): Promise<PortfolioCo
   const supabase = getSupabase()
   if (!supabase) return null
 
+  const fetchAll = Promise.all([
+    supabase.from('v_projects_i18n').select('*').eq('locale', locale).order('sort_order'),
+    supabase.from('v_skills_i18n').select('*').eq('locale', locale),
+    supabase.from('v_experiences_i18n').select('*').eq('locale', locale).order('sort_order'),
+    supabase.from('v_education_i18n').select('*').eq('locale', locale).order('sort_order'),
+    supabase.from('v_interests_i18n').select('*').eq('locale', locale).order('sort_order'),
+    supabase.from('v_expertise_i18n').select('*').eq('locale', locale).order('sort_order'),
+    supabase.from('v_profile_i18n').select('*').eq('locale', locale).maybeSingle(),
+    supabase.from('social_links').select('*').eq('published', true).order('sort_order'),
+    supabase
+      .from('spoken_languages')
+      .select('slug, flag_emoji, sort_order, spoken_language_translations(locale, name, level)')
+      .eq('published', true)
+      .order('sort_order'),
+  ])
+
+  let results: Awaited<typeof fetchAll>
+  try {
+    results = await withTimeout(fetchAll, FETCH_TIMEOUT_MS)
+  } catch (error) {
+    console.warn('[portfolio] Supabase fetch timed out or failed:', error)
+    return null
+  }
+
   const [
     projectsRes,
     skillsRes,
@@ -114,15 +161,9 @@ export async function fetchPortfolioContent(locale: Locale): Promise<PortfolioCo
     interestsRes,
     expertiseRes,
     profileRes,
-  ] = await Promise.all([
-    supabase.from('v_projects_i18n').select('*').eq('locale', locale).order('sort_order'),
-    supabase.from('v_skills_i18n').select('*').eq('locale', locale),
-    supabase.from('v_experiences_i18n').select('*').eq('locale', locale).order('sort_order'),
-    supabase.from('v_education_i18n').select('*').eq('locale', locale).order('sort_order'),
-    supabase.from('v_interests_i18n').select('*').eq('locale', locale).order('sort_order'),
-    supabase.from('v_expertise_i18n').select('*').eq('locale', locale).order('sort_order'),
-    supabase.from('v_profile_i18n').select('*').eq('locale', locale).maybeSingle(),
-  ])
+    socialRes,
+    spokenRes,
+  ] = results
 
   const firstError =
     projectsRes.error ??
@@ -131,7 +172,9 @@ export async function fetchPortfolioContent(locale: Locale): Promise<PortfolioCo
     educationRes.error ??
     interestsRes.error ??
     expertiseRes.error ??
-    profileRes.error
+    profileRes.error ??
+    socialRes.error ??
+    spokenRes.error
 
   if (firstError) {
     console.warn('[portfolio] Supabase fetch failed:', firstError.message)
@@ -177,7 +220,33 @@ export async function fetchPortfolioContent(locale: Locale): Promise<PortfolioCo
       tagline: profileRow.tagline,
       availability: profileRow.availability,
       bio: [profileRow.bio_paragraph_1, profileRow.bio_paragraph_2],
+      email: profileRow.email,
+      whatsapp: profileRow.whatsapp,
+      whatsappHref: profileRow.whatsapp_href,
+      address: profileRow.address,
     },
+    socialLinks: (socialRes.data as SocialLinkRow[]).map((row) => ({
+      slug: row.slug,
+      label: row.label,
+      href: row.href,
+      handle: row.handle,
+      iconKey: row.icon_key,
+      sortOrder: row.sort_order,
+    })),
+    spokenLanguages: (spokenRes.data as SpokenLanguageRow[])
+      .map((row) => {
+        const translation = row.spoken_language_translations.find((t) => t.locale === locale)
+        if (!translation) return null
+        return {
+          slug: row.slug,
+          flagEmoji: row.flag_emoji,
+          sortOrder: row.sort_order,
+          name: translation.name,
+          level: translation.level,
+        }
+      })
+      .filter((row): row is NonNullable<typeof row> => row !== null)
+      .sort((a, b) => a.sortOrder - b.sortOrder),
     projects,
     skillCategories,
     coreStack,

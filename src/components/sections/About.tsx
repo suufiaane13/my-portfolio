@@ -6,6 +6,7 @@ import { Card } from '@/components/ui/Card'
 import { usePortfolioContent } from '@/hooks/PortfolioContentProvider'
 import { useTranslation } from '@/i18n/LanguageProvider'
 import { getExpertiseIcon } from '@/lib/portfolioIcons'
+import { applyAvatarImageFallback } from '@/lib/portfolioImage'
 import { cn } from '@/lib/utils'
 
 const expertiseColors = [
@@ -50,7 +51,7 @@ export function About() {
                 decoding="async"
                 onLoad={() => setImageLoaded(true)}
                 onError={(event) => {
-                  event.currentTarget.src = '/favicon.svg'
+                  applyAvatarImageFallback(event.currentTarget)
                   setImageLoaded(true)
                 }}
               />

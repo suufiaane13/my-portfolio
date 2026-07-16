@@ -15,6 +15,7 @@ const ALLOWED_EVENTS = new Set([
   'game_score_submit',
   'lang_switch',
   'theme_switch',
+  'guide_topic',
 ])
 
 interface TrackEventBody {

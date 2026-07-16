@@ -1,0 +1,66 @@
+.portfolio-chat-fab {
+  box-shadow:
+    0 8px 24px rgb(37 99 235 / 0.25),
+    0 2px 8px rgb(0 0 0 / 0.2);
+}
+
+.portfolio-chat-fab:hover {
+  box-shadow:
+    0 12px 32px rgb(37 99 235 / 0.35),
+    0 4px 12px rgb(0 0 0 / 0.25);
+}
+
+.portfolio-chat-panel {
+  box-shadow:
+    0 24px 48px rgb(0 0 0 / 0.35),
+    0 0 0 1px rgb(37 99 235 / 0.12);
+}
+
+.portfolio-chat-messages {
+  scrollbar-width: thin;
+  scrollbar-color: rgb(37 99 235 / 0.35) transparent;
+}
+
+.portfolio-chat-bubble--user {
+  background: linear-gradient(135deg, rgb(37 99 235 / 0.95), rgb(59 130 246 / 0.85));
+  color: white;
+}
+
+.portfolio-chat-bubble--assistant {
+  background: var(--muted);
+  color: var(--foreground);
+}
+
+.portfolio-chat-chip {
+  transition:
+    border-color 0.2s ease,
+    background-color 0.2s ease,
+    color 0.2s ease;
+}
+
+.portfolio-chat-chip:hover {
+  border-color: rgb(37 99 235 / 0.45);
+  background: rgb(37 99 235 / 0.08);
+  color: var(--foreground);
+}
+
+.portfolio-guide-topic:focus-visible {
+  outline: 2px solid rgb(37 99 235 / 0.45);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .portfolio-chat-fab,
+  .portfolio-chat-chip {
+    transition: none;
+  }
+}
+
+@media (max-width: 639px) {
+  .portfolio-chat-panel {
+    border-radius: 0;
+    max-height: 100dvh;
+    height: 100dvh;
+    width: 100vw;
+  }
+}

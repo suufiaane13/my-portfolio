@@ -1,7 +1,7 @@
 import { useLayoutEffect } from 'react'
-import { profile } from '@/data/profile'
 import { cn } from '@/lib/utils'
 import { removeStaticLoader } from '@/hooks/useAppReady'
+import { usePortfolioContent } from '@/hooks/PortfolioContentProvider'
 import { useTranslation } from '@/i18n/LanguageProvider'
 import './PageLoader.css'
 
@@ -11,6 +11,7 @@ interface PageLoaderProps {
 
 export function PageLoader({ exiting = false }: PageLoaderProps) {
   const { t } = useTranslation()
+  const { content } = usePortfolioContent()
 
   useLayoutEffect(() => {
     removeStaticLoader()
@@ -29,7 +30,7 @@ export function PageLoader({ exiting = false }: PageLoaderProps) {
       <div className="page-loader__spinner-wrap">
         <div className="page-loader__ring" aria-hidden="true" />
         <img
-          src={profile.logo}
+          src={content.profile.logoUrl}
           alt=""
           className="page-loader__logo"
           width={56}

@@ -1,5 +1,4 @@
-import { profile } from '@/data/profile'
-import { useTranslation } from '@/i18n/LanguageProvider'
+import { usePortfolioContent } from '@/hooks/PortfolioContentProvider'
 import { cn } from '@/lib/utils'
 
 type BrandLogoSize = 'xs' | 'sm' | 'md' | 'lg'
@@ -19,10 +18,13 @@ interface BrandLogoProps {
 }
 
 export function BrandLogo({ size = 'sm', className, framed = false }: BrandLogoProps) {
+  const { content } = usePortfolioContent()
+  const { profile } = content
+
   if (!framed) {
     return (
       <img
-        src={profile.logo}
+        src={profile.logoUrl}
         alt={`Logo ${profile.name}`}
         className={cn('shrink-0 object-contain', sizeClasses[size], className)}
         width={64}
@@ -41,7 +43,7 @@ export function BrandLogo({ size = 'sm', className, framed = false }: BrandLogoP
       )}
     >
       <img
-        src={profile.logo}
+        src={profile.logoUrl}
         alt={`Logo ${profile.name}`}
         className="h-full w-full object-contain"
         width={64}
@@ -65,7 +67,8 @@ export function BrandLockup({
   className,
   titleClassName,
 }: BrandLockupProps) {
-  const { t } = useTranslation()
+  const { content } = usePortfolioContent()
+  const { profile } = content
 
   return (
     <div className={cn('flex items-center gap-3', className)}>
@@ -75,7 +78,7 @@ export function BrandLockup({
           {profile.name}
         </p>
         {showSubtitle && (
-          <p className="text-sm text-muted-foreground">{t.profile.title}</p>
+          <p className="text-sm text-muted-foreground">{profile.title}</p>
         )}
       </div>
     </div>

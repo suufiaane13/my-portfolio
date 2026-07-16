@@ -4,6 +4,7 @@ import {
   Code,
   GraduationCap,
   Heart,
+  Languages,
   Mail,
   Rocket,
   User,
@@ -18,6 +19,7 @@ export type NavKey = keyof Translations['nav'] &
     | 'education'
     | 'projects'
     | 'interests'
+    | 'languages'
     | 'contact'
   )
 
@@ -34,6 +36,7 @@ export const navItems: NavItem[] = [
   { href: '#education', key: 'education', icon: GraduationCap },
   { href: '#projects', key: 'projects', icon: Briefcase },
   { href: '#interests', key: 'interests', icon: Heart },
+  { href: '#languages', key: 'languages', icon: Languages },
   { href: '#contact', key: 'contact', icon: Mail },
 ]
 

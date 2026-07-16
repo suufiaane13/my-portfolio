@@ -7,6 +7,9 @@ const expertiseIconMap: Record<string, LucideIcon> = {
   globe: Globe,
 }
 
+export const INTEREST_ICON_KEYS = ['waves', 'crown', 'plane'] as const
+export type InterestIconKey = (typeof INTEREST_ICON_KEYS)[number]
+
 const interestIconMap: Record<string, LucideIcon> = {
   waves: Waves,
   crown: Crown,

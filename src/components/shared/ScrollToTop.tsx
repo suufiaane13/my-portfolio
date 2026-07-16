@@ -1,5 +1,13 @@
+import {
+  motion,
+  useMotionValueEvent,
+  useReducedMotion,
+  useScroll,
+  useSpring,
+  useTransform,
+} from 'framer-motion'
 import { ArrowUp } from 'lucide-react'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { useTranslation } from '@/i18n/LanguageProvider'
 import { cn } from '@/lib/utils'
 
@@ -9,34 +17,26 @@ const RADIUS = (SIZE - STROKE) / 2
 const CIRCUMFERENCE = 2 * Math.PI * RADIUS
 const SHOW_AFTER = 400
 
-function getScrollProgress() {
-  const maxScroll = document.documentElement.scrollHeight - window.innerHeight
-  if (maxScroll <= 0) return 0
-  return Math.min(1, Math.max(0, window.scrollY / maxScroll))
-}
-
 export function ScrollToTop() {
   const { t } = useTranslation()
-  const [visible, setVisible] = useState(false)
-  const [progress, setProgress] = useState(0)
+  const reduceMotion = useReducedMotion()
+  const [visible, setVisible] = useState(
+    () => typeof window !== 'undefined' && window.scrollY > SHOW_AFTER,
+  )
+  const { scrollYProgress, scrollY } = useScroll()
 
-  useEffect(() => {
-    const update = () => {
-      setVisible(window.scrollY > SHOW_AFTER)
-      setProgress(getScrollProgress())
-    }
+  useMotionValueEvent(scrollY, 'change', (latest) => {
+    setVisible(latest > SHOW_AFTER)
+  })
 
-    update()
-    window.addEventListener('scroll', update, { passive: true })
-    window.addEventListener('resize', update, { passive: true })
+  const smoothProgress = useSpring(scrollYProgress, {
+    stiffness: reduceMotion ? 1000 : 70,
+    damping: reduceMotion ? 100 : 22,
+    mass: 0.35,
+    restDelta: 0.0005,
+  })
 
-    return () => {
-      window.removeEventListener('scroll', update)
-      window.removeEventListener('resize', update)
-    }
-  }, [])
-
-  const offset = CIRCUMFERENCE * (1 - progress)
+  const offset = useTransform(smoothProgress, (progress) => CIRCUMFERENCE * (1 - progress))
 
   return (
     <button
@@ -69,7 +69,7 @@ export function ScrollToTop() {
           strokeOpacity={0.18}
           strokeWidth={STROKE}
         />
-        <circle
+        <motion.circle
           cx={SIZE / 2}
           cy={SIZE / 2}
           r={RADIUS}
@@ -77,9 +77,10 @@ export function ScrollToTop() {
           stroke="var(--primary)"
           strokeWidth={STROKE}
           strokeLinecap="round"
-          strokeDasharray={CIRCUMFERENCE}
-          strokeDashoffset={offset}
-          className="transition-[stroke-dashoffset] duration-150 ease-out motion-reduce:transition-none"
+          style={{
+            strokeDasharray: CIRCUMFERENCE,
+            strokeDashoffset: offset,
+          }}
         />
       </svg>
       <ArrowUp className="relative h-5 w-5 drop-shadow-sm" aria-hidden="true" />

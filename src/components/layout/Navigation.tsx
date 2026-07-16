@@ -3,21 +3,25 @@ import { useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { Sheet } from '@/components/ui/Sheet'
 import { Container } from '@/components/layout/Container'
+import { NavOverlayProvider } from '@/components/layout/NavOverlayContext'
 import {
   navActionClass,
   navActionGroupClass,
   navActionIconClass,
   navActionPillClass,
+  navActionShellClass,
 } from '@/components/layout/navActionStyles'
 import { BrandLogo } from '@/components/shared/BrandLogo'
 import { GameButtonHint } from '@/components/shared/GameButtonHint'
+import { applyAvatarImageFallback } from '@/lib/portfolioImage'
 import { GithubIcon } from '@/components/shared/SocialIcons'
 import { LanguageToggle } from '@/components/shared/LanguageToggle'
 import { ThemeToggle } from '@/components/shared/ThemeToggle'
 import { navItems } from '@/data/navigation'
-import { profile } from '@/data/profile'
+import { usePortfolioContent } from '@/hooks/PortfolioContentProvider'
 import { useScrollSpy, useScrolled } from '@/hooks/useScrollSpy'
 import { useTranslation } from '@/i18n/LanguageProvider'
+import { markGameVisited } from '@/hooks/useGameButtonHint'
 import { cn, scrollToSection } from '@/lib/utils'
 
 interface NavigationProps {
@@ -27,6 +31,8 @@ interface NavigationProps {
 
 export function Navigation({ isDark, onToggleTheme }: NavigationProps) {
   const { t } = useTranslation()
+  const { content } = usePortfolioContent()
+  const { profile } = content
   const location = useLocation()
   const isHome = location.pathname === '/'
   const isGamePage = location.pathname === '/game'
@@ -51,6 +57,7 @@ export function Navigation({ isDark, onToggleTheme }: NavigationProps) {
     )
 
   return (
+    <NavOverlayProvider>
     <>
       <header
         className={cn(
@@ -93,45 +100,56 @@ export function Navigation({ isDark, onToggleTheme }: NavigationProps) {
           )}
 
           <div className={navActionGroupClass}>
-            <GameButtonHint enabled={isHome && !isGamePage}>
-              <Link
-                to="/game"
-                className={cn(
-                  navActionClass({ active: isGamePage }),
-                  navActionPillClass,
-                  'hidden sm:inline-flex',
-                )}
-              >
-                <Gamepad2 className="h-4 w-4 shrink-0" aria-hidden="true" />
-                {t.nav.game}
-              </Link>
+            <div className={navActionShellClass}>
+              <GameButtonHint enabled={isHome && !isGamePage}>
+                <Link
+                  to="/game"
+                  onClick={markGameVisited}
+                  className={cn(
+                    navActionClass({ active: isGamePage }),
+                    navActionPillClass,
+                    'hidden sm:inline-flex',
+                  )}
+                >
+                  <Gamepad2 className="h-4 w-4 shrink-0" aria-hidden="true" />
+                  {t.nav.game}
+                </Link>
 
-              <Link
-                to="/game"
-                aria-label={t.nav.game}
-                className={cn(
-                  navActionClass({ active: isGamePage }),
-                  navActionIconClass,
-                  'sm:hidden',
-                )}
-              >
-                <Gamepad2 className="h-4 w-4" aria-hidden="true" />
-              </Link>
-            </GameButtonHint>
+                <Link
+                  to="/game"
+                  onClick={markGameVisited}
+                  aria-label={t.nav.game}
+                  className={cn(
+                    navActionClass({ active: isGamePage }),
+                    navActionIconClass,
+                    'sm:hidden',
+                  )}
+                >
+                  <Gamepad2 className="h-4 w-4" aria-hidden="true" />
+                </Link>
+              </GameButtonHint>
+            </div>
 
-            <LanguageToggle />
-            <ThemeToggle isDark={isDark} onToggle={onToggleTheme} />
+            <div className={navActionShellClass}>
+              <LanguageToggle />
+            </div>
+
+            <div className={navActionShellClass}>
+              <ThemeToggle isDark={isDark} onToggle={onToggleTheme} />
+            </div>
 
             {isHome && (
-              <button
-                type="button"
-                className={cn(navActionClass(), navActionIconClass, 'lg:hidden')}
-                onClick={() => setMenuOpen(true)}
-                aria-label={t.nav.menu}
-                aria-expanded={menuOpen}
-              >
-                <Menu className="h-4 w-4" aria-hidden="true" />
-              </button>
+              <div className={navActionShellClass}>
+                <button
+                  type="button"
+                  className={cn(navActionClass(), navActionIconClass, 'lg:hidden')}
+                  onClick={() => setMenuOpen(true)}
+                  aria-label={t.nav.menu}
+                  aria-expanded={menuOpen}
+                >
+                  <Menu className="h-4 w-4" aria-hidden="true" />
+                </button>
+              </div>
             )}
           </div>
         </Container>
@@ -156,14 +174,14 @@ export function Navigation({ isDark, onToggleTheme }: NavigationProps) {
           <div className="relative flex flex-col items-center gap-3 text-center">
             <div className="h-20 w-20 overflow-hidden rounded-2xl border-2 border-primary/30 bg-muted/50 shadow-md">
               <img
-                src={profile.avatar}
+                src={profile.avatarUrl}
                 alt={profile.name}
                 className="h-full w-full object-cover object-[center_12%]"
                 width={80}
                 height={80}
                 decoding="async"
                 onError={(event) => {
-                  event.currentTarget.src = '/favicon.svg'
+                  applyAvatarImageFallback(event.currentTarget)
                 }}
               />
             </div>
@@ -171,13 +189,13 @@ export function Navigation({ isDark, onToggleTheme }: NavigationProps) {
               <p className="font-display text-base font-bold leading-tight tracking-tight">
                 {profile.name}
               </p>
-              <p className="mt-1.5 text-xs leading-snug text-muted-foreground">{t.profile.title}</p>
+              <p className="mt-1.5 text-xs leading-snug text-muted-foreground">{profile.title}</p>
             </div>
           </div>
 
           <div className="relative mt-4 border-t border-primary/15 pt-3 text-center">
             <a
-              href={profile.github}
+              href={profile.githubUrl}
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center justify-center gap-1.5 rounded-lg text-xs font-medium text-muted-foreground transition-colors hover:text-primary"
@@ -215,7 +233,10 @@ export function Navigation({ isDark, onToggleTheme }: NavigationProps) {
           <div className="mt-3 border-t border-border/80 pt-3 pb-6">
             <Link
               to="/game"
-              onClick={() => setMenuOpen(false)}
+              onClick={() => {
+                markGameVisited()
+                setMenuOpen(false)
+              }}
               className={cn(
                 'group flex items-center gap-2.5 rounded-xl border px-3 py-2.5 transition-all duration-200',
                 'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background',
@@ -246,5 +267,6 @@ export function Navigation({ isDark, onToggleTheme }: NavigationProps) {
         </nav>
       </Sheet>
     </>
+    </NavOverlayProvider>
   )
 }

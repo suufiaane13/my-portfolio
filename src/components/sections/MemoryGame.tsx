@@ -1,6 +1,7 @@
 import { AnimatePresence, motion } from 'framer-motion'
 import {
   Clock,
+  Flame,
   Grid2x2,
   Grid3x3,
   Loader2,
@@ -19,15 +20,18 @@ import { Button } from '@/components/ui/Button'
 import { Input } from '@/components/ui/Input'
 import { CardIcon } from '@/components/sections/memory/CardIcons'
 import { type CardId, type GridSize } from '@/data/memoryGame'
-import { profile } from '@/data/profile'
 import { useGameSounds } from '@/hooks/useGameSounds'
+import { usePortfolioContent } from '@/hooks/PortfolioContentProvider'
 import { useMemoryGame } from '@/hooks/useMemoryGame'
 import { useTranslation } from '@/i18n/LanguageProvider'
 import { cn } from '@/lib/utils'
 import { trackEvent } from '@/services/analytics'
 import {
+  formatLeaderboardTime,
+  getPersonalBest,
   getSavedPlayerName,
   isLeaderboardEnabled,
+  savePersonalBestIfBetter,
   ScoreServiceError,
   submitScore,
 } from '@/services/memoryGame'
@@ -38,17 +42,21 @@ function MemoryCard({
   label,
   isFlipped,
   isMatched,
+  isMismatch,
   disabled,
   onClick,
   hiddenLabel,
+  logoUrl,
 }: {
   cardId: CardId
   label: string
   isFlipped: boolean
   isMatched: boolean
+  isMismatch: boolean
   disabled: boolean
   onClick: () => void
   hiddenLabel: string
+  logoUrl: string
 }) {
   return (
     <button
@@ -57,6 +65,7 @@ function MemoryCard({
         'memory-card',
         (isFlipped || isMatched) && 'memory-card--flipped',
         isMatched && 'memory-card--matched',
+        isMismatch && 'memory-card--mismatch',
       )}
       onClick={onClick}
       disabled={disabled || isMatched || isFlipped}
@@ -66,7 +75,7 @@ function MemoryCard({
       <div className="memory-card__inner">
         <div className="memory-card__face memory-card__face--front" aria-hidden={isFlipped || isMatched}>
           <img
-            src={profile.logo}
+            src={logoUrl}
             alt=""
             className="memory-card__brand"
             width={56}
@@ -84,6 +93,8 @@ function MemoryCard({
 
 export function MemoryGame() {
   const { t, locale } = useTranslation()
+  const { content } = usePortfolioContent()
+  const logoUrl = content.profile.logoUrl
   const [gridSize, setGridSize] = useState<GridSize>(4)
   const [hasGameStarted, setHasGameStarted] = useState(false)
   const [soundOn, setSoundOn] = useState(true)
@@ -93,6 +104,8 @@ export function MemoryGame() {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [submitError, setSubmitError] = useState<string | null>(null)
   const [leaderboardRefreshKey, setLeaderboardRefreshKey] = useState(0)
+  const [personalBest, setPersonalBest] = useState(() => getPersonalBest(gridSize))
+  const [isNewRecord, setIsNewRecord] = useState(false)
   const winMessageRef = useRef<HTMLDivElement>(null)
   const winTrackedRef = useRef(false)
   const { play } = useGameSounds(soundOn)
@@ -106,6 +119,7 @@ export function MemoryGame() {
     isWon,
     matchedCount,
     pairCount,
+    mismatchIndices,
     handleCardClick,
     restart,
   } = useMemoryGame({
@@ -121,6 +135,7 @@ export function MemoryGame() {
     setSubmittedRank(null)
     setSubmitError(null)
     setIsSubmitting(false)
+    setIsNewRecord(false)
     winTrackedRef.current = false
   }, [])
 
@@ -165,6 +180,8 @@ export function MemoryGame() {
           setSubmitError(t.memoryGame.leaderboard.rateLimit)
         } else if (error.code === 'validation') {
           setSubmitError(t.memoryGame.leaderboard.nameError)
+        } else if (error.code === 'waking_up') {
+          setSubmitError(t.memoryGame.leaderboard.wakingUp)
         } else {
           setSubmitError(t.memoryGame.leaderboard.submitError)
         }
@@ -177,9 +194,20 @@ export function MemoryGame() {
   }, [gridSize, locale, moves, playerName, seconds, t.memoryGame.leaderboard])
 
   useEffect(() => {
+    setPersonalBest(getPersonalBest(gridSize))
+    setIsNewRecord(false)
+  }, [gridSize])
+
+  useEffect(() => {
     if (!isWon || winTrackedRef.current) return
 
     winTrackedRef.current = true
+    const record = savePersonalBestIfBetter(gridSize, moves, seconds)
+    if (record.isNewRecord) {
+      setPersonalBest({ moves, seconds })
+      setIsNewRecord(true)
+    }
+
     trackEvent({
       eventType: 'game_win',
       path: '/game',
@@ -211,8 +239,19 @@ export function MemoryGame() {
         label: t.memoryGame.pairs,
         value: `${matchedCount}/${pairCount}`,
       },
+      ...(personalBest
+        ? [
+            {
+              icon: Flame,
+              label: t.memoryGame.personalBest,
+              value: t.memoryGame.personalBestStats
+                .replace('{{moves}}', String(personalBest.moves))
+                .replace('{{time}}', formatLeaderboardTime(personalBest.seconds)),
+            },
+          ]
+        : []),
     ],
-    [formattedTime, matchedCount, moves, pairCount, t.memoryGame],
+    [formattedTime, matchedCount, moves, pairCount, personalBest, t.memoryGame],
   )
 
   return (
@@ -322,9 +361,14 @@ export function MemoryGame() {
                   label={t.memoryGame.cards[card.cardId]}
                   isFlipped={card.isFlipped}
                   isMatched={card.isMatched}
+                  isMismatch={
+                    mismatchIndices !== null &&
+                    (index === mismatchIndices[0] || index === mismatchIndices[1])
+                  }
                   disabled={!hasGameStarted || isLocked || isWon}
                   onClick={() => handleCardClick(index)}
                   hiddenLabel={t.memoryGame.hiddenCard}
+                  logoUrl={logoUrl}
                 />
               ))}
             </div>
@@ -338,7 +382,7 @@ export function MemoryGame() {
                   className="memory-game__start"
                 >
                   <img
-                    src={profile.logo}
+                    src={logoUrl}
                     alt=""
                     className="memory-game__start-logo"
                     width={72}
@@ -373,6 +417,9 @@ export function MemoryGame() {
                   <Trophy className="h-7 w-7" aria-hidden="true" />
                 </div>
                 <h3 className="font-display text-2xl font-bold text-foreground">{t.memoryGame.winTitle}</h3>
+                {isNewRecord && (
+                  <p className="mt-2 text-sm font-semibold text-primary">{t.memoryGame.newRecord}</p>
+                )}
                 <p className="mt-2 text-base text-muted-foreground">{t.memoryGame.winMessage}</p>
                 <p className="mt-3 text-sm text-muted-foreground">
                   {t.memoryGame.winStats

@@ -1,6 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Loader2, Mail, MapPin, Send } from 'lucide-react'
-import { useEffect, useMemo, useState } from 'react'
+import { Loader2, Mail, MapPin, Newspaper, Send } from 'lucide-react'
+import { useEffect, useMemo, useState, type FormEvent } from 'react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import { Section, SectionHeading } from '@/components/layout/Container'
@@ -10,17 +10,22 @@ import { Button } from '@/components/ui/Button'
 import { Card } from '@/components/ui/Card'
 import { Input } from '@/components/ui/Input'
 import { Textarea } from '@/components/ui/Textarea'
-import { contactValues, whatsapp } from '@/data/contact'
+import { usePortfolioContent } from '@/hooks/PortfolioContentProvider'
 import { useTranslation } from '@/i18n/LanguageProvider'
 import { isSupabaseConfigured } from '@/lib/supabase'
 import { getContactSchema, type ContactFormValues } from '@/lib/validators'
 import { ContactServiceError, submitContactForm } from '@/services/contact'
+import { NewsletterServiceError, subscribeNewsletter } from '@/services/newsletter'
 
 const contactIcons = [Mail, WhatsAppIcon, MapPin]
 
 export function Contact() {
   const { t, locale } = useTranslation()
+  const { content } = usePortfolioContent()
+  const { profile } = content
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [newsletterEmail, setNewsletterEmail] = useState('')
+  const [isSubscribing, setIsSubscribing] = useState(false)
   const isFormEnabled = isSupabaseConfigured()
   const schema = useMemo(() => getContactSchema(t), [t])
 
@@ -28,30 +33,21 @@ export function Contact() {
     () => [
       {
         label: t.contact.labels.email,
-        value: contactValues.email,
-        href: `mailto:${contactValues.email}`,
+        value: profile.email,
+        href: `mailto:${profile.email}`,
       },
       {
         label: t.contact.labels.whatsapp,
-        value: whatsapp.value,
-        href: whatsapp.href,
+        value: profile.whatsapp,
+        href: profile.whatsappHref,
       },
       {
         label: t.contact.labels.address,
-        value: contactValues.address,
+        value: profile.address,
         href: '#contact',
       },
     ],
-    [t],
-  )
-
-  const spokenLanguages = useMemo(
-    () => [
-      { flag: '🇲🇦', ...t.contact.spoken.ar },
-      { flag: '🇫🇷', ...t.contact.spoken.fr },
-      { flag: '🇬🇧', ...t.contact.spoken.en },
-    ],
-    [t],
+    [t, profile],
   )
 
   const {
@@ -95,6 +91,14 @@ export function Contact() {
         return
       }
 
+      if (error instanceof ContactServiceError && error.code === 'waking_up') {
+        toast.error(t.toast.wakingUp, {
+          id: toastId,
+          description: t.toast.wakingUpDescription,
+        })
+        return
+      }
+
       toast.error(t.toast.error, {
         id: toastId,
         description: t.toast.errorDescription,
@@ -104,8 +108,28 @@ export function Contact() {
     }
   })
 
+  const handleNewsletterSubscribe = async (event: FormEvent) => {
+    event.preventDefault()
+    if (!isFormEnabled || isSubscribing || !newsletterEmail.trim()) return
+
+    setIsSubscribing(true)
+    try {
+      await subscribeNewsletter({ email: newsletterEmail.trim(), locale, source: 'contact' })
+      setNewsletterEmail('')
+      toast.success(t.newsletter.success)
+    } catch (error) {
+      if (error instanceof NewsletterServiceError && error.code === 'already_subscribed') {
+        toast.info(t.newsletter.alreadySubscribed)
+        return
+      }
+      toast.error(t.newsletter.error)
+    } finally {
+      setIsSubscribing(false)
+    }
+  }
+
   return (
-    <Section id="contact">
+    <Section id="contact" className="bg-background">
       <SectionHeading title={t.contact.title} description={t.contact.description} />
 
       <div className="grid gap-8 lg:grid-cols-3 lg:gap-10">
@@ -144,35 +168,52 @@ export function Contact() {
             </div>
           </div>
 
-          <div>
-            <h3 className="mb-4 font-display text-xl font-semibold">
-              {t.contact.spokenLanguages}
-            </h3>
-            <Card className="border-border p-4">
-              <div className="space-y-3">
-                {spokenLanguages.map((lang) => (
-                  <div key={lang.name} className="flex items-center gap-3">
-                    <span className="text-xl" aria-hidden="true">
-                      {lang.flag}
-                    </span>
-                    <div>
-                      <p className="text-sm font-medium">{lang.name}</p>
-                      <p className="text-xs text-muted-foreground">{lang.level}</p>
-                    </div>
+          {isFormEnabled && (
+            <div>
+              <h3 className="mb-4 font-display text-xl font-semibold">{t.newsletter.title}</h3>
+              <Card className="border-border p-4">
+                <div className="flex items-start gap-3">
+                  <div className="rounded-lg bg-primary/10 p-2">
+                    <Newspaper className="h-4 w-4 text-primary" aria-hidden="true" />
                   </div>
-                ))}
-              </div>
-            </Card>
-          </div>
+                  <div className="min-w-0 flex-1">
+                    <p className="text-sm text-muted-foreground">{t.newsletter.description}</p>
+                    <form
+                      onSubmit={(e) => void handleNewsletterSubscribe(e)}
+                      className="mt-3 flex flex-col gap-2 sm:flex-row"
+                    >
+                      <Input
+                        type="email"
+                        value={newsletterEmail}
+                        onChange={(e) => setNewsletterEmail(e.target.value)}
+                        placeholder={t.newsletter.placeholder}
+                        disabled={isSubscribing}
+                        className="min-w-0 flex-1"
+                        required
+                        aria-label={t.newsletter.placeholder}
+                      />
+                      <Button type="submit" size="md" disabled={isSubscribing} className="shrink-0">
+                        {isSubscribing ? (
+                          <Loader2 className="h-4 w-4 animate-spin" />
+                        ) : (
+                          t.newsletter.subscribe
+                        )}
+                      </Button>
+                    </form>
+                  </div>
+                </div>
+              </Card>
+            </div>
+          )}
         </SectionReveal>
 
         <SectionReveal delay={0.1} className="lg:col-span-2">
           <Card className="border-border p-5 md:p-6 lg:p-8">
             <div className="mb-6">
               <h3 className="font-display text-xl font-semibold">{t.contact.formTitle}</h3>
-              <p className="mt-2 text-sm text-muted-foreground">
-                {isFormEnabled ? t.contact.formDescription : t.contact.formUnavailable}
-              </p>
+              {!isFormEnabled && (
+                <p className="mt-2 text-sm text-muted-foreground">{t.contact.formUnavailable}</p>
+              )}
             </div>
 
             <form className="space-y-5" noValidate onSubmit={onSubmit}>

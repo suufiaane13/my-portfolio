@@ -1,8 +1,9 @@
 import { AnimatePresence, motion } from 'framer-motion'
 import { X } from 'lucide-react'
 import { useEffect, type ReactNode } from 'react'
-import { cn } from '@/lib/utils'
+import { createPortal } from 'react-dom'
 import { Button } from '@/components/ui/Button'
+import { cn } from '@/lib/utils'
 
 interface DialogProps {
   open: boolean
@@ -29,11 +30,13 @@ export function Dialog({ open, onClose, title, children, className }: DialogProp
     }
   }, [open, onClose])
 
-  return (
+  if (typeof document === 'undefined') return null
+
+  return createPortal(
     <AnimatePresence>
       {open && (
         <div
-          className="fixed inset-0 z-[70] flex items-end justify-center p-0 sm:items-center sm:p-4"
+          className="fixed inset-0 z-[100] flex items-end justify-center p-0 sm:items-center sm:p-4"
           role="dialog"
           aria-modal="true"
           aria-labelledby="dialog-title"
@@ -57,6 +60,7 @@ export function Dialog({ open, onClose, title, children, className }: DialogProp
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 24, scale: 0.98 }}
             transition={{ type: 'spring', damping: 28, stiffness: 320 }}
+            onClick={(event) => event.stopPropagation()}
           >
             <div className="sticky top-0 flex items-center justify-between border-b border-border bg-background/95 px-5 py-4 backdrop-blur-md">
               <h3 id="dialog-title" className="font-display text-lg font-semibold md:text-xl">
@@ -70,6 +74,7 @@ export function Dialog({ open, onClose, title, children, className }: DialogProp
           </motion.div>
         </div>
       )}
-    </AnimatePresence>
+    </AnimatePresence>,
+    document.body,
   )
 }

@@ -1,11 +1,12 @@
 import { useEffect } from 'react'
-import { profile } from '@/data/profile'
 import { siteConfig } from '@/data/site'
-import { socialLinks } from '@/data/contact'
+import { usePortfolioContent } from '@/hooks/PortfolioContentProvider'
 import { useTranslation } from '@/i18n/LanguageProvider'
 
 export function SeoHead() {
   const { t, locale } = useTranslation()
+  const { content } = usePortfolioContent()
+  const { profile, socialLinks } = content
 
   useEffect(() => {
     document.title = t.meta.title
@@ -53,11 +54,11 @@ export function SeoHead() {
         {
           '@type': 'Person',
           name: profile.name,
-          jobTitle: t.profile.title,
+          jobTitle: profile.title,
           url: siteConfig.url,
-          image: `${siteConfig.url}${profile.avatar}`,
-          logo: `${siteConfig.url}${profile.logo}`,
-          email: 'hjisfn@gmail.com',
+          image: `${siteConfig.url}${profile.avatarUrl}`,
+          logo: `${siteConfig.url}${profile.logoUrl}`,
+          email: profile.email,
           sameAs: socialLinks.map((link) => link.href),
           knowsAbout: [
             'React',
@@ -78,7 +79,7 @@ export function SeoHead() {
             name: profile.name,
             logo: {
               '@type': 'ImageObject',
-              url: `${siteConfig.url}${profile.logo}`,
+              url: `${siteConfig.url}${profile.logoUrl}`,
             },
           },
         },
@@ -93,7 +94,7 @@ export function SeoHead() {
       document.head.appendChild(script)
     }
     script.textContent = JSON.stringify(jsonLd)
-  }, [t, locale])
+  }, [t, locale, profile, socialLinks])
 
   return null
 }

@@ -9,11 +9,13 @@ import { Hero } from '@/components/sections/Hero'
 import { Interests } from '@/components/sections/Interests'
 import { Projects } from '@/components/sections/Projects'
 import { Skills } from '@/components/sections/Skills'
+import { SpokenLanguages } from '@/components/sections/SpokenLanguages'
 import { Analytics } from '@/components/shared/Analytics'
 import { PortfolioAnalytics } from '@/components/shared/PortfolioAnalytics'
+import { PortfolioChatWidget } from '@/components/chat/PortfolioChatWidget'
 import { ScrollToTop } from '@/components/shared/ScrollToTop'
+import { LanguageTransition } from '@/components/shared/LanguageTransition'
 import { SeoHead } from '@/components/shared/SeoHead'
-import { PortfolioContentProvider } from '@/hooks/PortfolioContentProvider'
 import { useTheme } from '@/hooks/useTheme'
 import { useTranslation } from '@/i18n/LanguageProvider'
 
@@ -36,28 +38,28 @@ function HomePageContent() {
 
       <Navigation isDark={isDark} onToggleTheme={toggleTheme} />
 
-      <main className="min-h-screen bg-background">
-        <Hero />
-        <About />
-        <Skills />
-        <Experience />
-        <Education />
-        <Projects />
-        <Interests />
-        <Contact />
-        <Footer />
-      </main>
+      <LanguageTransition className="min-h-screen">
+        <main className="min-h-screen bg-background">
+          <Hero />
+          <About />
+          <Skills />
+          <Experience />
+          <Education />
+          <Projects />
+          <Interests />
+          <SpokenLanguages />
+          <Contact />
+          <Footer />
+        </main>
+      </LanguageTransition>
 
       <ScrollToTop />
+      <PortfolioChatWidget />
       <Toaster richColors closeButton position="top-right" />
     </>
   )
 }
 
 export function HomePage() {
-  return (
-    <PortfolioContentProvider>
-      <HomePageContent />
-    </PortfolioContentProvider>
-  )
+  return <HomePageContent />
 }

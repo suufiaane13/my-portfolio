@@ -1,3 +1,4 @@
+import { contactValues, socialLinks as staticSocialLinks, whatsapp } from '@/data/contact'
 import { education as staticEducation } from '@/data/education'
 import { experience as staticExperience } from '@/data/experience'
 import { interests as staticInterests } from '@/data/interests'
@@ -37,7 +38,24 @@ export function buildStaticPortfolio(_locale: Locale, t: Translations): Portfoli
       tagline: t.profile.tagline,
       availability: staticProfile.availability,
       bio: t.profile.bio,
+      email: contactValues.email,
+      whatsapp: whatsapp.value,
+      whatsappHref: whatsapp.href,
+      address: contactValues.address,
     },
+    socialLinks: staticSocialLinks.map((link, index) => ({
+      slug: link.label.toLowerCase(),
+      label: link.label,
+      href: link.href,
+      handle: link.handle,
+      iconKey: link.label.toLowerCase() === 'instagram' ? 'instagram' : link.label.toLowerCase() === 'whatsapp' ? 'whatsapp' : 'github',
+      sortOrder: index + 1,
+    })),
+    spokenLanguages: [
+      { slug: 'ar', flagEmoji: '🇲🇦', sortOrder: 1, ...t.contact.spoken.ar },
+      { slug: 'fr', flagEmoji: '🇫🇷', sortOrder: 2, ...t.contact.spoken.fr },
+      { slug: 'en', flagEmoji: '🇬🇧', sortOrder: 3, ...t.contact.spoken.en },
+    ],
     projects: staticProjects.map((project, index) => {
       const copy = t.projects.items[project.id]
       return {

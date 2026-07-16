@@ -1,0 +1,39 @@
+{
+  "version": "1",
+  "generatedAt": "2026-06-22T16:32:19.041Z",
+  "format": "wav",
+  "voices": {
+    "fr": "fr_FR-tom-medium",
+    "en": "en_US-ryan-medium"
+  },
+  "files": {
+    "fr": [
+      "about-main",
+      "about-availability",
+      "skills-overview",
+      "experience-list",
+      "education-list",
+      "contact-main",
+      "cv-download",
+      "game-info",
+      "project-myfood",
+      "project-pure-power-menu",
+      "project-world-explorer",
+      "project-sultan-kunafa"
+    ],
+    "en": [
+      "about-main",
+      "about-availability",
+      "skills-overview",
+      "experience-list",
+      "education-list",
+      "contact-main",
+      "cv-download",
+      "game-info",
+      "project-myfood",
+      "project-pure-power-menu",
+      "project-world-explorer",
+      "project-sultan-kunafa"
+    ]
+  }
+}

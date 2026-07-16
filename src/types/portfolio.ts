@@ -75,6 +75,27 @@ export interface ProfileContent {
   tagline: string
   availability: string
   bio: [string, string]
+  email: string
+  whatsapp: string
+  whatsappHref: string
+  address: string
+}
+
+export interface SocialLinkContent {
+  slug: string
+  label: string
+  href: string
+  handle: string
+  iconKey: string
+  sortOrder: number
+}
+
+export interface SpokenLanguageContent {
+  slug: string
+  flagEmoji: string
+  sortOrder: number
+  name: string
+  level: string
 }
 
 export interface PortfolioContent {
@@ -86,5 +107,7 @@ export interface PortfolioContent {
   interests: InterestContent[]
   expertise: ExpertiseContent[]
   profile: ProfileContent
+  socialLinks: SocialLinkContent[]
+  spokenLanguages: SpokenLanguageContent[]
   source: 'supabase' | 'static'
 }
