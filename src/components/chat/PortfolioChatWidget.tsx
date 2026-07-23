@@ -20,6 +20,7 @@ import { createPortal } from 'react-dom'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { toast } from 'sonner'
 import { Button } from '@/components/ui/Button'
+import { AdminDashboardFab } from '@/components/shared/AdminDashboardFab'
 import { GithubIcon } from '@/components/shared/SocialIcons'
 import { GUIDE_TOPIC_IDS, type GuideTopicId } from '@/lib/portfolioChat/guideTopics'
 import { chunkIdForGuideProject, chunkIdForGuideTopic } from '@/lib/portfolioChat/guideAudio'
@@ -284,31 +285,38 @@ export function PortfolioChatWidget() {
     <>
       <AnimatePresence>
         {!isOpen && (
-          <motion.button
-            ref={fabRef}
-            type="button"
-            initial={reduceMotion ? false : { opacity: 0, scale: 0.9, y: 12 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={reduceMotion ? undefined : { opacity: 0, scale: 0.9, y: 12 }}
+          <motion.div
             className={cn(
-              'portfolio-chat-fab-anchor fixed z-40 flex items-center justify-center bg-transparent p-0',
-              'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2',
+              'portfolio-chat-fab-anchor fixed z-40 flex flex-col-reverse items-center gap-3',
             )}
-            onClick={toggle}
-            aria-label={t.chatbot.open}
-            whileHover={reduceMotion ? undefined : { scale: 1.06 }}
-            whileTap={reduceMotion ? undefined : { scale: 0.96 }}
+            initial={reduceMotion ? false : { opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={reduceMotion ? undefined : { opacity: 0, y: 12 }}
           >
-            <span
+            <motion.button
+              ref={fabRef}
+              type="button"
               className={cn(
-                'portfolio-chat-fab flex items-center justify-center rounded-full',
-                'border border-primary/30 bg-card p-1.5',
-                !reduceMotion && 'portfolio-chat-fab--live',
+                'flex items-center justify-center bg-transparent p-0',
+                'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2',
               )}
+              onClick={toggle}
+              aria-label={t.chatbot.open}
+              whileHover={reduceMotion ? undefined : { scale: 1.06 }}
+              whileTap={reduceMotion ? undefined : { scale: 0.96 }}
             >
-              <GuideMark sizeClass="h-12 w-12" animated={!reduceMotion} />
-            </span>
-          </motion.button>
+              <span
+                className={cn(
+                  'portfolio-chat-fab flex items-center justify-center rounded-full',
+                  'border border-primary/30 bg-card p-1.5',
+                  !reduceMotion && 'portfolio-chat-fab--live',
+                )}
+              >
+                <GuideMark sizeClass="h-12 w-12" animated={!reduceMotion} />
+              </span>
+            </motion.button>
+            <AdminDashboardFab />
+          </motion.div>
         )}
       </AnimatePresence>
 

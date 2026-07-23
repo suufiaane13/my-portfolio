@@ -7,26 +7,21 @@ import {
   useSpring,
   useTransform,
 } from 'framer-motion'
-import { ArrowUp, LayoutDashboard } from 'lucide-react'
+import { ArrowUp } from 'lucide-react'
 import { useState } from 'react'
-import { Link } from 'react-router-dom'
-import { useAuth } from '@/hooks/AuthProvider'
 import { useTranslation } from '@/i18n/LanguageProvider'
 import { cn } from '@/lib/utils'
 
 const SIZE = 52
-const GAP = 12
 const STROKE = 3
 const RADIUS = (SIZE - STROKE) / 2
 const CIRCUMFERENCE = 2 * Math.PI * RADIUS
 const SHOW_AFTER = 400
 
 const softSpring = { type: 'spring' as const, stiffness: 420, damping: 28, mass: 0.75 }
-const snappySpring = { type: 'spring' as const, stiffness: 520, damping: 32, mass: 0.65 }
 
 export function ScrollToTop() {
   const { t } = useTranslation()
-  const { session } = useAuth()
   const reduceMotion = useReducedMotion()
   const [visible, setVisible] = useState(
     () => typeof window !== 'undefined' && window.scrollY > SHOW_AFTER,
@@ -46,13 +41,6 @@ export function ScrollToTop() {
 
   const offset = useTransform(smoothProgress, (progress) => CIRCUMFERENCE * (1 - progress))
 
-  const fabShell = cn(
-    'flex items-center justify-center rounded-full',
-    'border border-primary/25 bg-card/90 text-primary backdrop-blur-md',
-    'shadow-lg shadow-primary/10',
-    'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background',
-  )
-
   return (
     <div
       className="pointer-events-none fixed right-6 z-40"
@@ -62,50 +50,7 @@ export function ScrollToTop() {
         height: SIZE,
       }}
     >
-      {session && (
-        <motion.div
-          className="pointer-events-auto absolute right-0"
-          initial={false}
-          animate={{ bottom: visible ? SIZE + GAP : 0 }}
-          transition={reduceMotion ? { duration: 0.15 } : softSpring}
-          style={{ width: SIZE, height: SIZE }}
-        >
-          <motion.div
-            className="h-full w-full"
-            whileHover={reduceMotion ? undefined : { scale: 1.08, y: -2 }}
-            whileTap={reduceMotion ? undefined : { scale: 0.94 }}
-            transition={snappySpring}
-          >
-            <Link
-              to="/admin"
-              aria-label={t.nav.admin}
-              title={t.nav.admin}
-              className={cn(
-                fabShell,
-                'h-full w-full transition-colors hover:border-primary/45 hover:bg-card hover:shadow-xl hover:shadow-primary/20',
-              )}
-            >
-              <motion.span
-                className="inline-flex"
-                animate={
-                  reduceMotion
-                    ? undefined
-                    : { y: [0, -1.5, 0], rotate: [0, -4, 0, 4, 0] }
-                }
-                transition={
-                  reduceMotion
-                    ? undefined
-                    : { duration: 3.6, repeat: Infinity, ease: 'easeInOut' }
-                }
-              >
-                <LayoutDashboard className="h-5 w-5 drop-shadow-sm" aria-hidden="true" />
-              </motion.span>
-            </Link>
-          </motion.div>
-        </motion.div>
-      )}
-
-      <AnimatePresence mode="popLayout">
+      <AnimatePresence>
         {visible && (
           <motion.button
             key="scroll-top"
@@ -113,8 +58,11 @@ export function ScrollToTop() {
             onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
             aria-label={t.common.scrollToTop}
             className={cn(
-              fabShell,
-              'pointer-events-auto absolute bottom-0 right-0 hover:border-primary/45 hover:bg-card hover:shadow-xl hover:shadow-primary/20',
+              'pointer-events-auto absolute bottom-0 right-0 flex items-center justify-center rounded-full',
+              'border border-primary/25 bg-card/90 text-primary backdrop-blur-md',
+              'shadow-lg shadow-primary/10',
+              'hover:border-primary/45 hover:bg-card hover:shadow-xl hover:shadow-primary/20',
+              'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background',
             )}
             style={{ width: SIZE, height: SIZE }}
             initial={
