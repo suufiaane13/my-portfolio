@@ -83,7 +83,7 @@ export function ForgotPasswordPage() {
             className="mx-auto mb-4 inline-flex rounded-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
             aria-label={t.auth.backToSite}
           >
-            <BrandLogo size="lg" framed className="mx-auto" />
+            <BrandLogo size="lg" className="mx-auto" />
           </Link>
           <h1 className="font-display text-2xl font-bold text-foreground">
             {t.auth.forgotPasswordTitle}

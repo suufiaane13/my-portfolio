@@ -98,9 +98,9 @@ export function AdminScoresPage() {
                           {formatLeaderboardTime(score.seconds)}
                         </dd>
                       </div>
-                      <div className="col-span-2">
+                      <div className="min-w-0">
                         <dt className="text-muted-foreground">{t.admin.scores.columns.date}</dt>
-                        <dd className="mt-0.5 whitespace-nowrap text-foreground">
+                        <dd className="mt-0.5 overflow-x-auto whitespace-nowrap text-foreground">
                           {formatDateTime(score.createdAt, locale)}
                         </dd>
                       </div>

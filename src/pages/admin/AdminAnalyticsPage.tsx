@@ -1,5 +1,20 @@
+import {
+  Download,
+  Eye,
+  Gamepad2,
+  Languages,
+  Layers,
+  Mail,
+  MessageCircle,
+  Moon,
+  MousePointerClick,
+  Trophy,
+} from 'lucide-react'
+import type { LucideIcon } from 'lucide-react'
 import { useEffect, useMemo, useState } from 'react'
 import { AdminPagination } from '@/components/admin/AdminPagination'
+import { RotatingStatCard } from '@/components/admin/RotatingStatCard'
+import { StatCard } from '@/components/admin/StatCard'
 import { Card } from '@/components/ui/Card'
 import { ADMIN_PAGE_SIZE, useClientPagination } from '@/hooks/useClientPagination'
 import { useTranslation } from '@/i18n/LanguageProvider'
@@ -10,6 +25,20 @@ import {
   fetchPortfolioEvents,
 } from '@/services/adminAnalytics'
 import type { PortfolioEvent } from '@/types/admin'
+
+const VIEW_EVENT_TYPES = new Set(['page_view', 'section_view'])
+
+const EVENT_ICONS: Record<string, LucideIcon> = {
+  project_click: MousePointerClick,
+  cv_download: Download,
+  contact_submit: Mail,
+  game_win: Gamepad2,
+  game_score_submit: Trophy,
+  lang_switch: Languages,
+  theme_switch: Moon,
+  chat_query: MessageCircle,
+  guide_topic: MessageCircle,
+}
 
 export function AdminAnalyticsPage() {
   const { t, locale } = useTranslation()
@@ -37,6 +66,12 @@ export function AdminAnalyticsPage() {
   }, [days])
 
   const summary = useMemo(() => aggregateEventTypes(events), [events])
+  const pageViews = summary.find((item) => item.eventType === 'page_view')?.count ?? 0
+  const sectionViews = summary.find((item) => item.eventType === 'section_view')?.count ?? 0
+  const otherSummary = useMemo(
+    () => summary.filter((item) => !VIEW_EVENT_TYPES.has(item.eventType)),
+    [summary],
+  )
   const daily = useMemo(() => aggregateEventsByDay(events), [events])
   const maxDaily = useMemo(() => Math.max(1, ...daily.map((d) => d.count)), [daily])
   const { page, setPage, pageCount, pageItems, total, pageSize } = useClientPagination(
@@ -76,14 +111,29 @@ export function AdminAnalyticsPage() {
         <p className="text-sm text-muted-foreground">{t.common.loading}</p>
       ) : (
         <>
-          <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-3">
-            {summary.map((item) => (
-              <Card key={item.eventType} className="p-3 sm:p-4">
-                <p className="text-xs text-muted-foreground sm:text-sm">{eventLabel(item.eventType)}</p>
-                <p className="mt-1 font-display text-xl font-bold tabular-nums sm:text-2xl">
-                  {item.count}
-                </p>
-              </Card>
+          <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-3 xl:grid-cols-4">
+            <RotatingStatCard
+              slides={[
+                {
+                  label: t.admin.analytics.eventTypes.page_view,
+                  value: pageViews,
+                  icon: Eye,
+                },
+                {
+                  label: t.admin.analytics.eventTypes.section_view,
+                  value: sectionViews,
+                  icon: Layers,
+                },
+              ]}
+            />
+            {otherSummary.map((item) => (
+              <StatCard
+                key={item.eventType}
+                label={eventLabel(item.eventType)}
+                value={item.count}
+                icon={EVENT_ICONS[item.eventType] ?? MousePointerClick}
+                className="p-4 sm:p-5"
+              />
             ))}
           </div>
 
@@ -95,7 +145,10 @@ export function AdminAnalyticsPage() {
               <p className="mt-1 text-sm text-muted-foreground">{t.admin.analytics.dailyChartDesc}</p>
               <div className="-mx-1 mt-6 flex items-end gap-1 overflow-x-auto px-1 pb-2 sm:gap-1.5">
                 {daily.map((item) => (
-                  <div key={item.date} className="flex min-w-[1.75rem] flex-col items-center gap-2 sm:min-w-[2rem]">
+                  <div
+                    key={item.date}
+                    className="flex min-w-[1.75rem] flex-col items-center gap-2 sm:min-w-[2rem]"
+                  >
                     <span className="text-[10px] font-medium tabular-nums text-muted-foreground sm:text-xs">
                       {item.count}
                     </span>
@@ -120,7 +173,6 @@ export function AdminAnalyticsPage() {
               </p>
             ) : (
               <>
-                {/* Mobile cards */}
                 <ul className="divide-y divide-border md:hidden">
                   {pageItems.map((event) => (
                     <li key={event.id} className="space-y-2 p-4">
@@ -139,7 +191,6 @@ export function AdminAnalyticsPage() {
                   ))}
                 </ul>
 
-                {/* Desktop table */}
                 <div className="hidden overflow-x-auto md:block">
                   <table className="min-w-full text-sm">
                     <thead>

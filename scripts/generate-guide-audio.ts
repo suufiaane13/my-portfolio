@@ -325,7 +325,7 @@ async function main() {
   let activeModels = [...TTS_MODELS]
 
   if (!useGemini) {
-    await ensurePiper()
+  await ensurePiper()
     piperExe = findPiperExecutable()
     if (!piperExe) throw new Error('Piper executable not found')
     piperVoices.fr = await ensurePiperVoice('fr')
@@ -425,13 +425,13 @@ async function main() {
       if (!piperExe) throw error
 
       console.log(`   → fallback Piper pour ${entry.chunkId}`)
-      synthesizeWithPiper(
-        piperExe,
+    synthesizeWithPiper(
+      piperExe,
         piperVoices[entry.locale]!.onnxPath,
-        entry.speechText,
-        outputPath,
-      )
-      manifestFiles[entry.locale].push(entry.chunkId)
+      entry.speechText,
+      outputPath,
+    )
+    manifestFiles[entry.locale].push(entry.chunkId)
       generated += 1
     }
   }
@@ -464,7 +464,7 @@ async function main() {
       : {
           fr: piperVoices.fr?.voiceId ?? voices.fr,
           en: piperVoices.en?.voiceId ?? voices.en,
-        },
+    },
     files: manifestFiles,
     gemini: {
       fr: [...geminiDone.fr].sort(),

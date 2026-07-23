@@ -100,7 +100,7 @@ export function LoginPage() {
             className="mx-auto mb-4 inline-flex rounded-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
             aria-label={t.auth.backToSite}
           >
-            <BrandLogo size="lg" framed className="mx-auto" />
+            <BrandLogo size="lg" className="mx-auto" />
           </Link>
           <h1 className="font-display text-2xl font-bold text-foreground">{t.auth.loginTitle}</h1>
           <p className="mt-2 text-sm text-muted-foreground">{t.auth.loginDescription}</p>
@@ -132,9 +132,17 @@ export function LoginPage() {
               </div>
 
               <div>
-                <label htmlFor="password" className="mb-2 block text-sm font-medium">
-                  {t.auth.password}
-                </label>
+                <div className="mb-2 flex items-center justify-between gap-3">
+                  <label htmlFor="password" className="text-sm font-medium">
+                    {t.auth.password}
+                  </label>
+                  <Link
+                    to="/forgot-password"
+                    className="shrink-0 text-xs font-medium text-muted-foreground transition-colors hover:text-primary hover:underline"
+                  >
+                    {t.auth.forgotPassword}
+                  </Link>
+                </div>
                 <div className="relative">
                   <Lock className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
                   <Input
@@ -149,12 +157,6 @@ export function LoginPage() {
                 {errors.password && (
                   <p className="mt-1.5 text-sm text-destructive">{errors.password.message}</p>
                 )}
-              </div>
-
-              <div className="text-right">
-                <Link to="/forgot-password" className="text-sm font-medium text-primary hover:underline">
-                  {t.auth.forgotPassword}
-                </Link>
               </div>
 
               <Button type="submit" className="w-full" disabled={isSubmitting || isLoading}>

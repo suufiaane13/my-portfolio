@@ -1,4 +1,5 @@
 import {
+  AnimatePresence,
   motion,
   useMotionValueEvent,
   useReducedMotion,
@@ -6,19 +7,26 @@ import {
   useSpring,
   useTransform,
 } from 'framer-motion'
-import { ArrowUp } from 'lucide-react'
+import { ArrowUp, LayoutDashboard } from 'lucide-react'
 import { useState } from 'react'
+import { Link } from 'react-router-dom'
+import { useAuth } from '@/hooks/AuthProvider'
 import { useTranslation } from '@/i18n/LanguageProvider'
 import { cn } from '@/lib/utils'
 
 const SIZE = 52
+const GAP = 12
 const STROKE = 3
 const RADIUS = (SIZE - STROKE) / 2
 const CIRCUMFERENCE = 2 * Math.PI * RADIUS
 const SHOW_AFTER = 400
 
+const softSpring = { type: 'spring' as const, stiffness: 420, damping: 28, mass: 0.75 }
+const snappySpring = { type: 'spring' as const, stiffness: 520, damping: 32, mass: 0.65 }
+
 export function ScrollToTop() {
   const { t } = useTranslation()
+  const { session } = useAuth()
   const reduceMotion = useReducedMotion()
   const [visible, setVisible] = useState(
     () => typeof window !== 'undefined' && window.scrollY > SHOW_AFTER,
@@ -38,52 +46,130 @@ export function ScrollToTop() {
 
   const offset = useTransform(smoothProgress, (progress) => CIRCUMFERENCE * (1 - progress))
 
+  const fabShell = cn(
+    'flex items-center justify-center rounded-full',
+    'border border-primary/25 bg-card/90 text-primary backdrop-blur-md',
+    'shadow-lg shadow-primary/10',
+    'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background',
+  )
+
   return (
-    <button
-      type="button"
-      onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-      aria-label={t.common.scrollToTop}
-      className={cn(
-        'fixed bottom-6 right-6 z-40 flex items-center justify-center rounded-full',
-        'border border-primary/25 bg-card/90 text-primary backdrop-blur-md',
-        'shadow-lg shadow-primary/10',
-        'transition-all duration-300 hover:scale-105 hover:border-primary/45 hover:bg-card hover:shadow-xl hover:shadow-primary/20',
-        'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background',
-        visible ? 'pointer-events-auto translate-y-0 opacity-100' : 'pointer-events-none translate-y-4 opacity-0',
-      )}
-      style={{ width: SIZE, height: SIZE }}
+    <div
+      className="pointer-events-none fixed right-6 z-40"
+      style={{
+        bottom: 'calc(1.5rem + env(safe-area-inset-bottom, 0px))',
+        width: SIZE,
+        height: SIZE,
+      }}
     >
-      <svg
-        className="pointer-events-none absolute inset-0 -rotate-90"
-        width={SIZE}
-        height={SIZE}
-        viewBox={`0 0 ${SIZE} ${SIZE}`}
-        aria-hidden="true"
-      >
-        <circle
-          cx={SIZE / 2}
-          cy={SIZE / 2}
-          r={RADIUS}
-          fill="none"
-          stroke="var(--primary)"
-          strokeOpacity={0.18}
-          strokeWidth={STROKE}
-        />
-        <motion.circle
-          cx={SIZE / 2}
-          cy={SIZE / 2}
-          r={RADIUS}
-          fill="none"
-          stroke="var(--primary)"
-          strokeWidth={STROKE}
-          strokeLinecap="round"
-          style={{
-            strokeDasharray: CIRCUMFERENCE,
-            strokeDashoffset: offset,
-          }}
-        />
-      </svg>
-      <ArrowUp className="relative h-5 w-5 drop-shadow-sm" aria-hidden="true" />
-    </button>
+      {session && (
+        <motion.div
+          className="pointer-events-auto absolute right-0"
+          initial={false}
+          animate={{ bottom: visible ? SIZE + GAP : 0 }}
+          transition={reduceMotion ? { duration: 0.15 } : softSpring}
+          style={{ width: SIZE, height: SIZE }}
+        >
+          <motion.div
+            className="h-full w-full"
+            whileHover={reduceMotion ? undefined : { scale: 1.08, y: -2 }}
+            whileTap={reduceMotion ? undefined : { scale: 0.94 }}
+            transition={snappySpring}
+          >
+            <Link
+              to="/admin"
+              aria-label={t.nav.admin}
+              title={t.nav.admin}
+              className={cn(
+                fabShell,
+                'h-full w-full transition-colors hover:border-primary/45 hover:bg-card hover:shadow-xl hover:shadow-primary/20',
+              )}
+            >
+              <motion.span
+                className="inline-flex"
+                animate={
+                  reduceMotion
+                    ? undefined
+                    : { y: [0, -1.5, 0], rotate: [0, -4, 0, 4, 0] }
+                }
+                transition={
+                  reduceMotion
+                    ? undefined
+                    : { duration: 3.6, repeat: Infinity, ease: 'easeInOut' }
+                }
+              >
+                <LayoutDashboard className="h-5 w-5 drop-shadow-sm" aria-hidden="true" />
+              </motion.span>
+            </Link>
+          </motion.div>
+        </motion.div>
+      )}
+
+      <AnimatePresence mode="popLayout">
+        {visible && (
+          <motion.button
+            key="scroll-top"
+            type="button"
+            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+            aria-label={t.common.scrollToTop}
+            className={cn(
+              fabShell,
+              'pointer-events-auto absolute bottom-0 right-0 hover:border-primary/45 hover:bg-card hover:shadow-xl hover:shadow-primary/20',
+            )}
+            style={{ width: SIZE, height: SIZE }}
+            initial={
+              reduceMotion ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.7, y: 24 }
+            }
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={reduceMotion ? { opacity: 0 } : { opacity: 0, scale: 0.78, y: 16 }}
+            transition={reduceMotion ? { duration: 0.12 } : softSpring}
+            whileHover={reduceMotion ? undefined : { scale: 1.08, y: -3 }}
+            whileTap={reduceMotion ? undefined : { scale: 0.92, y: 1 }}
+          >
+            <svg
+              className="pointer-events-none absolute inset-0 -rotate-90"
+              width={SIZE}
+              height={SIZE}
+              viewBox={`0 0 ${SIZE} ${SIZE}`}
+              aria-hidden="true"
+            >
+              <circle
+                cx={SIZE / 2}
+                cy={SIZE / 2}
+                r={RADIUS}
+                fill="none"
+                stroke="var(--primary)"
+                strokeOpacity={0.18}
+                strokeWidth={STROKE}
+              />
+              <motion.circle
+                cx={SIZE / 2}
+                cy={SIZE / 2}
+                r={RADIUS}
+                fill="none"
+                stroke="var(--primary)"
+                strokeWidth={STROKE}
+                strokeLinecap="round"
+                style={{
+                  strokeDasharray: CIRCUMFERENCE,
+                  strokeDashoffset: offset,
+                }}
+              />
+            </svg>
+            <motion.span
+              className="relative inline-flex"
+              animate={reduceMotion ? undefined : { y: [0, -3, 0] }}
+              transition={
+                reduceMotion
+                  ? undefined
+                  : { duration: 1.35, repeat: Infinity, ease: 'easeInOut' }
+              }
+            >
+              <ArrowUp className="h-5 w-5 drop-shadow-sm" aria-hidden="true" />
+            </motion.span>
+          </motion.button>
+        )}
+      </AnimatePresence>
+    </div>
   )
 }

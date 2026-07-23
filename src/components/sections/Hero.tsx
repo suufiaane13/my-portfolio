@@ -91,9 +91,6 @@ export function Hero() {
             {t.hero.viewProjects}
             <ArrowRight className="h-4 w-4" />
           </Button>
-          <Button size="lg" variant="outline" onClick={() => scrollToSection('#contact')}>
-            {t.hero.contactMe}
-          </Button>
           {profile.cvUrl && (
             <a
               href={profile.cvUrl}

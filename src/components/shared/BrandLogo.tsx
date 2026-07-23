@@ -51,7 +51,7 @@ export function BrandLogo({ size = 'sm', className, framed = false }: BrandLogoP
   return (
     <div
       className={cn(
-        'flex shrink-0 items-center justify-center overflow-hidden rounded-xl border border-primary/30 bg-black shadow-sm shadow-primary/15',
+        'flex shrink-0 items-center justify-center overflow-hidden rounded-xl border border-primary/30 bg-card shadow-sm shadow-primary/15',
         sizeClasses[size],
         className,
       )}
