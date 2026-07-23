@@ -12,8 +12,6 @@ export type ChatIntent =
   | 'interests'
   | 'cv'
   | 'game'
-  | 'greeting'
-  | 'thanks'
   | 'unknown'
 
 export interface ChatLink {
@@ -27,7 +25,6 @@ export interface ChatLink {
 export interface ChatChunk {
   id: string
   intent: ChatIntent
-  keywords: string[]
   title: string
   body: string
   links?: ChatLink[]
@@ -41,10 +38,9 @@ export interface ChatKnowledge {
 
 export interface ChatReplyAction {
   label: string
-  type: 'link' | 'section' | 'quick'
+  type: 'link' | 'section'
   href?: string
   sectionId?: string
-  query?: string
   download?: string
 }
 
@@ -54,18 +50,4 @@ export interface ChatReply {
   confidence: number
   actions?: ChatReplyAction[]
   sectionId?: string
-}
-
-export interface ChatMessage {
-  id: string
-  role: 'user' | 'assistant'
-  content: string
-  intent?: ChatIntent
-  actions?: ChatReplyAction[]
-  timestamp: number
-}
-
-export interface ChatEngineResult {
-  reply: ChatReply
-  suggestions: string[]
 }

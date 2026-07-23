@@ -97,6 +97,8 @@ function pickMaleVoice(voices: SpeechSynthesisVoice[], locale: Locale): SpeechSy
 export interface SpeakGuideOptions {
   onStart?: () => void
   onEnd?: () => void
+  /** Fired when Piper WAV is unavailable and Web Speech fallback is used. */
+  onFallback?: () => void
 }
 
 export function stopGuideSpeech(): void {
@@ -230,11 +232,6 @@ export async function speakGuideAnswer(
   const played = await speakWithPreloadedAudio(locale, chunkId, options)
   if (played) return
 
-  const manifest = manifestCache ?? (await loadGuideAudioManifest())
-  if (manifest && !isGuideAudioAvailable(manifest, locale, chunkId)) {
-    await speakWithWebSpeech(chunkId, title, body, locale, options)
-    return
-  }
-
+  options.onFallback?.()
   await speakWithWebSpeech(chunkId, title, body, locale, options)
 }

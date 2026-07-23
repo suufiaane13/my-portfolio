@@ -1,3 +1,4 @@
+/// <reference path="../deno-env.d.ts" />
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.49.1'
 
 const corsHeaders = {
@@ -36,10 +37,10 @@ function validatePayload(body: SubmitScoreBody) {
   const seconds = body.seconds
   const locale = body.locale === 'en' ? 'en' : 'fr'
 
-  if (!/^[a-zA-ZÀ-ÿ0-9 _.\-]{2,20}$/.test(playerName)) return null
+  if (!/^[a-zA-ZÀ-ÿ0-9 _.-]{2,20}$/.test(playerName)) return null
   if (gridSize !== 4 && gridSize !== 6) return null
-  if (!Number.isInteger(moves) || moves <= 0) return null
-  if (!Number.isInteger(seconds) || seconds < 0) return null
+  if (typeof moves !== 'number' || !Number.isInteger(moves) || moves <= 0) return null
+  if (typeof seconds !== 'number' || !Number.isInteger(seconds) || seconds < 0) return null
 
   const minMoves = gridSize === 4 ? 8 : 18
   if (moves < minMoves) return null

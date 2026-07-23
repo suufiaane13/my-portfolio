@@ -168,22 +168,15 @@ export interface Translations {
       cv: string
       game: string
     }
-    quickReplies: {
-      skills: string
-      projects: string
-      freelance: string
-      contact: string
-      cv: string
-      game: string
-    }
     actions: {
       viewSection: string
     }
+    relatedTopics: string
+    contentUnavailable: string
+    audioPreparing: string
+    audioFallback: string
     templates: {
       intro: string
-      greeting: string
-      thanks: string
-      fallback: string
       projectPrefix: string
       cvAvailable: string
       gameIntro: string

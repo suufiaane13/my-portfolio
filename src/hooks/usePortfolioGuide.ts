@@ -1,7 +1,13 @@
-import { useCallback, useEffect, useMemo, useState } from 'react'
-import { buildChatKnowledge } from '@/lib/portfolioChat/engine'
+import { useCallback, useMemo, useState } from 'react'
+import { buildChatKnowledge } from '@/lib/portfolioChat/knowledge'
 import { getGuideReplyForProject, getGuideReplyForTopic } from '@/lib/portfolioChat/guide'
-import { chunkIdForProject, chunkIdForTopic, GUIDE_TOPIC_IDS, type GuideTopicId } from '@/lib/portfolioChat/guideTopics'
+import {
+  chunkIdForProject,
+  chunkIdForTopic,
+  GUIDE_TOPIC_IDS,
+  relatedTopicsFor,
+  type GuideTopicId,
+} from '@/lib/portfolioChat/guideTopics'
 import type { ChatReply } from '@/lib/portfolioChat/types'
 import { usePortfolioContent } from '@/hooks/PortfolioContentProvider'
 import { useTranslation } from '@/i18n/LanguageProvider'
@@ -24,6 +30,7 @@ export function usePortfolioGuide() {
   const [answerTitle, setAnswerTitle] = useState('')
   const [answerChunkId, setAnswerChunkId] = useState('')
   const [answerSource, setAnswerSource] = useState<'menu' | 'projects'>('menu')
+  const [activeTopicId, setActiveTopicId] = useState<GuideTopicId | null>(null)
 
   const knowledge = useMemo(
     () => buildChatKnowledge(content, locale, t),
@@ -31,13 +38,16 @@ export function usePortfolioGuide() {
   )
 
   // Clear open answer when language changes so bubbles never mix FR/EN copy.
-  useEffect(() => {
+  const [guideLocale, setGuideLocale] = useState(locale)
+  if (guideLocale !== locale) {
+    setGuideLocale(locale)
     setView('menu')
     setReply(null)
     setAnswerTitle('')
     setAnswerChunkId('')
     setAnswerSource('menu')
-  }, [locale])
+    setActiveTopicId(null)
+  }
 
   const topicLabels = useMemo(
     () =>
@@ -46,6 +56,11 @@ export function usePortfolioGuide() {
       ) as Record<GuideTopicId, string>,
     [t.chatbot.menu],
   )
+
+  const relatedTopics = useMemo(() => {
+    if (!activeTopicId) return [] as GuideTopicId[]
+    return relatedTopicsFor(activeTopicId).filter((id) => id !== activeTopicId)
+  }, [activeTopicId])
 
   const trackTopic = useCallback(
     (topicId: string, projectSlug?: string) => {
@@ -69,6 +84,7 @@ export function usePortfolioGuide() {
       if (topicId === 'projects') {
         setView('projects')
         setReply(null)
+        setActiveTopicId('projects')
         return null
       }
 
@@ -83,6 +99,7 @@ export function usePortfolioGuide() {
       setAnswerChunkId(chunkId)
       setReply(nextReply)
       setAnswerSource('menu')
+      setActiveTopicId(topicId)
       setView('answer')
       return { chunkId, title, text: nextReply.text }
     },
@@ -101,6 +118,7 @@ export function usePortfolioGuide() {
       setAnswerChunkId(chunkId)
       setReply(nextReply)
       setAnswerSource('projects')
+      setActiveTopicId('projects')
       setView('answer')
       return { chunkId, title, text: nextReply.text }
     },
@@ -112,6 +130,7 @@ export function usePortfolioGuide() {
     setReply(null)
     setAnswerTitle('')
     setAnswerChunkId('')
+    setActiveTopicId(null)
   }, [])
 
   const backFromAnswer = useCallback(() => {
@@ -120,6 +139,7 @@ export function usePortfolioGuide() {
       setReply(null)
       setAnswerTitle('')
       setAnswerChunkId('')
+      setActiveTopicId('projects')
       return
     }
     backToMenu()
@@ -136,6 +156,7 @@ export function usePortfolioGuide() {
     setAnswerTitle('')
     setAnswerChunkId('')
     setAnswerSource('menu')
+    setActiveTopicId(null)
   }, [])
 
   return {
@@ -146,6 +167,8 @@ export function usePortfolioGuide() {
     reply,
     answerTitle,
     answerChunkId,
+    activeTopicId,
+    relatedTopics,
     selectTopic,
     selectProject,
     backToMenu,
@@ -154,5 +177,6 @@ export function usePortfolioGuide() {
     projects: content.projects,
     profile: content.profile,
     intro: t.chatbot.templates.intro.replace('{{name}}', content.profile.name),
+    contentUnavailable: t.chatbot.contentUnavailable,
   }
 }

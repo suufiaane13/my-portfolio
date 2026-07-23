@@ -15,13 +15,14 @@ import {
   VolumeX,
   X,
 } from 'lucide-react'
-import { useEffect } from 'react'
+import { useCallback, useEffect, useId, useRef } from 'react'
 import { createPortal } from 'react-dom'
 import { useLocation, useNavigate } from 'react-router-dom'
+import { toast } from 'sonner'
 import { Button } from '@/components/ui/Button'
 import { GithubIcon } from '@/components/shared/SocialIcons'
 import { GUIDE_TOPIC_IDS, type GuideTopicId } from '@/lib/portfolioChat/guideTopics'
-import { chunkIdForGuideTopic } from '@/lib/portfolioChat/guideAudio'
+import { chunkIdForGuideProject, chunkIdForGuideTopic } from '@/lib/portfolioChat/guideAudio'
 import type { ChatReplyAction } from '@/lib/portfolioChat/types'
 import { usePortfolioGuide } from '@/hooks/usePortfolioGuide'
 import { useGuideSpeech } from '@/hooks/useGuideSpeech'
@@ -42,6 +43,9 @@ const TOPIC_ICONS: Record<GuideTopicId, typeof User> = {
   cv: FileDown,
   game: Gamepad2,
 }
+
+const FOCUSABLE_SELECTOR =
+  'a[href], button:not([disabled]), textarea, input, select, [tabindex]:not([tabindex="-1"])'
 
 function renderMessageText(text: string) {
   const parts = text.split(/(\*\*[^*]+\*\*)/g)
@@ -105,7 +109,6 @@ function GuideActionButton({
 
       const scroll = () => scrollToSection(`#${sectionId}`)
 
-      // Wait for panel close (body overflow unlock) + optional route change
       const delay = location.pathname !== '/' ? 180 : 80
       if (location.pathname !== '/') {
         navigate('/')
@@ -152,6 +155,14 @@ function GuideActionButton({
 export function PortfolioChatWidget() {
   const { t, locale } = useTranslation()
   const reduceMotion = useReducedMotion()
+  const titleId = useId()
+  const descId = useId()
+  const liveId = useId()
+  const fabRef = useRef<HTMLButtonElement>(null)
+  const panelRef = useRef<HTMLDivElement>(null)
+  const closeButtonRef = useRef<HTMLButtonElement>(null)
+  const wasOpenRef = useRef(false)
+
   const {
     isOpen,
     toggle,
@@ -160,6 +171,7 @@ export function PortfolioChatWidget() {
     reply,
     answerTitle,
     answerChunkId,
+    relatedTopics,
     selectTopic,
     selectProject,
     backToMenu,
@@ -168,25 +180,93 @@ export function PortfolioChatWidget() {
     projects,
     profile,
     intro,
+    contentUnavailable,
   } = usePortfolioGuide()
 
-  const { supported: speechSupported, isSpeaking, preloadAnswer, toggleSpeech } = useGuideSpeech({
+  const handleSpeechFallback = useCallback(() => {
+    toast.message(t.chatbot.audioFallback)
+  }, [t.chatbot.audioFallback])
+
+  const {
+    supported: speechSupported,
+    isSpeaking,
+    manifestLoaded,
+    preloadAnswer,
+    toggleSpeech,
+  } = useGuideSpeech({
     isOpen,
     view,
     locale,
+    onFallback: handleSpeechFallback,
   })
 
-  useEffect(() => {
-    if (!isOpen) return
+  const handleSelectTopic = useCallback(
+    (topicId: GuideTopicId) => {
+      if (topicId === 'projects') {
+        selectTopic(topicId)
+        return
+      }
+      const result = selectTopic(topicId)
+      if (!result) toast.error(contentUnavailable)
+    },
+    [contentUnavailable, selectTopic],
+  )
 
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') close()
+  const handleSelectProject = useCallback(
+    (slug: string, title: string) => {
+      const result = selectProject(slug, title)
+      if (!result) toast.error(contentUnavailable)
+    },
+    [contentUnavailable, selectProject],
+  )
+
+  useEffect(() => {
+    if (!isOpen) {
+      if (wasOpenRef.current) {
+        fabRef.current?.focus()
+      }
+      wasOpenRef.current = false
+      return
     }
 
+    wasOpenRef.current = true
     document.body.style.overflow = 'hidden'
+
+    const focusClose = window.setTimeout(() => {
+      closeButtonRef.current?.focus()
+    }, 40)
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        close()
+        return
+      }
+
+      if (event.key !== 'Tab' || !panelRef.current) return
+
+      const focusable = Array.from(
+        panelRef.current.querySelectorAll<HTMLElement>(FOCUSABLE_SELECTOR),
+      ).filter((el) => !el.hasAttribute('disabled') && el.tabIndex !== -1)
+
+      if (focusable.length === 0) return
+
+      const first = focusable[0]
+      const last = focusable[focusable.length - 1]
+      const active = document.activeElement as HTMLElement | null
+
+      if (event.shiftKey && active === first) {
+        event.preventDefault()
+        last.focus()
+      } else if (!event.shiftKey && active === last) {
+        event.preventDefault()
+        first.focus()
+      }
+    }
+
     window.addEventListener('keydown', handleKeyDown)
 
     return () => {
+      window.clearTimeout(focusClose)
       document.body.style.overflow = ''
       window.removeEventListener('keydown', handleKeyDown)
     }
@@ -194,17 +274,24 @@ export function PortfolioChatWidget() {
 
   if (typeof document === 'undefined') return null
 
+  const speechStatus = isSpeaking
+    ? t.chatbot.speaking
+    : speechSupported && !manifestLoaded
+      ? t.chatbot.audioPreparing
+      : ''
+
   return createPortal(
     <>
       <AnimatePresence>
         {!isOpen && (
           <motion.button
+            ref={fabRef}
             type="button"
             initial={reduceMotion ? false : { opacity: 0, scale: 0.9, y: 12 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={reduceMotion ? undefined : { opacity: 0, scale: 0.9, y: 12 }}
             className={cn(
-              'fixed bottom-6 left-6 z-40 flex items-center justify-center bg-transparent p-0',
+              'portfolio-chat-fab-anchor fixed z-40 flex items-center justify-center bg-transparent p-0',
               'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2',
             )}
             onClick={toggle}
@@ -228,22 +315,25 @@ export function PortfolioChatWidget() {
       <AnimatePresence>
         {isOpen && (
           <motion.div
-            className="fixed inset-0 z-[100] flex items-end justify-center sm:items-end sm:justify-start sm:p-6 sm:pb-6 sm:pl-6"
+            className="portfolio-chat-overlay fixed inset-0 z-[100] flex items-end justify-center sm:items-end sm:justify-start"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             role="dialog"
             aria-modal="true"
-            aria-label={t.chatbot.title}
+            aria-labelledby={titleId}
+            aria-describedby={descId}
           >
             <button
               type="button"
               className="absolute inset-0 bg-black/50 backdrop-blur-sm sm:bg-black/30"
               aria-label={t.chatbot.close}
               onClick={close}
+              tabIndex={-1}
             />
 
             <motion.div
+              ref={panelRef}
               className={cn(
                 'portfolio-chat-panel relative z-10 flex w-full flex-col overflow-hidden',
                 'border border-border bg-background sm:h-[520px] sm:max-h-[85vh] sm:w-[380px] sm:rounded-2xl',
@@ -266,36 +356,54 @@ export function PortfolioChatWidget() {
                 )}
                 <GuideMark sizeClass="h-10 w-10" />
                 <div className="min-w-0 flex-1">
-                  <p className="truncate font-display text-sm font-semibold text-foreground">
+                  <p id={titleId} className="truncate font-display text-sm font-semibold text-foreground">
                     {t.chatbot.title}
                   </p>
-                  <p className="truncate text-xs text-muted-foreground">{t.chatbot.subtitle}</p>
+                  <p id={descId} className="truncate text-xs text-muted-foreground">
+                    {t.chatbot.subtitle}
+                  </p>
                 </div>
-                <Button variant="ghost" size="icon" onClick={close} aria-label={t.chatbot.close}>
+                <Button
+                  ref={closeButtonRef}
+                  variant="ghost"
+                  size="icon"
+                  onClick={close}
+                  aria-label={t.chatbot.close}
+                >
                   <X className="h-5 w-5" />
                 </Button>
               </header>
+
+              <div
+                id={liveId}
+                className="sr-only"
+                aria-live="polite"
+                aria-atomic="true"
+              >
+                {view === 'answer' && reply ? `${answerTitle}. ${speechStatus}` : speechStatus}
+              </div>
 
               <div className="portfolio-chat-messages flex-1 overflow-y-auto px-4 py-4">
                 {view === 'menu' && (
                   <div className="space-y-4">
                     <p className="text-sm leading-relaxed text-muted-foreground">{intro}</p>
-                    <div className="grid grid-cols-2 gap-2">
+                    <div className="grid grid-cols-2 gap-2" role="list">
                       {GUIDE_TOPIC_IDS.map((topicId, index) => {
                         const Icon = TOPIC_ICONS[topicId]
+                        const label = topicLabels[topicId]
                         const isLastOdd =
                           GUIDE_TOPIC_IDS.length % 2 === 1 && index === GUIDE_TOPIC_IDS.length - 1
                         return (
                           <button
                             key={topicId}
                             type="button"
+                            role="listitem"
+                            aria-label={label}
                             onPointerEnter={() => {
                               const chunkId = chunkIdForGuideTopic(topicId)
                               if (chunkId) preloadAnswer(chunkId)
                             }}
-                            onClick={() => {
-                              selectTopic(topicId)
-                            }}
+                            onClick={() => handleSelectTopic(topicId)}
                             className={cn(
                               'portfolio-guide-topic flex flex-col items-center gap-2 rounded-xl border border-border',
                               'bg-card/60 p-3 text-center transition-colors hover:border-primary/40 hover:bg-card',
@@ -306,7 +414,7 @@ export function PortfolioChatWidget() {
                               <Icon className="h-4 w-4" aria-hidden="true" />
                             </span>
                             <span className="text-xs font-semibold leading-snug text-foreground">
-                              {topicLabels[topicId]}
+                              {label}
                             </span>
                           </button>
                         )
@@ -341,10 +449,9 @@ export function PortfolioChatWidget() {
                         <li key={project.slug}>
                           <button
                             type="button"
-                            onPointerEnter={() => preloadAnswer(`project-${project.slug}`)}
-                            onClick={() => {
-                              selectProject(project.slug, project.title)
-                            }}
+                            aria-label={project.title}
+                            onPointerEnter={() => preloadAnswer(chunkIdForGuideProject(project.slug))}
+                            onClick={() => handleSelectProject(project.slug, project.title)}
                             className={cn(
                               'flex w-full items-center justify-between gap-3 rounded-xl border border-border',
                               'bg-card/60 px-3 py-3 text-left transition-colors hover:border-primary/40 hover:bg-card',
@@ -358,7 +465,7 @@ export function PortfolioChatWidget() {
                                 {project.year} · {project.tags.slice(0, 2).join(', ')}
                               </span>
                             </span>
-                            <ChevronRight className="h-4 w-4 shrink-0 text-muted-foreground" />
+                            <ChevronRight className="h-4 w-4 shrink-0 text-muted-foreground" aria-hidden="true" />
                           </button>
                         </li>
                       ))}
@@ -367,14 +474,15 @@ export function PortfolioChatWidget() {
                 )}
 
                 {view === 'answer' && reply && (
-                  <div className="space-y-3">
+                  <div className="space-y-3" aria-live="polite">
                     <div className="flex items-start justify-between gap-2">
                       <h3 className="font-display text-base font-semibold text-foreground">{answerTitle}</h3>
-                      {speechSupported && answerChunkId !== 'contact-main' && (
+                      {speechSupported && (
                         <Button
                           variant="ghost"
                           size="icon"
                           className="shrink-0 text-primary"
+                          disabled={!manifestLoaded && !isSpeaking}
                           onClick={() => {
                             if (reply && answerChunkId) {
                               toggleSpeech(answerChunkId, answerTitle, reply.text)
@@ -382,7 +490,13 @@ export function PortfolioChatWidget() {
                           }}
                           aria-label={isSpeaking ? t.chatbot.stopSpeech : t.chatbot.listenAgain}
                           aria-pressed={isSpeaking}
-                          title={isSpeaking ? t.chatbot.speaking : t.chatbot.listenAgain}
+                          title={
+                            !manifestLoaded && !isSpeaking
+                              ? t.chatbot.audioPreparing
+                              : isSpeaking
+                                ? t.chatbot.speaking
+                                : t.chatbot.listenAgain
+                          }
                         >
                           {isSpeaking ? (
                             <VolumeX className="h-4 w-4" aria-hidden="true" />
@@ -392,6 +506,9 @@ export function PortfolioChatWidget() {
                         </Button>
                       )}
                     </div>
+                    {!manifestLoaded && speechSupported && (
+                      <p className="text-xs text-muted-foreground">{t.chatbot.audioPreparing}</p>
+                    )}
                     <div className="portfolio-chat-bubble--assistant rounded-2xl rounded-tl-md px-3.5 py-3 text-sm leading-relaxed">
                       {renderMessageText(reply.text)}
                       {reply.actions && reply.actions.length > 0 && (
@@ -407,6 +524,25 @@ export function PortfolioChatWidget() {
                         </div>
                       )}
                     </div>
+                    {relatedTopics.length > 0 && (
+                      <div className="space-y-2 pt-1">
+                        <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
+                          {t.chatbot.relatedTopics}
+                        </p>
+                        <div className="flex flex-wrap gap-1.5">
+                          {relatedTopics.map((topicId) => (
+                            <button
+                              key={topicId}
+                              type="button"
+                              onClick={() => handleSelectTopic(topicId)}
+                              className="portfolio-chat-chip rounded-full border border-border px-3 py-1.5 text-xs font-medium text-muted-foreground"
+                            >
+                              {topicLabels[topicId]}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+                    )}
                   </div>
                 )}
               </div>

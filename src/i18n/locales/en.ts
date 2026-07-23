@@ -89,30 +89,21 @@ export const en: Translations = {
       cv: 'CV',
       game: 'Memory game',
     },
-    quickReplies: {
-      skills: 'What are your skills?',
-      projects: 'Show me your projects',
-      freelance: 'Are you available for freelance?',
-      contact: 'How can I contact you?',
-      cv: 'Download your CV',
-      game: 'What is the memory game?',
-    },
     actions: {
       viewSection: 'View section',
     },
+    relatedTopics: 'Continue with',
+    contentUnavailable: 'This content is temporarily unavailable. Try again or pick another topic.',
+    audioPreparing: 'Preparing audio…',
+    audioFallback: 'Browser speech (system voice)',
     templates: {
       intro:
         'Welcome! Explore {{name}}’s path: skills, projects, experience, and contact.',
-      greeting:
-        'Hello! I’m {{name}}’s portfolio assistant. Ask me about skills, projects, experience, or how to get in touch.',
-      thanks: 'You’re welcome! Feel free to ask anything else.',
-      fallback:
-        'I couldn’t find a precise answer. Here are some options, or contact {{name}} directly.',
       projectPrefix: '**{{title}}**',
       cvAvailable:
-        'My CV is available for download. Use the “Download my CV” button at the top of the page, or the button below.',
+        'The CV is ready to download. Use the button below, or “Download my CV” at the top of the page.',
       gameIntro:
-        'The portfolio includes a memory matching game with a top-5 leaderboard. Play a round and try to beat your personal best!',
+        'The portfolio includes a memory matching game with a top-5 leaderboard. Play a round and beat your personal best!',
       coreStack: 'Core stack',
       location: 'Address',
       emailLabel: 'Email',

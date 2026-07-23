@@ -1,3 +1,21 @@
+.portfolio-chat-fab-anchor {
+  bottom: calc(1.5rem + env(safe-area-inset-bottom, 0px));
+  left: calc(1.5rem + env(safe-area-inset-left, 0px));
+}
+
+.portfolio-chat-overlay {
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+  padding-left: env(safe-area-inset-left, 0px);
+}
+
+@media (min-width: 640px) {
+  .portfolio-chat-overlay {
+    padding: 1.5rem;
+    padding-bottom: calc(1.5rem + env(safe-area-inset-bottom, 0px));
+    padding-left: calc(1.5rem + env(safe-area-inset-left, 0px));
+  }
+}
+
 .portfolio-chat-fab {
   box-shadow:
     0 8px 24px rgb(37 99 235 / 0.25),
@@ -54,11 +72,6 @@
 .portfolio-chat-messages {
   scrollbar-width: thin;
   scrollbar-color: rgb(37 99 235 / 0.35) transparent;
-}
-
-.portfolio-chat-bubble--user {
-  background: linear-gradient(135deg, rgb(37 99 235 / 0.95), rgb(59 130 246 / 0.85));
-  color: white;
 }
 
 .portfolio-chat-bubble--assistant {

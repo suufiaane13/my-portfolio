@@ -89,30 +89,21 @@ export const fr: Translations = {
       cv: 'CV',
       game: 'Jeu mémoire',
     },
-    quickReplies: {
-      skills: 'Quelles sont tes compétences ?',
-      projects: 'Montre-moi tes projets',
-      freelance: 'Es-tu disponible en freelance ?',
-      contact: 'Comment te contacter ?',
-      cv: 'Télécharger ton CV',
-      game: 'C’est quoi le jeu mémoire ?',
-    },
     actions: {
       viewSection: 'Voir la section',
     },
+    relatedTopics: 'Continuer avec',
+    contentUnavailable: 'Ce contenu est temporairement indisponible. Réessayez ou choisissez un autre sujet.',
+    audioPreparing: 'Préparation audio…',
+    audioFallback: 'Lecture navigateur (voix système)',
     templates: {
       intro:
         'Bienvenue ! Explorez le parcours de {{name}} : compétences, projets, expérience et contact.',
-      greeting:
-        'Bonjour ! Je suis l’assistant de {{name}}. Je peux vous renseigner sur mes compétences, projets, expérience ou comment me contacter.',
-      thanks: 'Avec plaisir ! N’hésitez pas si vous avez d’autres questions.',
-      fallback:
-        'Je n’ai pas trouvé de réponse précise. Voici ce que je peux vous montrer, ou contactez {{name}} directement.',
       projectPrefix: '**{{title}}**',
       cvAvailable:
-        'Mon CV est disponible au téléchargement. Utilisez le bouton « Télécharger mon CV » en haut de page, ou le bouton ci-dessous.',
+        'Le CV est prêt à télécharger. Utilisez le bouton ci-dessous, ou « Télécharger mon CV » en haut de page.',
       gameIntro:
-        'Le portfolio inclut un mini-jeu mémoire avec classement top 5. Lancez une partie et tentez de battre votre record !',
+        'Un mini-jeu mémoire avec classement top 5 est inclus dans le portfolio. Lancez une partie et battez votre record !',
       coreStack: 'Stack clé',
       location: 'Adresse',
       emailLabel: 'Email',

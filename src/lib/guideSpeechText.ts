@@ -66,7 +66,8 @@ export function stripMarkdownForSpeech(text: string): string {
     .replace(/\*([^*]+)\*/g, '$1')
     .replace(/`([^`]+)`/g, '$1')
     .replace(/^\s*[-*•]\s+/gm, '')
-    .replace(/[★●▪︎]/g, '')
+    .replace(/[★●]/g, '')
+    .replace(/\u25E6/g, '')
     .trim()
 }
 
@@ -127,7 +128,7 @@ function expandYears(text: string, locale: Locale): string {
 
   // Ranges: 2023–2025, 2023-2025, 2023 — 2025 (before dashes are stripped)
   let result = text.replace(
-    /\b(20\d{2})\s*[–—−\-]\s*(20\d{2})\b/g,
+    /\b(20\d{2})\s*[–—−-]\s*(20\d{2})\b/g,
     (_m, start: string, end: string) => `${speakYear(start, locale)}${joiner}${speakYear(end, locale)}`,
   )
 

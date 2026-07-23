@@ -8,6 +8,8 @@
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
+    "test": "vitest run",
+    "test:watch": "vitest",
     "logo:generate": "node scripts/generate-logo-base64.mjs",
     "cms:seed:sql": "node scripts/generate-cms-seed.mjs",
     "guide:audio": "npx vite-node scripts/generate-guide-audio.ts",
@@ -43,6 +45,7 @@
     "tsx": "^4.21.0",
     "typescript": "~6.0.2",
     "typescript-eslint": "^8.59.2",
-    "vite": "^8.0.12"
+    "vite": "^8.0.12",
+    "vitest": "^3.2.7"
   }
 }
