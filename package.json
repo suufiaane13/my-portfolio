@@ -15,11 +15,14 @@
     "guide:scripts": "npx vite-node scripts/rewrite-guide-scripts.ts",
     "guide:audio": "npx vite-node scripts/generate-guide-audio.ts",
     "guide:audio:force": "npx vite-node scripts/generate-guide-audio.ts --force",
-    "guide:audio:piper": "npx vite-node scripts/generate-guide-audio.ts --piper"
+    "guide:audio:piper": "npx vite-node scripts/generate-guide-audio.ts --piper",
+    "chess:themes": "node scripts/download-chess-themes.mjs",
+    "chess:themes:force": "node scripts/download-chess-themes.mjs --force"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.4.0",
     "@supabase/supabase-js": "^2.108.1",
+    "chess.js": "^1.4.0",
     "clsx": "^2.1.1",
     "framer-motion": "^12.40.0",
     "lucide-react": "^1.17.0",

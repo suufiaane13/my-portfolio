@@ -67,6 +67,11 @@ export interface Translations {
     interests: string
     languages: string
     game: string
+    games: string
+    gameItems: {
+      memory: string
+      chess: string
+    }
     gameHintMessages: readonly string[]
     gameHintCta: string
     gameHintBadge: string
@@ -79,6 +84,92 @@ export interface Translations {
     mainNav: string
     mobileNav: string
     skillCategories: string
+  }
+  chessGame: {
+    title: string
+    description: string
+    backToPortfolio: string
+    setupTitle: string
+    setupDescription: string
+    setupMatch: string
+    setupLook: string
+    difficulty: string
+    levels: {
+      beginner: string
+      intermediate: string
+      expert: string
+    }
+    playWhite: string
+    playBlack: string
+    white: string
+    black: string
+    yourTurn: string
+    botTurn: string
+    thinking: string
+    check: string
+    youWin: string
+    youLose: string
+    draw: string
+    resign: string
+    hint: string
+    newGame: string
+    playAgain: string
+    promote: string
+    sidePanelTitle: string
+    playingAs: string
+    engineNote: string
+    engineFallback: string
+    pieceSet: string
+    boardTheme: string
+    elo: string
+    preview: string
+    closePreview: string
+    yourColor: string
+    randomColor: string
+    startGame: string
+    prevTheme: string
+    nextTheme: string
+    prevMove: string
+    nextMove: string
+    firstMove: string
+    lastMove: string
+    reviewing: string
+    analyzingMoves: string
+    moves: string
+    noMovesYet: string
+    you: string
+    bot: string
+    vs: string
+    sound: string
+    soundOn: string
+    soundOff: string
+    leaderboard: {
+      title: string
+      loading: string
+      empty: string
+      emptyWinsOnly: string
+      emptyAfterWin: string
+      nameLabel: string
+      namePlaceholder: string
+      nameError: string
+      submit: string
+      success: string
+      successRank: string
+      submitError: string
+      rateLimit: string
+      wakingUp: string
+    }
+    moveQuality: {
+      brilliant: string
+      great: string
+      best: string
+      excellent: string
+      good: string
+      book: string
+      inaccuracy: string
+      mistake: string
+      blunder: string
+    }
   }
   memoryGame: {
     title: string
@@ -456,6 +547,10 @@ export interface Translations {
       confirmDelete: string
       deleteSuccess: string
       deleteError: string
+      tabMemory: string
+      tabChess: string
+      chessEmpty: string
+      chessConfirmDelete: string
       columns: {
         rank: string
         player: string
@@ -463,6 +558,10 @@ export interface Translations {
         moves: string
         time: string
         date: string
+        difficulty: string
+        result: string
+        color: string
+        plies: string
       }
     }
     content: {

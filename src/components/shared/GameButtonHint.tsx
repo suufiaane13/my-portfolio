@@ -73,7 +73,7 @@ export function GameButtonHint({ enabled, className, children }: GameButtonHintP
                 </span>
                 <div className="min-w-0 flex-1">
                   <p className="font-display text-sm font-semibold leading-none text-foreground">
-                    {t.nav.game}
+                    {t.nav.games}
                   </p>
                   <p className="mt-1 flex items-center gap-1 text-[0.6875rem] font-medium text-muted-foreground">
                     <Sparkles className="h-3 w-3 shrink-0 text-[var(--game-hint-accent)]" aria-hidden="true" />

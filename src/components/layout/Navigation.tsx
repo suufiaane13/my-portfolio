@@ -1,18 +1,18 @@
-import { ChevronRight, Gamepad2, LayoutDashboard, LogIn, Menu } from 'lucide-react'
+import { ChevronRight, Gamepad2, LayoutDashboard, LogIn, Menu, Puzzle } from 'lucide-react'
 import { useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { Sheet } from '@/components/ui/Sheet'
 import { Container } from '@/components/layout/Container'
+import { GamesMenu } from '@/components/layout/GamesMenu'
 import { NavOverlayProvider } from '@/components/layout/NavOverlayContext'
 import {
   navActionClass,
   navActionGroupClass,
   navActionIconClass,
-  navActionPillClass,
   navActionShellClass,
+  navActionPillClass,
 } from '@/components/layout/navActionStyles'
 import { BrandLogo } from '@/components/shared/BrandLogo'
-import { GameButtonHint } from '@/components/shared/GameButtonHint'
 import { applyAvatarImageFallback } from '@/lib/portfolioImage'
 import { GithubIcon } from '@/components/shared/SocialIcons'
 import { LanguageToggle } from '@/components/shared/LanguageToggle'
@@ -37,7 +37,7 @@ export function Navigation({ isDark, onToggleTheme }: NavigationProps) {
   const { session } = useAuth()
   const location = useLocation()
   const isHome = location.pathname === '/'
-  const isGamePage = location.pathname === '/game'
+  const isGamesArea = location.pathname === '/game' || location.pathname.startsWith('/game/')
   const isAuthPage =
     location.pathname === '/login' ||
     location.pathname === '/forgot-password' ||
@@ -111,33 +111,7 @@ export function Navigation({ isDark, onToggleTheme }: NavigationProps) {
 
           <div className={navActionGroupClass}>
             <div className={navActionShellClass}>
-              <GameButtonHint enabled={isHome && !isGamePage}>
-                <Link
-                  to="/game"
-                  onClick={markGameVisited}
-                  className={cn(
-                    navActionClass({ active: isGamePage }),
-                    navActionPillClass,
-                    'hidden sm:inline-flex',
-                  )}
-                >
-                  <Gamepad2 className="h-4 w-4 shrink-0" aria-hidden="true" />
-                  {t.nav.game}
-                </Link>
-
-                <Link
-                  to="/game"
-                  onClick={markGameVisited}
-                  aria-label={t.nav.game}
-                  className={cn(
-                    navActionClass({ active: isGamePage }),
-                    navActionIconClass,
-                    'sm:hidden',
-                  )}
-                >
-                  <Gamepad2 className="h-4 w-4" aria-hidden="true" />
-                </Link>
-              </GameButtonHint>
+              <GamesMenu showHint={isHome && !isGamesArea} />
             </div>
 
             <div className={navActionShellClass}>
@@ -257,38 +231,55 @@ export function Navigation({ isDark, onToggleTheme }: NavigationProps) {
           })}
 
           <div className="mt-3 space-y-2 border-t border-border/80 pt-3 pb-6">
-            <Link
-              to="/game"
-              onClick={() => {
-                markGameVisited()
-                setMenuOpen(false)
-              }}
-              className={cn(
-                'group flex items-center gap-2.5 rounded-xl border px-3 py-2.5 transition-all duration-200',
-                'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background',
-                isGamePage
-                  ? 'border-primary/40 bg-primary/15 shadow-sm shadow-primary/10'
-                  : 'border-primary/25 bg-primary/8 hover:border-primary/40 hover:bg-primary/12',
-              )}
-            >
-              <span
-                className={cn(
-                  'flex h-9 w-9 shrink-0 items-center justify-center rounded-lg transition-colors',
-                  isGamePage
-                    ? 'bg-primary text-primary-foreground'
-                    : 'bg-primary/15 text-primary group-hover:bg-primary/20',
-                )}
-              >
-                <Gamepad2 className="h-4 w-4" aria-hidden="true" />
-              </span>
-              <span className="min-w-0 flex-1 text-left font-display text-sm font-semibold text-primary">
-                {t.nav.game}
-              </span>
-              <ChevronRight
-                className="h-4 w-4 shrink-0 text-primary/60 transition-transform group-hover:translate-x-0.5"
-                aria-hidden="true"
-              />
-            </Link>
+            <p className="px-1 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+              {t.nav.games}
+            </p>
+            {(
+              [
+                { to: '/game', label: t.nav.gameItems.memory, icon: Puzzle },
+                { to: '/game/chess', label: t.nav.gameItems.chess, icon: Gamepad2 },
+              ] as const
+            ).map(({ to, label, icon: Icon }) => {
+              const active =
+                to === '/game'
+                  ? location.pathname === '/game'
+                  : location.pathname.startsWith(to)
+              return (
+                <Link
+                  key={to}
+                  to={to}
+                  onClick={() => {
+                    markGameVisited()
+                    setMenuOpen(false)
+                  }}
+                  className={cn(
+                    'group flex items-center gap-2.5 rounded-xl border px-3 py-2.5 transition-all duration-200',
+                    'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background',
+                    active
+                      ? 'border-primary/40 bg-primary/15 shadow-sm shadow-primary/10'
+                      : 'border-primary/25 bg-primary/8 hover:border-primary/40 hover:bg-primary/12',
+                  )}
+                >
+                  <span
+                    className={cn(
+                      'flex h-9 w-9 shrink-0 items-center justify-center rounded-lg transition-colors',
+                      active
+                        ? 'bg-primary text-primary-foreground'
+                        : 'bg-primary/15 text-primary group-hover:bg-primary/20',
+                    )}
+                  >
+                    <Icon className="h-4 w-4" aria-hidden="true" />
+                  </span>
+                  <span className="min-w-0 flex-1 text-left font-display text-sm font-semibold text-primary">
+                    {label}
+                  </span>
+                  <ChevronRight
+                    className="h-4 w-4 shrink-0 text-primary/60 transition-transform group-hover:translate-x-0.5"
+                    aria-hidden="true"
+                  />
+                </Link>
+              )
+            })}
 
             <Link
               to={authHref}

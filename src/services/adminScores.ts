@@ -1,5 +1,5 @@
 import { getSupabase } from '@/lib/supabase'
-import type { MemoryScoreRow } from '@/types/admin'
+import type { ChessGameRow, MemoryScoreRow } from '@/types/admin'
 
 export async function fetchAllScores(limit = 100): Promise<MemoryScoreRow[]> {
   const supabase = getSupabase()
@@ -47,6 +47,63 @@ export async function countScores(): Promise<number> {
 
   const { count, error } = await supabase
     .from('memory_scores')
+    .select('*', { count: 'exact', head: true })
+
+  if (error) return 0
+  return count ?? 0
+}
+
+export async function fetchAllChessGames(limit = 100): Promise<ChessGameRow[]> {
+  const supabase = getSupabase()
+  if (!supabase) return []
+
+  const { data, error } = await supabase
+    .from('chess_games')
+    .select(
+      'id, player_name, difficulty, player_color, result, ply_count, seconds, opening_name, locale, created_at',
+    )
+    .order('created_at', { ascending: false })
+    .limit(limit)
+
+  if (error) {
+    console.error('[admin] fetch chess games failed:', error.message)
+    return []
+  }
+
+  return (data ?? []).map((row) => ({
+    id: row.id,
+    playerName: row.player_name,
+    difficulty: row.difficulty,
+    playerColor: row.player_color,
+    result: row.result,
+    plyCount: row.ply_count,
+    seconds: row.seconds,
+    openingName: row.opening_name ?? null,
+    locale: row.locale,
+    createdAt: row.created_at,
+    rank: null,
+  }))
+}
+
+export async function deleteChessGame(id: string): Promise<boolean> {
+  const supabase = getSupabase()
+  if (!supabase) return false
+
+  const { error } = await supabase.from('chess_games').delete().eq('id', id)
+  if (error) {
+    console.error('[admin] delete chess game failed:', error.message)
+    return false
+  }
+
+  return true
+}
+
+export async function countChessGames(): Promise<number> {
+  const supabase = getSupabase()
+  if (!supabase) return 0
+
+  const { count, error } = await supabase
+    .from('chess_games')
     .select('*', { count: 'exact', head: true })
 
   if (error) return 0

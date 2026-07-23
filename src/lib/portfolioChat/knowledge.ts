@@ -179,9 +179,12 @@ export function buildChatKnowledge(
   chunks.push({
     id: 'game-info',
     intent: 'game',
-    title: t.nav.game,
+    title: t.nav.games,
     body: t.chatbot.templates.gameIntro,
-    links: [{ label: t.nav.game, href: '/game' }],
+    links: [
+      { label: t.nav.gameItems.memory, href: '/game' },
+      { label: t.nav.gameItems.chess, href: '/game/chess' },
+    ],
   })
 
   return { locale, chunks }

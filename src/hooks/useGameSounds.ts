@@ -27,6 +27,7 @@ function playTone(
   oscillator.stop(now + duration)
 }
 
+/** WebAudio beeps for the Memory game only. Chess uses real Lichess MP3s. */
 export function useGameSounds(enabled: boolean) {
   const contextRef = useRef<AudioContext | null>(null)
 

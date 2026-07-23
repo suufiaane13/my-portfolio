@@ -5,7 +5,6 @@ import { Toaster } from 'sonner'
 import { Footer } from '@/components/layout/Footer'
 import { Navigation } from '@/components/layout/Navigation'
 import { MemoryGame } from '@/components/sections/MemoryGame'
-import { PortfolioChatWidget } from '@/components/chat/PortfolioChatWidget'
 import { Analytics } from '@/components/shared/Analytics'
 import { PortfolioAnalytics } from '@/components/shared/PortfolioAnalytics'
 import { LanguageTransition } from '@/components/shared/LanguageTransition'
@@ -47,7 +46,6 @@ export function GamePage() {
         </main>
       </LanguageTransition>
 
-      <PortfolioChatWidget />
       <Toaster richColors closeButton position="top-right" />
     </>
   )

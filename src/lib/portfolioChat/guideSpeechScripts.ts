@@ -29,7 +29,7 @@ const GUIDE_SPEECH_SCRIPTS: Record<Locale, Record<string, string>> = {
       'Mon C V est disponible au téléchargement. Vous pouvez le récupérer directement en utilisant le bouton Télécharger mon C V dans l\'en-tête, ou via le bouton situé juste ci-dessous.',
 
     'game-info':
-      'Une pause ludique ? Ce portfolio intègre un mini-jeu de mémoire avec un classement du top 5. Lancez une partie et tentez de battre votre record !',
+      'Une pause ludique ? Ce portfolio propose deux mini-jeux : un jeu de mémoire avec classement top 5, et des échecs contre un bot Stockfish avec ouvertures et niveau Expert. Choisissez dans le menu Jeux !',
 
     'project-myfood':
       'Le projet MyFood est une application mobile développée en Kotlin et Jetpack Compose, connectée à un back-end Superbase. Elle offre un parcours client complet et un espace de gestion pour les restaurateurs, avec authentification et base de données PostgreSQL.',
@@ -67,7 +67,7 @@ const GUIDE_SPEECH_SCRIPTS: Record<Locale, Record<string, string>> = {
       'Curriculum Vitae. My resume is available for instant download. Feel free to click the Download my CV button in the hero banner, or click the button down below.',
 
     'game-info':
-      'Memory game. This portfolio features an interactive memory matching game with a top 5 leaderboard. Take a moment to play a round and set a new high score!',
+      'Portfolio mini-games. You can play Memory with a top 5 leaderboard, or Chess against a Stockfish bot with openings and Expert difficulty. Open the Games menu to pick one!',
 
     'project-myfood':
       'MyFood project. A mobile application crafted with Kotlin and Jetpack Compose, powered by a Superbase backend for authentication, PostgreSQL, and storage. It supports a full customer journey alongside a management dashboard for restaurant owners using Kotlin, Jetpack Compose, Superbase, and Android.',

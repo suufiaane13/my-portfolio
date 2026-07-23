@@ -1,4 +1,5 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
+import { lazy, Suspense } from 'react'
 import { ProtectedRoute } from '@/components/auth/ProtectedRoute'
 import { AdminLayout } from '@/components/admin/AdminLayout'
 import { PageLoader } from '@/components/shared/PageLoader'
@@ -22,6 +23,10 @@ import { LoginPage } from '@/pages/LoginPage'
 import { ResetPasswordPage } from '@/pages/ResetPasswordPage'
 import { AdminNewsletterPage } from '@/pages/admin/AdminNewsletterPage'
 
+const ChessPage = lazy(() =>
+  import('@/pages/ChessPage').then((module) => ({ default: module.ChessPage })),
+)
+
 function AppRoutes() {
   return (
     <>
@@ -29,6 +34,14 @@ function AppRoutes() {
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/game" element={<GamePage />} />
+        <Route
+          path="/game/chess"
+          element={
+            <Suspense fallback={<PageLoader />}>
+              <ChessPage />
+            </Suspense>
+          }
+        />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/forgot-password" element={<ForgotPasswordPage />} />
         <Route path="/reset-password" element={<ResetPasswordPage />} />

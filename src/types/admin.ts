@@ -34,6 +34,20 @@ export interface MemoryScoreRow {
   rank: number | null
 }
 
+export interface ChessGameRow {
+  id: string
+  playerName: string
+  difficulty: string
+  playerColor: string
+  result: string
+  plyCount: number
+  seconds: number
+  openingName: string | null
+  locale: string
+  createdAt: string
+  rank: number | null
+}
+
 export interface AdminDashboardStats {
   unreadMessages: number
   totalMessages: number

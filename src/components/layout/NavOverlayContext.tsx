@@ -7,7 +7,7 @@ import {
   type ReactNode,
 } from 'react'
 
-export type NavOverlay = 'lang' | 'game-hint'
+export type NavOverlay = 'lang' | 'game-hint' | 'games'
 
 interface NavOverlayContextValue {
   active: NavOverlay | null
@@ -15,6 +15,7 @@ interface NavOverlayContextValue {
   closeOverlay: () => void
   isLangOpen: boolean
   isGameHintOpen: boolean
+  isGamesOpen: boolean
 }
 
 const NavOverlayContext = createContext<NavOverlayContextValue | null>(null)
@@ -37,6 +38,7 @@ export function NavOverlayProvider({ children }: { children: ReactNode }) {
       closeOverlay,
       isLangOpen: active === 'lang',
       isGameHintOpen: active === 'game-hint',
+      isGamesOpen: active === 'games',
     }),
     [active, closeOverlay, openOverlay],
   )
