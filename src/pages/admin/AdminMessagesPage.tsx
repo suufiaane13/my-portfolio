@@ -93,7 +93,7 @@ export function AdminMessagesPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="font-display text-2xl font-bold">{t.admin.nav.messages}</h1>
+        <h1 className="font-display text-xl font-bold sm:text-2xl">{t.admin.nav.messages}</h1>
         <p className="mt-2 text-sm text-muted-foreground">{t.admin.messages.subtitle}</p>
       </div>
 

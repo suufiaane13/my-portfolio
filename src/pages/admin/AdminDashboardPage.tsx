@@ -1,6 +1,7 @@
 import { BarChart3, Mail, MousePointerClick, Newspaper, Trophy } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
+import { RotatingStatCard } from '@/components/admin/RotatingStatCard'
 import { StatCard } from '@/components/admin/StatCard'
 import { Card } from '@/components/ui/Card'
 import { useTranslation } from '@/i18n/LanguageProvider'
@@ -33,47 +34,57 @@ export function AdminDashboardPage() {
   return (
     <div className="space-y-8">
       <div>
-        <h1 className="font-display text-2xl font-bold text-foreground sm:text-3xl">
+        <h1 className="font-display text-xl font-bold text-foreground sm:text-2xl lg:text-3xl">
           {t.admin.dashboard.welcome}
         </h1>
-        <p className="mt-2 text-muted-foreground">{t.admin.dashboard.subtitle}</p>
+        <p className="mt-2 text-sm text-muted-foreground sm:text-base">{t.admin.dashboard.subtitle}</p>
       </div>
 
       {isLoading ? (
         <p className="text-sm text-muted-foreground">{t.common.loading}</p>
       ) : stats ? (
         <>
-          <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-5">
+          {/* Mobile 2×2 · sm+ 2 cols · xl 4 cols */}
+          <div className="grid grid-cols-2 gap-3 sm:gap-4 xl:grid-cols-4">
             <StatCard
               label={t.admin.dashboard.unreadMessages}
               value={stats.unreadMessages}
               icon={Mail}
+              className="p-4 sm:p-5"
             />
             <StatCard
               label={t.admin.dashboard.newsletterSubscribers}
               value={stats.newsletterSubscribers}
               icon={Newspaper}
+              className="p-4 sm:p-5"
             />
-            <StatCard
-              label={t.admin.dashboard.events7d}
-              value={stats.eventsLast7Days}
-              icon={MousePointerClick}
-            />
-            <StatCard
-              label={t.admin.dashboard.events30d}
-              value={stats.eventsLast30Days}
-              icon={BarChart3}
+            <RotatingStatCard
+              slides={[
+                {
+                  label: t.admin.dashboard.events7d,
+                  value: stats.eventsLast7Days,
+                  icon: MousePointerClick,
+                },
+                {
+                  label: t.admin.dashboard.events30d,
+                  value: stats.eventsLast30Days,
+                  icon: BarChart3,
+                },
+              ]}
             />
             <StatCard
               label={t.admin.dashboard.totalScores}
               value={stats.totalScores}
               icon={Trophy}
+              className="p-4 sm:p-5"
             />
           </div>
 
           <div className="grid gap-6 lg:grid-cols-2">
-            <Card className="p-5">
-              <h2 className="mb-4 font-display text-lg font-semibold">{t.admin.dashboard.quickLinks}</h2>
+            <Card className="p-4 sm:p-5">
+              <h2 className="mb-4 font-display text-base font-semibold sm:text-lg">
+                {t.admin.dashboard.quickLinks}
+              </h2>
               <div className="space-y-2">
                 <Link
                   to="/admin/content"
@@ -110,8 +121,8 @@ export function AdminDashboardPage() {
               </div>
             </Card>
 
-            <Card className="p-5">
-              <h2 className="mb-4 font-display text-lg font-semibold">
+            <Card className="p-4 sm:p-5">
+              <h2 className="mb-4 font-display text-base font-semibold sm:text-lg">
                 {t.admin.dashboard.topEvents}
               </h2>
               {stats.topEventTypes.length === 0 ? (
@@ -124,8 +135,9 @@ export function AdminDashboardPage() {
                       className="flex items-center justify-between rounded-xl bg-muted/50 px-4 py-2.5 text-sm"
                     >
                       <span className="font-medium">
-                        {t.admin.analytics.eventTypes[item.eventType as keyof typeof t.admin.analytics.eventTypes] ??
-                          item.eventType}
+                        {t.admin.analytics.eventTypes[
+                          item.eventType as keyof typeof t.admin.analytics.eventTypes
+                        ] ?? item.eventType}
                       </span>
                       <span className="tabular-nums text-muted-foreground">{item.count}</span>
                     </li>

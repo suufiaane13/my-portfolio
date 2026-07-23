@@ -7,6 +7,9 @@ export interface GuideAudioManifest {
   format: 'wav'
   voices: Record<Locale, string>
   files: Record<Locale, string[]>
+  /** Chunks already synthesized with Gemini — skipped on next `guide:audio` without --force. */
+  gemini?: Record<Locale, string[]>
+  provider?: string
 }
 
 export const GUIDE_AUDIO_BASE = '/audio/guide'

@@ -56,15 +56,71 @@ export function AdminScoresPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="font-display text-2xl font-bold">{t.admin.nav.scores}</h1>
+        <h1 className="font-display text-xl font-bold sm:text-2xl">{t.admin.nav.scores}</h1>
         <p className="mt-2 text-sm text-muted-foreground">{t.admin.scores.subtitle}</p>
       </div>
 
       {isLoading ? (
         <p className="text-sm text-muted-foreground">{t.common.loading}</p>
+      ) : total === 0 ? (
+        <Card className="px-4 py-10 text-center text-sm text-muted-foreground">
+          {t.admin.scores.empty}
+        </Card>
       ) : (
         <Card className="overflow-hidden">
-          <div className="overflow-x-auto">
+          {/* Mobile cards */}
+          <ul className="divide-y divide-border md:hidden">
+            {pageItems.map((score) => (
+              <li key={score.id} className="p-4">
+                <div className="flex items-start justify-between gap-3">
+                  <div className="min-w-0 flex-1">
+                    <div className="flex flex-wrap items-center gap-2">
+                      <span className="inline-flex h-7 min-w-7 items-center justify-center rounded-lg bg-primary/10 px-2 text-xs font-bold tabular-nums text-primary">
+                        #{score.rank ?? '—'}
+                      </span>
+                      <p className="truncate font-semibold text-foreground">{score.playerName}</p>
+                    </div>
+                    <dl className="mt-3 grid grid-cols-2 gap-x-3 gap-y-2 text-xs">
+                      <div>
+                        <dt className="text-muted-foreground">{t.admin.scores.columns.grid}</dt>
+                        <dd className="mt-0.5 font-medium text-foreground">
+                          {score.gridSize}×{score.gridSize}
+                        </dd>
+                      </div>
+                      <div>
+                        <dt className="text-muted-foreground">{t.admin.scores.columns.moves}</dt>
+                        <dd className="mt-0.5 font-medium tabular-nums text-foreground">{score.moves}</dd>
+                      </div>
+                      <div>
+                        <dt className="text-muted-foreground">{t.admin.scores.columns.time}</dt>
+                        <dd className="mt-0.5 font-mono font-medium tabular-nums text-foreground">
+                          {formatLeaderboardTime(score.seconds)}
+                        </dd>
+                      </div>
+                      <div>
+                        <dt className="text-muted-foreground">{t.admin.scores.columns.date}</dt>
+                        <dd className="mt-0.5 text-foreground">
+                          {new Date(score.createdAt).toLocaleString()}
+                        </dd>
+                      </div>
+                    </dl>
+                  </div>
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    className="shrink-0"
+                    onClick={() => setPendingDelete(score)}
+                    aria-label={t.admin.scores.delete}
+                  >
+                    <Trash2 className="h-4 w-4" />
+                  </Button>
+                </div>
+              </li>
+            ))}
+          </ul>
+
+          {/* Desktop table */}
+          <div className="hidden overflow-x-auto md:block">
             <table className="min-w-full text-sm">
               <thead>
                 <tr className="border-b border-border text-left text-muted-foreground">
@@ -78,43 +134,36 @@ export function AdminScoresPage() {
                 </tr>
               </thead>
               <tbody>
-                {total === 0 ? (
-                  <tr>
-                    <td colSpan={7} className="px-4 py-8 text-center text-muted-foreground">
-                      {t.admin.scores.empty}
+                {pageItems.map((score) => (
+                  <tr key={score.id} className="border-b border-border/70">
+                    <td className="px-4 py-3 tabular-nums">{score.rank ?? '—'}</td>
+                    <td className="px-4 py-3 font-medium">{score.playerName}</td>
+                    <td className="px-4 py-3">
+                      {score.gridSize}×{score.gridSize}
+                    </td>
+                    <td className="px-4 py-3 tabular-nums">{score.moves}</td>
+                    <td className="px-4 py-3 font-mono tabular-nums">
+                      {formatLeaderboardTime(score.seconds)}
+                    </td>
+                    <td className="px-4 py-3 text-muted-foreground">
+                      {new Date(score.createdAt).toLocaleString()}
+                    </td>
+                    <td className="px-4 py-3">
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        onClick={() => setPendingDelete(score)}
+                        aria-label={t.admin.scores.delete}
+                      >
+                        <Trash2 className="h-4 w-4" />
+                      </Button>
                     </td>
                   </tr>
-                ) : (
-                  pageItems.map((score) => (
-                    <tr key={score.id} className="border-b border-border/70">
-                      <td className="px-4 py-3 tabular-nums">{score.rank ?? '—'}</td>
-                      <td className="px-4 py-3 font-medium">{score.playerName}</td>
-                      <td className="px-4 py-3">
-                        {score.gridSize}×{score.gridSize}
-                      </td>
-                      <td className="px-4 py-3 tabular-nums">{score.moves}</td>
-                      <td className="px-4 py-3 font-mono tabular-nums">
-                        {formatLeaderboardTime(score.seconds)}
-                      </td>
-                      <td className="px-4 py-3 text-muted-foreground">
-                        {new Date(score.createdAt).toLocaleString()}
-                      </td>
-                      <td className="px-4 py-3">
-                        <Button
-                          size="sm"
-                          variant="outline"
-                          onClick={() => setPendingDelete(score)}
-                          aria-label={t.admin.scores.delete}
-                        >
-                          <Trash2 className="h-4 w-4" />
-                        </Button>
-                      </td>
-                    </tr>
-                  ))
-                )}
+                ))}
               </tbody>
             </table>
           </div>
+
           <AdminPagination
             page={page}
             pageCount={pageCount}

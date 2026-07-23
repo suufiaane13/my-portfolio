@@ -50,10 +50,10 @@ export function AdminAnalyticsPage() {
     <div className="space-y-6">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <div>
-          <h1 className="font-display text-2xl font-bold">{t.admin.nav.analytics}</h1>
+          <h1 className="font-display text-xl font-bold sm:text-2xl">{t.admin.nav.analytics}</h1>
           <p className="mt-2 text-sm text-muted-foreground">{t.admin.analytics.subtitle}</p>
         </div>
-        <div className="flex gap-2">
+        <div className="flex gap-2 self-start sm:self-auto">
           {[7, 30].map((value) => (
             <button
               key={value}
@@ -75,31 +75,35 @@ export function AdminAnalyticsPage() {
         <p className="text-sm text-muted-foreground">{t.common.loading}</p>
       ) : (
         <>
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-3">
             {summary.map((item) => (
-              <Card key={item.eventType} className="p-4">
-                <p className="text-sm text-muted-foreground">{eventLabel(item.eventType)}</p>
-                <p className="mt-1 font-display text-2xl font-bold tabular-nums">{item.count}</p>
+              <Card key={item.eventType} className="p-3 sm:p-4">
+                <p className="text-xs text-muted-foreground sm:text-sm">{eventLabel(item.eventType)}</p>
+                <p className="mt-1 font-display text-xl font-bold tabular-nums sm:text-2xl">
+                  {item.count}
+                </p>
               </Card>
             ))}
           </div>
 
           {daily.length > 0 && (
             <Card className="p-4 sm:p-6">
-              <h2 className="font-display text-lg font-semibold">{t.admin.analytics.dailyChart}</h2>
+              <h2 className="font-display text-base font-semibold sm:text-lg">
+                {t.admin.analytics.dailyChart}
+              </h2>
               <p className="mt-1 text-sm text-muted-foreground">{t.admin.analytics.dailyChartDesc}</p>
-              <div className="mt-6 flex items-end gap-1.5 overflow-x-auto pb-2">
+              <div className="-mx-1 mt-6 flex items-end gap-1 overflow-x-auto px-1 pb-2 sm:gap-1.5">
                 {daily.map((item) => (
-                  <div key={item.date} className="flex min-w-[2rem] flex-col items-center gap-2">
-                    <span className="text-xs font-medium tabular-nums text-muted-foreground">
+                  <div key={item.date} className="flex min-w-[1.75rem] flex-col items-center gap-2 sm:min-w-[2rem]">
+                    <span className="text-[10px] font-medium tabular-nums text-muted-foreground sm:text-xs">
                       {item.count}
                     </span>
                     <div
-                      className="w-full min-w-[1.25rem] rounded-t-md bg-primary/80 transition-all"
+                      className="w-full min-w-[1rem] rounded-t-md bg-primary/80 transition-all sm:min-w-[1.25rem]"
                       style={{ height: `${Math.max(8, (item.count / maxDaily) * 120)}px` }}
                       title={`${item.date}: ${item.count}`}
                     />
-                    <span className="text-[10px] text-muted-foreground">
+                    <span className="text-[9px] text-muted-foreground sm:text-[10px]">
                       {item.date.slice(5)}
                     </span>
                   </div>
@@ -109,47 +113,68 @@ export function AdminAnalyticsPage() {
           )}
 
           <Card className="overflow-hidden">
-            <div className="overflow-x-auto">
-              <table className="min-w-full text-sm">
-                <thead>
-                  <tr className="border-b border-border text-left text-muted-foreground">
-                    <th className="px-4 py-3 font-medium">{t.admin.analytics.columns.type}</th>
-                    <th className="px-4 py-3 font-medium">{t.admin.analytics.columns.path}</th>
-                    <th className="px-4 py-3 font-medium">{t.admin.analytics.columns.detail}</th>
-                    <th className="px-4 py-3 font-medium">{t.admin.analytics.columns.date}</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {total === 0 ? (
-                    <tr>
-                      <td colSpan={4} className="px-4 py-8 text-center text-muted-foreground">
-                        {t.admin.analytics.empty}
-                      </td>
-                    </tr>
-                  ) : (
-                    pageItems.map((event) => (
-                      <tr key={event.id} className="border-b border-border/70">
-                        <td className="px-4 py-3 font-medium">{eventLabel(event.eventType)}</td>
-                        <td className="px-4 py-3 text-muted-foreground">{event.path ?? '—'}</td>
-                        <td className="px-4 py-3 text-muted-foreground">
+            {total === 0 ? (
+              <p className="px-4 py-10 text-center text-sm text-muted-foreground">
+                {t.admin.analytics.empty}
+              </p>
+            ) : (
+              <>
+                {/* Mobile cards */}
+                <ul className="divide-y divide-border md:hidden">
+                  {pageItems.map((event) => (
+                    <li key={event.id} className="space-y-2 p-4">
+                      <p className="font-semibold text-foreground">{eventLabel(event.eventType)}</p>
+                      <div className="flex flex-wrap gap-x-3 gap-y-1 text-xs text-muted-foreground">
+                        <span className="truncate font-mono">{event.path ?? '—'}</span>
+                        <span>·</span>
+                        <span className="truncate">
                           {event.sectionId ?? event.projectId ?? '—'}
-                        </td>
-                        <td className="px-4 py-3 text-muted-foreground">
-                          {new Date(event.createdAt).toLocaleString()}
-                        </td>
+                        </span>
+                      </div>
+                      <p className="text-xs text-muted-foreground">
+                        {new Date(event.createdAt).toLocaleString()}
+                      </p>
+                    </li>
+                  ))}
+                </ul>
+
+                {/* Desktop table */}
+                <div className="hidden overflow-x-auto md:block">
+                  <table className="min-w-full text-sm">
+                    <thead>
+                      <tr className="border-b border-border text-left text-muted-foreground">
+                        <th className="px-4 py-3 font-medium">{t.admin.analytics.columns.type}</th>
+                        <th className="px-4 py-3 font-medium">{t.admin.analytics.columns.path}</th>
+                        <th className="px-4 py-3 font-medium">{t.admin.analytics.columns.detail}</th>
+                        <th className="px-4 py-3 font-medium">{t.admin.analytics.columns.date}</th>
                       </tr>
-                    ))
-                  )}
-                </tbody>
-              </table>
-            </div>
-            <AdminPagination
-              page={page}
-              pageCount={pageCount}
-              total={total}
-              pageSize={pageSize}
-              onPageChange={setPage}
-            />
+                    </thead>
+                    <tbody>
+                      {pageItems.map((event) => (
+                        <tr key={event.id} className="border-b border-border/70">
+                          <td className="px-4 py-3 font-medium">{eventLabel(event.eventType)}</td>
+                          <td className="px-4 py-3 text-muted-foreground">{event.path ?? '—'}</td>
+                          <td className="px-4 py-3 text-muted-foreground">
+                            {event.sectionId ?? event.projectId ?? '—'}
+                          </td>
+                          <td className="px-4 py-3 text-muted-foreground">
+                            {new Date(event.createdAt).toLocaleString()}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+
+                <AdminPagination
+                  page={page}
+                  pageCount={pageCount}
+                  total={total}
+                  pageSize={pageSize}
+                  onPageChange={setPage}
+                />
+              </>
+            )}
           </Card>
         </>
       )}

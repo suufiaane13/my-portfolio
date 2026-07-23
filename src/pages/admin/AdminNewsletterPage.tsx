@@ -53,7 +53,7 @@ export function AdminNewsletterPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="font-display text-2xl font-bold">{t.admin.nav.newsletter}</h1>
+        <h1 className="font-display text-xl font-bold sm:text-2xl">{t.admin.nav.newsletter}</h1>
         <p className="mt-2 text-sm text-muted-foreground">{t.admin.newsletter.subtitle}</p>
       </div>
 
@@ -61,12 +61,45 @@ export function AdminNewsletterPage() {
         {isLoading ? (
           <p className="px-4 py-8 text-sm text-muted-foreground">{t.common.loading}</p>
         ) : total === 0 ? (
-          <p className="px-4 py-8 text-center text-sm text-muted-foreground">
+          <p className="px-4 py-10 text-center text-sm text-muted-foreground">
             {t.admin.newsletter.empty}
           </p>
         ) : (
           <>
-            <div className="overflow-x-auto">
+            {/* Mobile cards */}
+            <ul className="divide-y divide-border md:hidden">
+              {pageItems.map((subscriber) => (
+                <li key={subscriber.id} className="p-4">
+                  <div className="flex items-start justify-between gap-3">
+                    <div className="min-w-0 flex-1">
+                      <p className="truncate font-semibold text-foreground">{subscriber.email}</p>
+                      <div className="mt-2 flex flex-wrap gap-2 text-xs text-muted-foreground">
+                        <span className="rounded-md bg-muted px-2 py-0.5 font-medium uppercase tracking-wide text-foreground">
+                          {subscriber.locale}
+                        </span>
+                        <span className="rounded-md border border-border px-2 py-0.5">
+                          {subscriber.source}
+                        </span>
+                      </div>
+                      <p className="mt-2 text-xs text-muted-foreground">
+                        {new Date(subscriber.subscribedAt).toLocaleString()}
+                      </p>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => setPendingDelete(subscriber)}
+                      className="inline-flex shrink-0 items-center justify-center rounded-lg p-2 text-destructive transition-colors hover:bg-destructive/10"
+                      aria-label={t.admin.newsletter.delete}
+                    >
+                      <Trash2 className="h-4 w-4" />
+                    </button>
+                  </div>
+                </li>
+              ))}
+            </ul>
+
+            {/* Desktop table */}
+            <div className="hidden overflow-x-auto md:block">
               <table className="min-w-full text-sm">
                 <thead>
                   <tr className="border-b border-border text-left text-muted-foreground">
@@ -101,6 +134,7 @@ export function AdminNewsletterPage() {
                 </tbody>
               </table>
             </div>
+
             <AdminPagination
               page={page}
               pageCount={pageCount}

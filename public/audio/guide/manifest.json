@@ -1,39 +1,56 @@
 {
-  "version": "1",
-  "generatedAt": "2026-07-16T23:04:52.262Z",
+  "version": "3",
+  "generatedAt": "2026-07-23T12:06:47.223Z",
   "format": "wav",
+  "provider": "gemini-tts",
   "voices": {
-    "fr": "fr_FR-tom-medium",
-    "en": "en_US-ryan-medium"
+    "fr": "gemini:Charon",
+    "en": "gemini:Orus"
   },
   "files": {
     "fr": [
-      "about-main",
       "about-availability",
-      "skills-overview",
-      "experience-list",
-      "education-list",
+      "about-main",
       "contact-main",
       "cv-download",
+      "education-list",
+      "experience-list",
       "game-info",
       "project-myfood",
       "project-pure-power-menu",
+      "project-sultan-kunafa",
       "project-world-explorer",
-      "project-sultan-kunafa"
+      "skills-overview"
     ],
     "en": [
-      "about-main",
       "about-availability",
-      "skills-overview",
-      "experience-list",
-      "education-list",
+      "about-main",
       "contact-main",
       "cv-download",
+      "education-list",
+      "experience-list",
+      "game-info",
+      "project-myfood",
+      "project-pure-power-menu",
+      "project-sultan-kunafa",
+      "project-world-explorer",
+      "skills-overview"
+    ]
+  },
+  "gemini": {
+    "fr": [
+      "about-availability",
+      "about-main",
+      "contact-main",
+      "cv-download",
+      "education-list",
+      "experience-list",
       "game-info",
       "project-myfood",
       "project-pure-power-menu",
       "project-world-explorer",
-      "project-sultan-kunafa"
-    ]
+      "skills-overview"
+    ],
+    "en": []
   }
 }
