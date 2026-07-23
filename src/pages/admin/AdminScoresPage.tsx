@@ -7,12 +7,13 @@ import { Button } from '@/components/ui/Button'
 import { Card } from '@/components/ui/Card'
 import { ADMIN_PAGE_SIZE, useClientPagination } from '@/hooks/useClientPagination'
 import { useTranslation } from '@/i18n/LanguageProvider'
+import { formatDateTime } from '@/lib/formatDate'
 import { formatLeaderboardTime } from '@/services/memoryGame'
 import { deleteScore, fetchAllScores } from '@/services/adminScores'
 import type { MemoryScoreRow } from '@/types/admin'
 
 export function AdminScoresPage() {
-  const { t } = useTranslation()
+  const { t, locale } = useTranslation()
   const [scores, setScores] = useState<MemoryScoreRow[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [pendingDelete, setPendingDelete] = useState<MemoryScoreRow | null>(null)
@@ -100,7 +101,7 @@ export function AdminScoresPage() {
                       <div>
                         <dt className="text-muted-foreground">{t.admin.scores.columns.date}</dt>
                         <dd className="mt-0.5 text-foreground">
-                          {new Date(score.createdAt).toLocaleString()}
+                          {formatDateTime(score.createdAt, locale)}
                         </dd>
                       </div>
                     </dl>
@@ -146,7 +147,7 @@ export function AdminScoresPage() {
                       {formatLeaderboardTime(score.seconds)}
                     </td>
                     <td className="px-4 py-3 text-muted-foreground">
-                      {new Date(score.createdAt).toLocaleString()}
+                      {formatDateTime(score.createdAt, locale)}
                     </td>
                     <td className="px-4 py-3">
                       <Button

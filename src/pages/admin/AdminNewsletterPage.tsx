@@ -6,6 +6,7 @@ import { ConfirmDeleteDialog } from '@/components/admin/ConfirmDeleteDialog'
 import { Card } from '@/components/ui/Card'
 import { ADMIN_PAGE_SIZE, useClientPagination } from '@/hooks/useClientPagination'
 import { useTranslation } from '@/i18n/LanguageProvider'
+import { formatDateTime } from '@/lib/formatDate'
 import {
   deleteNewsletterSubscriber,
   fetchNewsletterSubscribers,
@@ -13,7 +14,7 @@ import {
 } from '@/services/admin/newsletter'
 
 export function AdminNewsletterPage() {
-  const { t } = useTranslation()
+  const { t, locale } = useTranslation()
   const [subscribers, setSubscribers] = useState<NewsletterSubscriber[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [pendingDelete, setPendingDelete] = useState<NewsletterSubscriber | null>(null)
@@ -82,7 +83,7 @@ export function AdminNewsletterPage() {
                         </span>
                       </div>
                       <p className="mt-2 text-xs text-muted-foreground">
-                        {new Date(subscriber.subscribedAt).toLocaleString()}
+                        {formatDateTime(subscriber.subscribedAt, locale)}
                       </p>
                     </div>
                     <button
@@ -117,7 +118,7 @@ export function AdminNewsletterPage() {
                       <td className="px-4 py-3 text-muted-foreground">{subscriber.locale}</td>
                       <td className="px-4 py-3 text-muted-foreground">{subscriber.source}</td>
                       <td className="px-4 py-3 text-muted-foreground">
-                        {new Date(subscriber.subscribedAt).toLocaleString()}
+                        {formatDateTime(subscriber.subscribedAt, locale)}
                       </td>
                       <td className="px-4 py-3 text-right">
                         <button

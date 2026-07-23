@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/Button'
 import { Card } from '@/components/ui/Card'
 import { ADMIN_PAGE_SIZE, useClientPagination } from '@/hooks/useClientPagination'
 import { useTranslation } from '@/i18n/LanguageProvider'
+import { formatDateTime } from '@/lib/formatDate'
 import { cn } from '@/lib/utils'
 import {
   deleteContactMessage,
@@ -19,7 +20,7 @@ import type { ContactMessage, ContactMessageStatus } from '@/types/admin'
 const filters: Array<ContactMessageStatus | 'all'> = ['all', 'new', 'read', 'replied', 'spam']
 
 export function AdminMessagesPage() {
-  const { t } = useTranslation()
+  const { t, locale } = useTranslation()
   const [messages, setMessages] = useState<ContactMessage[]>([])
   const [filter, setFilter] = useState<ContactMessageStatus | 'all'>('all')
   const [search, setSearch] = useState('')
@@ -157,7 +158,7 @@ export function AdminMessagesPage() {
                     </div>
                     <p className="line-clamp-2 text-sm text-muted-foreground">{message.message}</p>
                     <p className="mt-2 text-xs text-muted-foreground">
-                      {new Date(message.createdAt).toLocaleString()}
+                      {formatDateTime(message.createdAt, locale)}
                     </p>
                   </button>
                 </li>
@@ -188,7 +189,7 @@ export function AdminMessagesPage() {
               </div>
 
               <p className="mb-4 text-xs text-muted-foreground">
-                {new Date(selected.createdAt).toLocaleString()} · {selected.locale.toUpperCase()}
+                {formatDateTime(selected.createdAt, locale)} · {selected.locale.toUpperCase()}
               </p>
 
               <div className="mb-6 rounded-xl border border-border bg-muted/30 p-4 text-sm leading-relaxed whitespace-pre-wrap">

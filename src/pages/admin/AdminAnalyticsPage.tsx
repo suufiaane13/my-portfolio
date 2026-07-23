@@ -3,6 +3,7 @@ import { AdminPagination } from '@/components/admin/AdminPagination'
 import { Card } from '@/components/ui/Card'
 import { ADMIN_PAGE_SIZE, useClientPagination } from '@/hooks/useClientPagination'
 import { useTranslation } from '@/i18n/LanguageProvider'
+import { formatDateOnly, formatDateTime } from '@/lib/formatDate'
 import {
   aggregateEventsByDay,
   aggregateEventTypes,
@@ -11,7 +12,7 @@ import {
 import type { PortfolioEvent } from '@/types/admin'
 
 export function AdminAnalyticsPage() {
-  const { t } = useTranslation()
+  const { t, locale } = useTranslation()
   const [days, setDays] = useState(30)
   const [events, setEvents] = useState<PortfolioEvent[]>([])
   const [isLoading, setIsLoading] = useState(true)
@@ -101,10 +102,10 @@ export function AdminAnalyticsPage() {
                     <div
                       className="w-full min-w-[1rem] rounded-t-md bg-primary/80 transition-all sm:min-w-[1.25rem]"
                       style={{ height: `${Math.max(8, (item.count / maxDaily) * 120)}px` }}
-                      title={`${item.date}: ${item.count}`}
+                      title={`${formatDateOnly(item.date, locale)}: ${item.count}`}
                     />
                     <span className="text-[9px] text-muted-foreground sm:text-[10px]">
-                      {item.date.slice(5)}
+                      {formatDateOnly(item.date, locale).split(' ').slice(0, 2).join(' ')}
                     </span>
                   </div>
                 ))}
@@ -132,7 +133,7 @@ export function AdminAnalyticsPage() {
                         </span>
                       </div>
                       <p className="text-xs text-muted-foreground">
-                        {new Date(event.createdAt).toLocaleString()}
+                        {formatDateTime(event.createdAt, locale)}
                       </p>
                     </li>
                   ))}
@@ -158,7 +159,7 @@ export function AdminAnalyticsPage() {
                             {event.sectionId ?? event.projectId ?? '—'}
                           </td>
                           <td className="px-4 py-3 text-muted-foreground">
-                            {new Date(event.createdAt).toLocaleString()}
+                            {formatDateTime(event.createdAt, locale)}
                           </td>
                         </tr>
                       ))}
