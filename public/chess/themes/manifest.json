@@ -1,0 +1,1057 @@
+{
+  "source": "https://github.com/lichess-org/lila",
+  "licenseNote": "Piece/board assets from Lichess (lila) plus extra open-source sets (ansuz, skak, echecs). See NOTICE.md.",
+  "generatedAt": "2026-07-23T19:10:21.669Z",
+  "pieceSets": [
+    {
+      "id": "alpha",
+      "files": [
+        "wK.svg",
+        "wQ.svg",
+        "wR.svg",
+        "wB.svg",
+        "wN.svg",
+        "wP.svg",
+        "bK.svg",
+        "bQ.svg",
+        "bR.svg",
+        "bB.svg",
+        "bN.svg",
+        "bP.svg"
+      ],
+      "path": "pieces/alpha"
+    },
+    {
+      "id": "anarcandy",
+      "files": [
+        "wK.svg",
+        "wQ.svg",
+        "wR.svg",
+        "wB.svg",
+        "wN.svg",
+        "wP.svg",
+        "bK.svg",
+        "bQ.svg",
+        "bR.svg",
+        "bB.svg",
+        "bN.svg",
+        "bP.svg"
+      ],
+      "path": "pieces/anarcandy"
+    },
+    {
+      "id": "caliente",
+      "files": [
+        "wK.svg",
+        "wQ.svg",
+        "wR.svg",
+        "wB.svg",
+        "wN.svg",
+        "wP.svg",
+        "bK.svg",
+        "bQ.svg",
+        "bR.svg",
+        "bB.svg",
+        "bN.svg",
+        "bP.svg"
+      ],
+      "path": "pieces/caliente"
+    },
+    {
+      "id": "california",
+      "files": [
+        "wK.svg",
+        "wQ.svg",
+        "wR.svg",
+        "wB.svg",
+        "wN.svg",
+        "wP.svg",
+        "bK.svg",
+        "bQ.svg",
+        "bR.svg",
+        "bB.svg",
+        "bN.svg",
+        "bP.svg"
+      ],
+      "path": "pieces/california"
+    },
+    {
+      "id": "cardinal",
+      "files": [
+        "wK.svg",
+        "wQ.svg",
+        "wR.svg",
+        "wB.svg",
+        "wN.svg",
+        "wP.svg",
+        "bK.svg",
+        "bQ.svg",
+        "bR.svg",
+        "bB.svg",
+        "bN.svg",
+        "bP.svg"
+      ],
+      "path": "pieces/cardinal"
+    },
+    {
+      "id": "cburnett",
+      "files": [
+        "wK.svg",
+        "wQ.svg",
+        "wR.svg",
+        "wB.svg",
+        "wN.svg",
+        "wP.svg",
+        "bK.svg",
+        "bQ.svg",
+        "bR.svg",
+        "bB.svg",
+        "bN.svg",
+        "bP.svg"
+      ],
+      "path": "pieces/cburnett"
+    },
+    {
+      "id": "celtic",
+      "files": [
+        "wK.svg",
+        "wQ.svg",
+        "wR.svg",
+        "wB.svg",
+        "wN.svg",
+        "wP.svg",
+        "bK.svg",
+        "bQ.svg",
+        "bR.svg",
+        "bB.svg",
+        "bN.svg",
+        "bP.svg"
+      ],
+      "path": "pieces/celtic"
+    },
+    {
+      "id": "chess7",
+      "files": [
+        "wK.svg",
+        "wQ.svg",
+        "wR.svg",
+        "wB.svg",
+        "wN.svg",
+        "wP.svg",
+        "bK.svg",
+        "bQ.svg",
+        "bR.svg",
+        "bB.svg",
+        "bN.svg",
+        "bP.svg"
+      ],
+      "path": "pieces/chess7"
+    },
+    {
+      "id": "chessnut",
+      "files": [
+        "wK.svg",
+        "wQ.svg",
+        "wR.svg",
+        "wB.svg",
+        "wN.svg",
+        "wP.svg",
+        "bK.svg",
+        "bQ.svg",
+        "bR.svg",
+        "bB.svg",
+        "bN.svg",
+        "bP.svg"
+      ],
+      "path": "pieces/chessnut"
+    },
+    {
+      "id": "companion",
+      "files": [
+        "wK.svg",
+        "wQ.svg",
+        "wR.svg",
+        "wB.svg",
+        "wN.svg",
+        "wP.svg",
+        "bK.svg",
+        "bQ.svg",
+        "bR.svg",
+        "bB.svg",
+        "bN.svg",
+        "bP.svg"
+      ],
+      "path": "pieces/companion"
+    },
+    {
+      "id": "cooke",
+      "files": [
+        "wK.svg",
+        "wQ.svg",
+        "wR.svg",
+        "wB.svg",
+        "wN.svg",
+        "wP.svg",
+        "bK.svg",
+        "bQ.svg",
+        "bR.svg",
+        "bB.svg",
+        "bN.svg",
+        "bP.svg"
+      ],
+      "path": "pieces/cooke"
+    },
+    {
+      "id": "dubrovny",
+      "files": [
+        "wK.svg",
+        "wQ.svg",
+        "wR.svg",
+        "wB.svg",
+        "wN.svg",
+        "wP.svg",
+        "bK.svg",
+        "bQ.svg",
+        "bR.svg",
+        "bB.svg",
+        "bN.svg",
+        "bP.svg"
+      ],
+      "path": "pieces/dubrovny"
+    },
+    {
+      "id": "fantasy",
+      "files": [
+        "wK.svg",
+        "wQ.svg",
+        "wR.svg",
+        "wB.svg",
+        "wN.svg",
+        "wP.svg",
+        "bK.svg",
+        "bQ.svg",
+        "bR.svg",
+        "bB.svg",
+        "bN.svg",
+        "bP.svg"
+      ],
+      "path": "pieces/fantasy"
+    },
+    {
+      "id": "firi",
+      "files": [
+        "wK.svg",
+        "wQ.svg",
+        "wR.svg",
+        "wB.svg",
+        "wN.svg",
+        "wP.svg",
+        "bK.svg",
+        "bQ.svg",
+        "bR.svg",
+        "bB.svg",
+        "bN.svg",
+        "bP.svg"
+      ],
+      "path": "pieces/firi"
+    },
+    {
+      "id": "fresca",
+      "files": [
+        "wK.svg",
+        "wQ.svg",
+        "wR.svg",
+        "wB.svg",
+        "wN.svg",
+        "wP.svg",
+        "bK.svg",
+        "bQ.svg",
+        "bR.svg",
+        "bB.svg",
+        "bN.svg",
+        "bP.svg"
+      ],
+      "path": "pieces/fresca"
+    },
+    {
+      "id": "gioco",
+      "files": [
+        "wK.svg",
+        "wQ.svg",
+        "wR.svg",
+        "wB.svg",
+        "wN.svg",
+        "wP.svg",
+        "bK.svg",
+        "bQ.svg",
+        "bR.svg",
+        "bB.svg",
+        "bN.svg",
+        "bP.svg"
+      ],
+      "path": "pieces/gioco"
+    },
+    {
+      "id": "governor",
+      "files": [
+        "wK.svg",
+        "wQ.svg",
+        "wR.svg",
+        "wB.svg",
+        "wN.svg",
+        "wP.svg",
+        "bK.svg",
+        "bQ.svg",
+        "bR.svg",
+        "bB.svg",
+        "bN.svg",
+        "bP.svg"
+      ],
+      "path": "pieces/governor"
+    },
+    {
+      "id": "horsey",
+      "files": [
+        "wK.svg",
+        "wQ.svg",
+        "wR.svg",
+        "wB.svg",
+        "wN.svg",
+        "wP.svg",
+        "bK.svg",
+        "bQ.svg",
+        "bR.svg",
+        "bB.svg",
+        "bN.svg",
+        "bP.svg"
+      ],
+      "path": "pieces/horsey"
+    },
+    {
+      "id": "icpieces",
+      "files": [
+        "wK.svg",
+        "wQ.svg",
+        "wR.svg",
+        "wB.svg",
+        "wN.svg",
+        "wP.svg",
+        "bK.svg",
+        "bQ.svg",
+        "bR.svg",
+        "bB.svg",
+        "bN.svg",
+        "bP.svg"
+      ],
+      "path": "pieces/icpieces"
+    },
+    {
+      "id": "kiwen-suwi",
+      "files": [
+        "wK.svg",
+        "wQ.svg",
+        "wR.svg",
+        "wB.svg",
+        "wN.svg",
+        "wP.svg",
+        "bK.svg",
+        "bQ.svg",
+        "bR.svg",
+        "bB.svg",
+        "bN.svg",
+        "bP.svg"
+      ],
+      "path": "pieces/kiwen-suwi"
+    },
+    {
+      "id": "kosal",
+      "files": [
+        "wK.svg",
+        "wQ.svg",
+        "wR.svg",
+        "wB.svg",
+        "wN.svg",
+        "wP.svg",
+        "bK.svg",
+        "bQ.svg",
+        "bR.svg",
+        "bB.svg",
+        "bN.svg",
+        "bP.svg"
+      ],
+      "path": "pieces/kosal"
+    },
+    {
+      "id": "leipzig",
+      "files": [
+        "wK.svg",
+        "wQ.svg",
+        "wR.svg",
+        "wB.svg",
+        "wN.svg",
+        "wP.svg",
+        "bK.svg",
+        "bQ.svg",
+        "bR.svg",
+        "bB.svg",
+        "bN.svg",
+        "bP.svg"
+      ],
+      "path": "pieces/leipzig"
+    },
+    {
+      "id": "letter",
+      "files": [
+        "wK.svg",
+        "wQ.svg",
+        "wR.svg",
+        "wB.svg",
+        "wN.svg",
+        "wP.svg",
+        "bK.svg",
+        "bQ.svg",
+        "bR.svg",
+        "bB.svg",
+        "bN.svg",
+        "bP.svg"
+      ],
+      "path": "pieces/letter"
+    },
+    {
+      "id": "maestro",
+      "files": [
+        "wK.svg",
+        "wQ.svg",
+        "wR.svg",
+        "wB.svg",
+        "wN.svg",
+        "wP.svg",
+        "bK.svg",
+        "bQ.svg",
+        "bR.svg",
+        "bB.svg",
+        "bN.svg",
+        "bP.svg"
+      ],
+      "path": "pieces/maestro"
+    },
+    {
+      "id": "merida",
+      "files": [
+        "wK.svg",
+        "wQ.svg",
+        "wR.svg",
+        "wB.svg",
+        "wN.svg",
+        "wP.svg",
+        "bK.svg",
+        "bQ.svg",
+        "bR.svg",
+        "bB.svg",
+        "bN.svg",
+        "bP.svg"
+      ],
+      "path": "pieces/merida"
+    },
+    {
+      "id": "mono",
+      "files": [
+        "B.svg",
+        "K.svg",
+        "N.svg",
+        "P.svg",
+        "Q.svg",
+        "R.svg"
+      ],
+      "path": "pieces/mono"
+    },
+    {
+      "id": "mpchess",
+      "files": [
+        "wK.svg",
+        "wQ.svg",
+        "wR.svg",
+        "wB.svg",
+        "wN.svg",
+        "wP.svg",
+        "bK.svg",
+        "bQ.svg",
+        "bR.svg",
+        "bB.svg",
+        "bN.svg",
+        "bP.svg"
+      ],
+      "path": "pieces/mpchess"
+    },
+    {
+      "id": "papercut",
+      "files": [
+        "wK.svg",
+        "wQ.svg",
+        "wR.svg",
+        "wB.svg",
+        "wN.svg",
+        "wP.svg",
+        "bK.svg",
+        "bQ.svg",
+        "bR.svg",
+        "bB.svg",
+        "bN.svg",
+        "bP.svg"
+      ],
+      "path": "pieces/papercut"
+    },
+    {
+      "id": "pirouetti",
+      "files": [
+        "wK.svg",
+        "wQ.svg",
+        "wR.svg",
+        "wB.svg",
+        "wN.svg",
+        "wP.svg",
+        "bK.svg",
+        "bQ.svg",
+        "bR.svg",
+        "bB.svg",
+        "bN.svg",
+        "bP.svg"
+      ],
+      "path": "pieces/pirouetti"
+    },
+    {
+      "id": "pixel",
+      "files": [
+        "wK.svg",
+        "wQ.svg",
+        "wR.svg",
+        "wB.svg",
+        "wN.svg",
+        "wP.svg",
+        "bK.svg",
+        "bQ.svg",
+        "bR.svg",
+        "bB.svg",
+        "bN.svg",
+        "bP.svg"
+      ],
+      "path": "pieces/pixel"
+    },
+    {
+      "id": "reillycraig",
+      "files": [
+        "wK.svg",
+        "wQ.svg",
+        "wR.svg",
+        "wB.svg",
+        "wN.svg",
+        "wP.svg",
+        "bK.svg",
+        "bQ.svg",
+        "bR.svg",
+        "bB.svg",
+        "bN.svg",
+        "bP.svg"
+      ],
+      "path": "pieces/reillycraig"
+    },
+    {
+      "id": "rhosgfx",
+      "files": [
+        "wK.svg",
+        "wQ.svg",
+        "wR.svg",
+        "wB.svg",
+        "wN.svg",
+        "wP.svg",
+        "bK.svg",
+        "bQ.svg",
+        "bR.svg",
+        "bB.svg",
+        "bN.svg",
+        "bP.svg"
+      ],
+      "path": "pieces/rhosgfx"
+    },
+    {
+      "id": "riohacha",
+      "files": [
+        "wK.svg",
+        "wQ.svg",
+        "wR.svg",
+        "wB.svg",
+        "wN.svg",
+        "wP.svg",
+        "bK.svg",
+        "bQ.svg",
+        "bR.svg",
+        "bB.svg",
+        "bN.svg",
+        "bP.svg"
+      ],
+      "path": "pieces/riohacha"
+    },
+    {
+      "id": "shahi-ivory-brown",
+      "files": [
+        "wK.svg",
+        "wQ.svg",
+        "wR.svg",
+        "wB.svg",
+        "wN.svg",
+        "wP.svg",
+        "bK.svg",
+        "bQ.svg",
+        "bR.svg",
+        "bB.svg",
+        "bN.svg",
+        "bP.svg"
+      ],
+      "path": "pieces/shahi-ivory-brown"
+    },
+    {
+      "id": "shapes",
+      "files": [
+        "wK.svg",
+        "wQ.svg",
+        "wR.svg",
+        "wB.svg",
+        "wN.svg",
+        "wP.svg",
+        "bK.svg",
+        "bQ.svg",
+        "bR.svg",
+        "bB.svg",
+        "bN.svg",
+        "bP.svg"
+      ],
+      "path": "pieces/shapes"
+    },
+    {
+      "id": "spatial",
+      "files": [
+        "wK.svg",
+        "wQ.svg",
+        "wR.svg",
+        "wB.svg",
+        "wN.svg",
+        "wP.svg",
+        "bK.svg",
+        "bQ.svg",
+        "bR.svg",
+        "bB.svg",
+        "bN.svg",
+        "bP.svg"
+      ],
+      "path": "pieces/spatial"
+    },
+    {
+      "id": "staunty",
+      "files": [
+        "wK.svg",
+        "wQ.svg",
+        "wR.svg",
+        "wB.svg",
+        "wN.svg",
+        "wP.svg",
+        "bK.svg",
+        "bQ.svg",
+        "bR.svg",
+        "bB.svg",
+        "bN.svg",
+        "bP.svg"
+      ],
+      "path": "pieces/staunty"
+    },
+    {
+      "id": "tatiana",
+      "files": [
+        "wK.svg",
+        "wQ.svg",
+        "wR.svg",
+        "wB.svg",
+        "wN.svg",
+        "wP.svg",
+        "bK.svg",
+        "bQ.svg",
+        "bR.svg",
+        "bB.svg",
+        "bN.svg",
+        "bP.svg"
+      ],
+      "path": "pieces/tatiana"
+    },
+    {
+      "id": "totoy",
+      "files": [
+        "wK.svg",
+        "wQ.svg",
+        "wR.svg",
+        "wB.svg",
+        "wN.svg",
+        "wP.svg",
+        "bK.svg",
+        "bQ.svg",
+        "bR.svg",
+        "bB.svg",
+        "bN.svg",
+        "bP.svg"
+      ],
+      "path": "pieces/totoy"
+    },
+    {
+      "id": "xkcd",
+      "files": [
+        "wK.svg",
+        "wQ.svg",
+        "wR.svg",
+        "wB.svg",
+        "wN.svg",
+        "wP.svg",
+        "bK.svg",
+        "bQ.svg",
+        "bR.svg",
+        "bB.svg",
+        "bN.svg",
+        "bP.svg"
+      ],
+      "path": "pieces/xkcd"
+    },
+    {
+      "id": "ansuz",
+      "files": [
+        "wK.svg",
+        "wQ.svg",
+        "wR.svg",
+        "wB.svg",
+        "wN.svg",
+        "wP.svg",
+        "bK.svg",
+        "bQ.svg",
+        "bR.svg",
+        "bB.svg",
+        "bN.svg",
+        "bP.svg"
+      ],
+      "path": "pieces/ansuz"
+    },
+    {
+      "id": "skak",
+      "files": [
+        "wK.svg",
+        "wQ.svg",
+        "wR.svg",
+        "wB.svg",
+        "wN.svg",
+        "wP.svg",
+        "bK.svg",
+        "bQ.svg",
+        "bR.svg",
+        "bB.svg",
+        "bN.svg",
+        "bP.svg"
+      ],
+      "path": "pieces/skak"
+    },
+    {
+      "id": "echecs",
+      "files": [
+        "wK.svg",
+        "wQ.svg",
+        "wR.svg",
+        "wB.svg",
+        "wN.svg",
+        "wP.svg",
+        "bK.svg",
+        "bQ.svg",
+        "bR.svg",
+        "bB.svg",
+        "bN.svg",
+        "bP.svg"
+      ],
+      "path": "pieces/echecs"
+    }
+  ],
+  "boards": [
+    {
+      "id": "portfolio-blue",
+      "type": "solid",
+      "light": "#dbeafe",
+      "dark": "#2563eb",
+      "label": "Portfolio Blue"
+    },
+    {
+      "id": "brown-solid",
+      "type": "solid",
+      "light": "#f0d9b5",
+      "dark": "#b58863",
+      "label": "Brown"
+    },
+    {
+      "id": "green-solid",
+      "type": "solid",
+      "light": "#eeeed2",
+      "dark": "#769656",
+      "label": "Green"
+    },
+    {
+      "id": "blue-solid",
+      "type": "solid",
+      "light": "#dee3e6",
+      "dark": "#8ca2ad",
+      "label": "Blue"
+    },
+    {
+      "id": "purple-solid",
+      "type": "solid",
+      "light": "#e8d5e8",
+      "dark": "#8f6b8f",
+      "label": "Purple"
+    },
+    {
+      "id": "ic-solid",
+      "type": "solid",
+      "light": "#ececec",
+      "dark": "#c1c18e",
+      "label": "IC"
+    },
+    {
+      "id": "red-solid",
+      "type": "solid",
+      "light": "#f5d5d5",
+      "dark": "#b04545",
+      "label": "Red"
+    },
+    {
+      "id": "teal-solid",
+      "type": "solid",
+      "light": "#d7ece8",
+      "dark": "#3d8b7a",
+      "label": "Teal"
+    },
+    {
+      "id": "grey-solid",
+      "type": "solid",
+      "light": "#e8e8e8",
+      "dark": "#7a7a7a",
+      "label": "Grey"
+    },
+    {
+      "id": "orange-solid",
+      "type": "solid",
+      "light": "#f5e0c8",
+      "dark": "#c47a3a",
+      "label": "Orange"
+    },
+    {
+      "id": "navy-solid",
+      "type": "solid",
+      "light": "#d9e2f0",
+      "dark": "#3a4f6f",
+      "label": "Navy"
+    },
+    {
+      "id": "rose-solid",
+      "type": "solid",
+      "light": "#f3d6e2",
+      "dark": "#a85575",
+      "label": "Rose"
+    },
+    {
+      "id": "walnut-solid",
+      "type": "solid",
+      "light": "#e8d5b5",
+      "dark": "#6b4423",
+      "label": "Walnut"
+    },
+    {
+      "id": "slate-solid",
+      "type": "solid",
+      "light": "#e2e8f0",
+      "dark": "#475569",
+      "label": "Slate"
+    },
+    {
+      "id": "blue-marble",
+      "type": "image",
+      "file": "blue-marble.jpg",
+      "path": "boards/blue-marble.jpg",
+      "label": "blue-marble"
+    },
+    {
+      "id": "blue",
+      "type": "image",
+      "file": "blue.png",
+      "path": "boards/blue.png",
+      "label": "blue"
+    },
+    {
+      "id": "blue2",
+      "type": "image",
+      "file": "blue2.jpg",
+      "path": "boards/blue2.jpg",
+      "label": "blue2"
+    },
+    {
+      "id": "blue3",
+      "type": "image",
+      "file": "blue3.jpg",
+      "path": "boards/blue3.jpg",
+      "label": "blue3"
+    },
+    {
+      "id": "brown",
+      "type": "image",
+      "file": "brown.png",
+      "path": "boards/brown.png",
+      "label": "brown"
+    },
+    {
+      "id": "canvas2",
+      "type": "image",
+      "file": "canvas2.jpg",
+      "path": "boards/canvas2.jpg",
+      "label": "canvas2"
+    },
+    {
+      "id": "green-plastic",
+      "type": "image",
+      "file": "green-plastic.png",
+      "path": "boards/green-plastic.png",
+      "label": "green-plastic"
+    },
+    {
+      "id": "green",
+      "type": "image",
+      "file": "green.png",
+      "path": "boards/green.png",
+      "label": "green"
+    },
+    {
+      "id": "grey",
+      "type": "image",
+      "file": "grey.jpg",
+      "path": "boards/grey.jpg",
+      "label": "grey"
+    },
+    {
+      "id": "horsey",
+      "type": "image",
+      "file": "horsey.jpg",
+      "path": "boards/horsey.jpg",
+      "label": "horsey"
+    },
+    {
+      "id": "ic",
+      "type": "image",
+      "file": "ic.png",
+      "path": "boards/ic.png",
+      "label": "ic"
+    },
+    {
+      "id": "leather",
+      "type": "image",
+      "file": "leather.jpg",
+      "path": "boards/leather.jpg",
+      "label": "leather"
+    },
+    {
+      "id": "maple",
+      "type": "image",
+      "file": "maple.jpg",
+      "path": "boards/maple.jpg",
+      "label": "maple"
+    },
+    {
+      "id": "maple2",
+      "type": "image",
+      "file": "maple2.jpg",
+      "path": "boards/maple2.jpg",
+      "label": "maple2"
+    },
+    {
+      "id": "marble",
+      "type": "image",
+      "file": "marble.jpg",
+      "path": "boards/marble.jpg",
+      "label": "marble"
+    },
+    {
+      "id": "metal",
+      "type": "image",
+      "file": "metal.jpg",
+      "path": "boards/metal.jpg",
+      "label": "metal"
+    },
+    {
+      "id": "ncf-board",
+      "type": "image",
+      "file": "ncf-board.png",
+      "path": "boards/ncf-board.png",
+      "label": "ncf-board"
+    },
+    {
+      "id": "olive",
+      "type": "image",
+      "file": "olive.jpg",
+      "path": "boards/olive.jpg",
+      "label": "olive"
+    },
+    {
+      "id": "pink-pyramid",
+      "type": "image",
+      "file": "pink-pyramid.png",
+      "path": "boards/pink-pyramid.png",
+      "label": "pink-pyramid"
+    },
+    {
+      "id": "purple-diag",
+      "type": "image",
+      "file": "purple-diag.png",
+      "path": "boards/purple-diag.png",
+      "label": "purple-diag"
+    },
+    {
+      "id": "purple",
+      "type": "image",
+      "file": "purple.png",
+      "path": "boards/purple.png",
+      "label": "purple"
+    },
+    {
+      "id": "wood",
+      "type": "image",
+      "file": "wood.jpg",
+      "path": "boards/wood.jpg",
+      "label": "wood"
+    },
+    {
+      "id": "wood2",
+      "type": "image",
+      "file": "wood2.jpg",
+      "path": "boards/wood2.jpg",
+      "label": "wood2"
+    },
+    {
+      "id": "wood3",
+      "type": "image",
+      "file": "wood3.jpg",
+      "path": "boards/wood3.jpg",
+      "label": "wood3"
+    },
+    {
+      "id": "wood4",
+      "type": "image",
+      "file": "wood4.jpg",
+      "path": "boards/wood4.jpg",
+      "label": "wood4"
+    },
+    {
+      "id": "newspaper",
+      "type": "image",
+      "file": "newspaper.svg",
+      "path": "boards/newspaper.svg",
+      "label": "newspaper"
+    }
+  ]
+}

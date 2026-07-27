@@ -1,0 +1,20 @@
+.skills-nav {
+  scrollbar-width: none;
+}
+
+.skills-nav::-webkit-scrollbar {
+  display: none;
+}
+
+.skills-panel-grid {
+  background-image:
+    linear-gradient(rgb(124 92 255 / 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(124 92 255 / 0.04) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+.dark .skills-panel-grid {
+  background-image:
+    linear-gradient(rgb(255 255 255 / 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(255 255 255 / 0.04) 1px, transparent 1px);
+}
