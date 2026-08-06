@@ -39,11 +39,7 @@ function createDeck(size: GridSize): GameCard[] {
   }))
 }
 
-function formatTime(seconds: number) {
-  const mins = Math.floor(seconds / 60)
-  const secs = seconds % 60
-  return `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`
-}
+import { formatDuration } from '@/lib/time'
 
 type CardClickResult =
   | { kind: 'noop' }
@@ -223,7 +219,7 @@ export function useMemoryGame({
     cards,
     moves,
     seconds,
-    formattedTime: formatTime(seconds),
+    formattedTime: formatDuration(seconds),
     isLocked,
     isWon,
     matchedCount,

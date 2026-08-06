@@ -1,5 +1,18 @@
-import { CalendarDays, ChessKnight, Percent, RotateCcw, Search, Trash2, Trophy } from 'lucide-react'
-import { useEffect, useMemo, useState } from 'react'
+import {
+  CalendarDays,
+  ChevronDown,
+  ChevronRight,
+  ChessKnight,
+  Eye,
+  Lightbulb,
+  Percent,
+  RotateCcw,
+  Search,
+  Trash2,
+  Trophy,
+} from 'lucide-react'
+import { Fragment, useEffect, useMemo, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { toast } from 'sonner'
 import { AdminPagination } from '@/components/admin/AdminPagination'
 import { ConfirmDeleteDialog } from '@/components/admin/ConfirmDeleteDialog'
@@ -9,13 +22,13 @@ import { Card } from '@/components/ui/Card'
 import { Input } from '@/components/ui/Input'
 import { ADMIN_PAGE_SIZE, useClientPagination } from '@/hooks/useClientPagination'
 import { useTranslation } from '@/i18n/LanguageProvider'
-import { formatDateTime } from '@/lib/formatDate'
+import { formatSmartDate } from '@/lib/time'
 import { cn } from '@/lib/utils'
 import { deleteChessGame, fetchAllChessGames } from '@/services/adminScores'
 import { formatLeaderboardTime } from '@/services/chessGame'
 import type { ChessGameRow } from '@/types/admin'
 
-type DifficultyFilter = 'all' | 'beginner' | 'intermediate' | 'expert'
+type DifficultyFilter = 'all' | 'beginner' | 'intermediate' | 'expert' | 'soufiane'
 type ResultFilter = 'all' | 'win' | 'loss' | 'draw'
 
 function daysAgoIso(days: number) {
@@ -73,6 +86,7 @@ function FilterSegmentedControl<T extends string>({
 
 export function AdminChessPage() {
   const { t, locale } = useTranslation()
+  const navigate = useNavigate()
   const [games, setGames] = useState<ChessGameRow[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [pendingDelete, setPendingDelete] = useState<ChessGameRow | null>(null)
@@ -80,6 +94,7 @@ export function AdminChessPage() {
   const [difficulty, setDifficulty] = useState<DifficultyFilter>('all')
   const [result, setResult] = useState<ResultFilter>('all')
   const [query, setQuery] = useState('')
+  const [expandedGameId, setExpandedGameId] = useState<string | null>(null)
 
   useEffect(() => {
     document.title = `${t.admin.nav.chess} — ${t.admin.title}`
@@ -116,6 +131,7 @@ export function AdminChessPage() {
         { value: 'beginner' as const, label: t.chessGame.levels.beginner },
         { value: 'intermediate' as const, label: t.chessGame.levels.intermediate },
         { value: 'expert' as const, label: t.chessGame.levels.expert },
+        { value: 'soufiane' as const, label: 'Soufiane' },
       ] as const,
     [t],
   )
@@ -138,6 +154,7 @@ export function AdminChessPage() {
       beginner: wins.filter((game) => game.difficulty === 'beginner').length,
       intermediate: wins.filter((game) => game.difficulty === 'intermediate').length,
       expert: wins.filter((game) => game.difficulty === 'expert').length,
+      soufiane: wins.filter((game) => game.difficulty === 'soufiane').length,
     }
     const openings = new Map<string, number>()
     for (const game of games) {
@@ -148,6 +165,8 @@ export function AdminChessPage() {
     const topOpening =
       [...openings.entries()].sort((a, b) => b[1] - a[1])[0]?.[0] ?? t.admin.chess.noOpening
 
+    const totalHints = games.reduce((sum, g) => sum + (g.hintsUsed ?? 0), 0)
+
     return {
       total: games.length,
       wins: wins.length,
@@ -155,6 +174,7 @@ export function AdminChessPage() {
       winRate: games.length === 0 ? 0 : Math.round((wins.length / games.length) * 100),
       winsByDifficulty,
       topOpening,
+      totalHints,
     }
   }, [games, t.admin.chess.noOpening])
 
@@ -191,6 +211,7 @@ export function AdminChessPage() {
     if (value === 'beginner') return t.chessGame.levels.beginner
     if (value === 'intermediate') return t.chessGame.levels.intermediate
     if (value === 'expert') return t.chessGame.levels.expert
+    if (value === 'soufiane') return 'Soufiane'
     return value
   }
 
@@ -202,10 +223,13 @@ export function AdminChessPage() {
       </div>
 
       {isLoading ? (
-        <p className="text-sm text-muted-foreground">{t.common.loading}</p>
+        <div className="flex flex-col items-center gap-2 py-8">
+          <div className="h-6 w-6 animate-spin rounded-full border-[3px] border-primary/20 border-t-primary" />
+          <p className="text-sm text-muted-foreground">{t.common.loading}</p>
+        </div>
       ) : (
         <>
-          <div className="grid grid-cols-2 gap-3 sm:gap-4 xl:grid-cols-4">
+          <div className="grid grid-cols-2 gap-3 sm:gap-4 xl:grid-cols-5">
             <StatCard label={t.admin.chess.stats.total} value={stats.total} icon={ChessKnight} />
             <StatCard label={t.admin.chess.stats.wins} value={stats.wins} icon={Trophy} />
             <StatCard label={t.admin.chess.stats.last7d} value={stats.last7d} icon={CalendarDays} />
@@ -214,13 +238,18 @@ export function AdminChessPage() {
               value={`${stats.winRate}%`}
               icon={Percent}
             />
+            <StatCard
+              label={t.admin.chess.stats.totalHints}
+              value={stats.totalHints}
+              icon={Lightbulb}
+            />
           </div>
 
           <Card className="p-5">
             <div className="grid gap-5 sm:grid-cols-[1fr_auto] sm:items-end sm:gap-8">
               <div>
                 <p className="mb-2 text-sm text-muted-foreground">{t.admin.chess.stats.winsByLevel}</p>
-                <dl className="grid grid-cols-3 gap-3 text-sm">
+                <dl className="grid grid-cols-4 gap-3 text-sm">
                   <div>
                     <dt className="text-muted-foreground">{t.chessGame.levels.beginner}</dt>
                     <dd className="mt-0.5 font-semibold tabular-nums">
@@ -237,6 +266,12 @@ export function AdminChessPage() {
                     <dt className="text-muted-foreground">{t.chessGame.levels.expert}</dt>
                     <dd className="mt-0.5 font-semibold tabular-nums">
                       {stats.winsByDifficulty.expert}
+                    </dd>
+                  </div>
+                  <div>
+                    <dt className="text-muted-foreground">Soufiane</dt>
+                    <dd className="mt-0.5 font-semibold tabular-nums">
+                      {stats.winsByDifficulty.soufiane}
                     </dd>
                   </div>
                 </dl>
@@ -307,111 +342,100 @@ export function AdminChessPage() {
           ) : (
             <Card className="overflow-hidden">
               <ul className="divide-y divide-border md:hidden">
-                {pagination.pageItems.map((game) => (
-                  <li key={game.id} className="p-4">
-                    <div className="flex items-start justify-between gap-3">
-                      <div className="min-w-0 flex-1">
-                        <p className="truncate font-semibold text-foreground">{game.playerName}</p>
-                        <dl className="mt-3 grid grid-cols-2 gap-x-3 gap-y-2 text-xs">
-                          <div>
-                            <dt className="text-muted-foreground">{t.admin.chess.columns.difficulty}</dt>
-                            <dd className="mt-0.5 font-medium text-foreground">
-                              {difficultyLabel(game.difficulty)}
-                            </dd>
-                          </div>
-                          <div>
-                            <dt className="text-muted-foreground">{t.admin.chess.columns.result}</dt>
-                            <dd
-                              className={cn(
-                                'mt-0.5 font-medium',
-                                game.result === 'win' && 'text-emerald-600 dark:text-emerald-400',
-                                game.result === 'loss' && 'text-rose-600 dark:text-rose-400',
-                              )}
+                {pagination.pageItems.map((game) => {
+                  const isExpanded = expandedGameId === game.id
+                  return (
+                    <li key={game.id} className="p-4">
+                      <div className="flex items-start justify-between gap-3">
+                        <div className="min-w-0 flex-1">
+                          <div className="flex items-center gap-2">
+                            <button
+                              type="button"
+                              className="flex items-center gap-1.5 text-left"
+                              onClick={() =>
+                                setExpandedGameId(isExpanded ? null : game.id)
+                              }
                             >
-                              {resultLabel(game.result)}
-                            </dd>
+                              {isExpanded ? (
+                                <ChevronDown className="h-4 w-4 shrink-0 text-muted-foreground" />
+                              ) : (
+                                <ChevronRight className="h-4 w-4 shrink-0 text-muted-foreground" />
+                              )}
+                              <p className="truncate font-semibold text-foreground">
+                                {game.playerName}
+                              </p>
+                            </button>
                           </div>
-                          <div>
-                            <dt className="text-muted-foreground">{t.admin.chess.columns.plies}</dt>
-                            <dd className="mt-0.5 font-medium tabular-nums text-foreground">
-                              {game.plyCount}
-                            </dd>
-                          </div>
-                          <div>
-                            <dt className="text-muted-foreground">{t.admin.chess.columns.time}</dt>
-                            <dd className="mt-0.5 font-mono font-medium tabular-nums text-foreground">
-                              {formatLeaderboardTime(game.seconds)}
-                            </dd>
-                          </div>
-                          <div className="col-span-2 min-w-0">
-                            <dt className="text-muted-foreground">{t.admin.chess.columns.opening}</dt>
-                            <dd className="mt-0.5 truncate text-foreground">
-                              {game.openingName || '—'}
-                            </dd>
-                          </div>
-                          <div className="col-span-2 min-w-0">
-                            <dt className="text-muted-foreground">{t.admin.chess.columns.date}</dt>
-                            <dd className="mt-0.5 overflow-x-auto whitespace-nowrap text-foreground">
-                              {formatDateTime(game.createdAt, locale)}
-                            </dd>
-                          </div>
-                        </dl>
-                      </div>
-                      <Button
-                        size="sm"
-                        variant="outline"
-                        className="shrink-0"
-                        onClick={() => setPendingDelete(game)}
-                        aria-label={t.admin.chess.delete}
-                      >
-                        <Trash2 className="h-4 w-4" />
-                      </Button>
-                    </div>
-                  </li>
-                ))}
-              </ul>
-
-              <div className="hidden overflow-x-auto md:block">
-                <table className="min-w-full text-sm">
-                  <thead>
-                    <tr className="border-b border-border text-left text-muted-foreground">
-                      <th className="px-4 py-3 font-medium">{t.admin.chess.columns.player}</th>
-                      <th className="px-4 py-3 font-medium">{t.admin.chess.columns.difficulty}</th>
-                      <th className="px-4 py-3 font-medium">{t.admin.chess.columns.result}</th>
-                      <th className="px-4 py-3 font-medium">{t.admin.chess.columns.color}</th>
-                      <th className="px-4 py-3 font-medium">{t.admin.chess.columns.plies}</th>
-                      <th className="px-4 py-3 font-medium">{t.admin.chess.columns.time}</th>
-                      <th className="px-4 py-3 font-medium">{t.admin.chess.columns.opening}</th>
-                      <th className="px-4 py-3 font-medium">{t.admin.chess.columns.date}</th>
-                      <th className="px-4 py-3 font-medium" />
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {pagination.pageItems.map((game) => (
-                      <tr key={game.id} className="border-b border-border/70">
-                        <td className="px-4 py-3 font-medium">{game.playerName}</td>
-                        <td className="px-4 py-3">{difficultyLabel(game.difficulty)}</td>
-                        <td
-                          className={cn(
-                            'px-4 py-3 font-medium',
-                            game.result === 'win' && 'text-emerald-600 dark:text-emerald-400',
-                            game.result === 'loss' && 'text-rose-600 dark:text-rose-400',
+                          <dl className="mt-3 grid grid-cols-2 gap-x-3 gap-y-2 text-xs">
+                            <div>
+                              <dt className="text-muted-foreground">{t.admin.chess.columns.difficulty}</dt>
+                              <dd className="mt-0.5 font-medium text-foreground">
+                                {difficultyLabel(game.difficulty)}
+                              </dd>
+                            </div>
+                            <div>
+                              <dt className="text-muted-foreground">{t.admin.chess.columns.result}</dt>
+                              <dd
+                                className={cn(
+                                  'mt-0.5 font-medium',
+                                  game.result === 'win' && 'text-emerald-600 dark:text-emerald-400',
+                                  game.result === 'loss' && 'text-rose-600 dark:text-rose-400',
+                                )}
+                              >
+                                {resultLabel(game.result)}
+                              </dd>
+                            </div>
+                            <div>
+                              <dt className="text-muted-foreground">{t.admin.chess.columns.plies}</dt>
+                              <dd className="mt-0.5 font-medium tabular-nums text-foreground">
+                                {game.plyCount}
+                              </dd>
+                            </div>
+                            <div>
+                              <dt className="text-muted-foreground">{t.admin.chess.columns.time}</dt>
+                              <dd className="mt-0.5 font-mono font-medium tabular-nums text-foreground">
+                                {formatLeaderboardTime(game.seconds)}
+                              </dd>
+                            </div>
+                            <div>
+                              <dt className="text-muted-foreground">{t.admin.chess.columns.hints}</dt>
+                              <dd className="mt-0.5 font-medium tabular-nums text-foreground">
+                                {game.hintsUsed}
+                              </dd>
+                            </div>
+                            <div className="col-span-2 min-w-0">
+                              <dt className="text-muted-foreground">{t.admin.chess.columns.opening}</dt>
+                              <dd className="mt-0.5 truncate text-foreground">
+                                {game.openingName || '—'}
+                              </dd>
+                            </div>
+                            <div className="col-span-2 min-w-0">
+                              <dt className="text-muted-foreground">{t.admin.chess.columns.date}</dt>
+                              <dd className="mt-0.5 overflow-x-auto whitespace-nowrap text-foreground">
+                                {formatSmartDate(game.createdAt, locale)}
+                              </dd>
+                            </div>
+                          </dl>
+                          {isExpanded && (
+                            <div className="mt-3 rounded-lg border border-border/60 bg-muted/30 p-3">
+                              <p className="mb-1.5 text-[11px] font-semibold tracking-wider text-muted-foreground uppercase">
+                                {t.admin.chess.detail.pgn}
+                              </p>
+                              <p className="whitespace-pre-wrap break-all font-mono text-xs leading-relaxed text-foreground">
+                                {game.moveNotation || t.admin.chess.detail.noMoves}
+                              </p>
+                            </div>
                           )}
-                        >
-                          {resultLabel(game.result)}
-                        </td>
-                        <td className="px-4 py-3 uppercase">{game.playerColor}</td>
-                        <td className="px-4 py-3 tabular-nums">{game.plyCount}</td>
-                        <td className="px-4 py-3 font-mono tabular-nums">
-                          {formatLeaderboardTime(game.seconds)}
-                        </td>
-                        <td className="max-w-[10rem] truncate px-4 py-3 text-muted-foreground">
-                          {game.openingName || '—'}
-                        </td>
-                        <td className="px-4 py-3 text-muted-foreground">
-                          {formatDateTime(game.createdAt, locale)}
-                        </td>
-                        <td className="px-4 py-3">
+                        </div>
+                        <div className="flex shrink-0 gap-1.5">
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            onClick={() => navigate(`/admin/chess/${game.id}`)}
+                            aria-label={t.admin.chess.detail.replay}
+                          >
+                            <Eye className="h-4 w-4" />
+                          </Button>
                           <Button
                             size="sm"
                             variant="outline"
@@ -420,9 +444,113 @@ export function AdminChessPage() {
                           >
                             <Trash2 className="h-4 w-4" />
                           </Button>
-                        </td>
-                      </tr>
-                    ))}
+                        </div>
+                      </div>
+                    </li>
+                  )
+                })}
+              </ul>
+
+              <div className="hidden overflow-x-auto md:block">
+                <table className="min-w-full text-sm">
+                  <thead>
+                    <tr className="border-b border-border text-left text-muted-foreground">
+                      <th className="px-4 py-3 font-medium" />
+                      <th className="px-4 py-3 font-medium">{t.admin.chess.columns.player}</th>
+                      <th className="px-4 py-3 font-medium">{t.admin.chess.columns.difficulty}</th>
+                      <th className="px-4 py-3 font-medium">{t.admin.chess.columns.result}</th>
+                      <th className="px-4 py-3 font-medium">{t.admin.chess.columns.color}</th>
+                      <th className="px-4 py-3 font-medium">{t.admin.chess.columns.plies}</th>
+                      <th className="px-4 py-3 font-medium">{t.admin.chess.columns.time}</th>
+                      <th className="px-4 py-3 font-medium">{t.admin.chess.columns.hints}</th>
+                      <th className="px-4 py-3 font-medium">{t.admin.chess.columns.opening}</th>
+                      <th className="px-4 py-3 font-medium">{t.admin.chess.columns.date}</th>
+                      <th className="px-4 py-3 font-medium" />
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {pagination.pageItems.map((game) => {
+                      const isExpanded = expandedGameId === game.id
+                      return (
+                        <Fragment key={game.id}>
+                          <tr className="border-b border-border/70">
+                            <td className="px-4 py-3">
+                              <button
+                                type="button"
+                                onClick={() =>
+                                  setExpandedGameId(isExpanded ? null : game.id)
+                                }
+                                className="rounded p-0.5 hover:bg-muted"
+                                aria-label={isExpanded ? 'Collapse' : 'Expand'}
+                              >
+                                {isExpanded ? (
+                                  <ChevronDown className="h-4 w-4 text-muted-foreground" />
+                                ) : (
+                                  <ChevronRight className="h-4 w-4 text-muted-foreground" />
+                                )}
+                              </button>
+                            </td>
+                            <td className="px-4 py-3 font-medium">{game.playerName}</td>
+                            <td className="px-4 py-3">{difficultyLabel(game.difficulty)}</td>
+                            <td
+                              className={cn(
+                                'px-4 py-3 font-medium',
+                                game.result === 'win' && 'text-emerald-600 dark:text-emerald-400',
+                                game.result === 'loss' && 'text-rose-600 dark:text-rose-400',
+                              )}
+                            >
+                              {resultLabel(game.result)}
+                            </td>
+                            <td className="px-4 py-3 uppercase">{game.playerColor}</td>
+                            <td className="px-4 py-3 tabular-nums">{game.plyCount}</td>
+                            <td className="px-4 py-3 font-mono tabular-nums">
+                              {formatLeaderboardTime(game.seconds)}
+                            </td>
+                            <td className="px-4 py-3 tabular-nums">{game.hintsUsed}</td>
+                            <td className="max-w-[10rem] truncate px-4 py-3 text-muted-foreground">
+                              {game.openingName || '—'}
+                            </td>
+                            <td className="px-4 py-3 text-muted-foreground">
+                              {formatSmartDate(game.createdAt, locale)}
+                            </td>
+                            <td className="px-4 py-3">
+                              <div className="flex gap-1.5">
+                                <Button
+                                  size="sm"
+                                  variant="outline"
+                                  onClick={() => navigate(`/admin/chess/${game.id}`)}
+                                  aria-label={t.admin.chess.detail.replay}
+                                >
+                                  <Eye className="h-4 w-4" />
+                                </Button>
+                                <Button
+                                  size="sm"
+                                  variant="outline"
+                                  onClick={() => setPendingDelete(game)}
+                                  aria-label={t.admin.chess.delete}
+                                >
+                                  <Trash2 className="h-4 w-4" />
+                                </Button>
+                              </div>
+                            </td>
+                          </tr>
+                          {isExpanded && (
+                            <tr className="border-b border-border/70 bg-muted/20">
+                              <td colSpan={11} className="px-4 py-3">
+                                <div className="rounded-lg border border-border/60 bg-background p-4">
+                                  <p className="mb-2 text-[11px] font-semibold tracking-wider text-muted-foreground uppercase">
+                                    {t.admin.chess.detail.pgn}
+                                  </p>
+                                  <p className="whitespace-pre-wrap break-all font-mono text-xs leading-relaxed text-foreground">
+                                    {game.moveNotation || t.admin.chess.detail.noMoves}
+                                  </p>
+                                </div>
+                              </td>
+                            </tr>
+                          )}
+                        </Fragment>
+                      )
+                    })}
                   </tbody>
                 </table>
               </div>

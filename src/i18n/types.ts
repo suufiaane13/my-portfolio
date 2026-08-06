@@ -58,6 +58,17 @@ export interface Translations {
     technos: string
     scrollToTop: string
   }
+  notFound: {
+    title: string
+    description: string
+    backHome: string
+    home: string
+  }
+  errorBoundary: {
+    title: string
+    message: string
+    retry: string
+  }
   nav: {
     about: string
     skills: string
@@ -98,7 +109,9 @@ export interface Translations {
       beginner: string
       intermediate: string
       expert: string
+      soufiane: string
     }
+    myRealStyle: string
     playWhite: string
     playBlack: string
     white: string
@@ -129,6 +142,9 @@ export interface Translations {
     startGame: string
     prevTheme: string
     nextTheme: string
+    themeSearch: string
+    themeEmpty: string
+    randomTheme: string
     prevMove: string
     nextMove: string
     firstMove: string
@@ -455,6 +471,7 @@ export interface Translations {
     themeDark: string
     openMenu: string
     closeMenu: string
+    closeDialog: string
     pagination: {
       previous: string
       next: string
@@ -476,6 +493,40 @@ export interface Translations {
       scores: string
       chess: string
       newsletter: string
+      guide: string
+    }
+    guide: {
+      title: string
+      subtitle: string
+      manifestInfo: string
+      generatedAt: string
+      voices: string
+      voiceFr: string
+      voiceEn: string
+      provider: string
+      fileCount: string
+      topics: string
+      scriptEditor: string
+      scriptSaved: string
+      scriptSaveError: string
+      audioManager: string
+      audioPlay: string
+      audioPause: string
+      audioDelete: string
+      audioDeleteConfirm: string
+      audioDeleteSuccess: string
+      audioDeleteError: string
+      audioSize: string
+      audioMissing: string
+      audioPresent: string
+      audioRegenerating: string
+      audioRegenerateSuccess: string
+      audioRegenerateError: string
+      normalizedText: string
+      saveScript: string
+      regenerateAudio: string
+      noScript: string
+      chunkIds: Record<string, string>
     }
     dashboard: {
       welcome: string
@@ -586,6 +637,7 @@ export interface Translations {
         winRate: string
         winsByLevel: string
         topOpening: string
+        totalHints: string
       }
       columns: {
         player: string
@@ -595,7 +647,32 @@ export interface Translations {
         plies: string
         time: string
         opening: string
+        hints: string
+        moves: string
         date: string
+      }
+      detail: {
+        title: string
+        pgn: string
+        noMoves: string
+        backToList: string
+        player: string
+        opponent: string
+        result: string
+        level: string
+        color: string
+        plies: string
+        time: string
+        opening: string
+        hintsUsed: string
+        date: string
+        replay: string
+        start: string
+        end: string
+        white: string
+        black: string
+        tabDetails: string
+        tabMoves: string
       }
     }
     content: {

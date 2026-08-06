@@ -1,4 +1,4 @@
-export type ChessDifficulty = 'beginner' | 'intermediate' | 'expert'
+export type ChessDifficulty = 'beginner' | 'intermediate' | 'expert' | 'soufiane'
 
 export interface DifficultyPreset {
   id: ChessDifficulty
@@ -16,9 +16,10 @@ export interface SearchOptions {
 }
 
 export const DIFFICULTY_PRESETS: Record<ChessDifficulty, DifficultyPreset & { approxElo: number }> = {
-  beginner: { id: 'beginner', skillLevel: 3, movetimeMs: 250, approxElo: 1000 },
-  intermediate: { id: 'intermediate', skillLevel: 10, movetimeMs: 800, approxElo: 1600 },
+  beginner: { id: 'beginner', skillLevel: 0, movetimeMs: 150, approxElo: 500 },
+  intermediate: { id: 'intermediate', skillLevel: 7, movetimeMs: 500, approxElo: 1200 },
   expert: { id: 'expert', skillLevel: 20, movetimeMs: 3500, depth: 16, approxElo: 2400 },
+  soufiane: { id: 'soufiane', skillLevel: 3, movetimeMs: 300, approxElo: 1050 },
 }
 
 /** Shorter Expert think time on small screens (plan: mobile perf). */

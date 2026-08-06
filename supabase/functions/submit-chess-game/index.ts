@@ -14,6 +14,8 @@ interface SubmitChessBody {
   seconds?: number
   opening_name?: string | null
   uci_moves?: string
+  move_notation?: string
+  hints_used?: number
   locale?: string
   website?: string
 }
@@ -43,9 +45,16 @@ function validatePayload(body: SubmitChessBody) {
   const locale = body.locale === 'en' ? 'en' : 'fr'
   const openingName = body.opening_name?.trim() || null
   const uciMoves = typeof body.uci_moves === 'string' ? body.uci_moves.trim() : ''
+  const moveNotation = typeof body.move_notation === 'string' ? body.move_notation.trim() : ''
+  const hintsUsed = typeof body.hints_used === 'number' ? body.hints_used : 0
 
   if (!/^[a-zA-ZÀ-ÿ0-9 _.-]{2,20}$/.test(playerName)) return null
-  if (difficulty !== 'beginner' && difficulty !== 'intermediate' && difficulty !== 'expert') {
+  if (
+    difficulty !== 'beginner' &&
+    difficulty !== 'intermediate' &&
+    difficulty !== 'expert' &&
+    difficulty !== 'soufiane'
+  ) {
     return null
   }
   if (playerColor !== 'w' && playerColor !== 'b') return null
@@ -57,7 +66,11 @@ function validatePayload(body: SubmitChessBody) {
     return null
   }
   if (uciMoves.length > 4000) return null
+  if (moveNotation.length > 8000) return null
   if (openingName && openingName.length > 120) return null
+  if (typeof hintsUsed !== 'number' || !Number.isInteger(hintsUsed) || hintsUsed < 0 || hintsUsed > 200) {
+    return null
+  }
 
   const uciTokens = uciMoves ? uciMoves.split(/\s+/).filter(Boolean) : []
   if (uciTokens.length !== plyCount) return null
@@ -72,6 +85,8 @@ function validatePayload(body: SubmitChessBody) {
     seconds,
     openingName,
     uciMoves,
+    moveNotation,
+    hintsUsed,
     locale,
   }
 }
@@ -156,6 +171,8 @@ Deno.serve(async (req) => {
         ply_count: payload.plyCount,
         opening_name: payload.openingName,
         uci_moves: payload.uciMoves,
+        move_notation: payload.moveNotation,
+        hints_used: payload.hintsUsed,
         seconds: payload.seconds,
         locale: payload.locale,
         ip_hash: ipHash,

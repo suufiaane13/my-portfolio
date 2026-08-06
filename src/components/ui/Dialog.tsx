@@ -3,6 +3,7 @@ import { X } from 'lucide-react'
 import { useEffect, type ReactNode } from 'react'
 import { createPortal } from 'react-dom'
 import { Button } from '@/components/ui/Button'
+import { useTranslation } from '@/i18n/LanguageProvider'
 import { cn } from '@/lib/utils'
 
 interface DialogProps {
@@ -14,6 +15,8 @@ interface DialogProps {
 }
 
 export function Dialog({ open, onClose, title, children, className }: DialogProps) {
+  const { t } = useTranslation()
+
   useEffect(() => {
     if (!open) return
 
@@ -43,7 +46,7 @@ export function Dialog({ open, onClose, title, children, className }: DialogProp
         >
           <motion.button
             type="button"
-            aria-label="Fermer"
+            aria-label={t.admin.closeDialog}
             className="absolute inset-0 bg-black/60 backdrop-blur-sm"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -66,7 +69,7 @@ export function Dialog({ open, onClose, title, children, className }: DialogProp
               <h3 id="dialog-title" className="font-display text-lg font-semibold md:text-xl">
                 {title}
               </h3>
-              <Button variant="ghost" size="icon" onClick={onClose} aria-label="Fermer la fenêtre">
+              <Button variant="ghost" size="icon" onClick={onClose} aria-label={t.admin.closeDialog}>
                 <X className="h-5 w-5" />
               </Button>
             </div>

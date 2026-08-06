@@ -13,6 +13,17 @@
   to = "/index.html"
   status = 200
 
+# ── Security headers ──────────────────────────────────────────────
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Content-Type-Options = "nosniff"
+    X-Frame-Options = "DENY"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Permissions-Policy = "camera=(), microphone=(), geolocation=()"
+    Content-Security-Policy = "default-src 'self'; script-src 'self' 'unsafe-inline' https://plausible.io; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data: blob: https://*.supabase.co; connect-src 'self' https://*.supabase.co https://plausible.io; worker-src 'self' blob:"
+
+# ── Cache rules ───────────────────────────────────────────────────
 [[headers]]
   for = "/assets/*"
   [headers.values]
@@ -42,3 +53,18 @@
   for = "/*.pdf"
   [headers.values]
     Cache-Control = "public, max-age=86400"
+
+[[headers]]
+  for = "/fonts/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/audio/*"
+  [headers.values]
+    Cache-Control = "public, max-age=604800"
+
+[[headers]]
+  for = "/chess/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"

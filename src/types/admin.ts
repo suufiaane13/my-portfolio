@@ -43,6 +43,9 @@ export interface ChessGameRow {
   plyCount: number
   seconds: number
   openingName: string | null
+  hintsUsed: number
+  moveNotation: string
+  uciMoves: string
   locale: string
   createdAt: string
   rank: number | null

@@ -5,10 +5,13 @@ import {
   ChevronLast,
   ChevronLeft,
   ChevronRight,
+  Crown,
   Flag,
+  Grid3X3,
   Lightbulb,
   Loader2,
   RotateCcw,
+  Search,
   Shuffle,
   Volume2,
   VolumeX,
@@ -72,7 +75,7 @@ import {
 import { cn } from '@/lib/utils'
 
 const PROMOTION_PIECES: PieceSymbol[] = ['q', 'r', 'b', 'n']
-const DIFFICULTIES: ChessDifficulty[] = ['beginner', 'intermediate', 'expert']
+const DIFFICULTIES: ChessDifficulty[] = ['beginner', 'intermediate', 'expert', 'soufiane']
 
 const DIFFICULTY_META: Record<
   ChessDifficulty,
@@ -101,6 +104,14 @@ const DIFFICULTY_META: Record<
       'border-rose-500 bg-rose-500/10 text-rose-700 shadow-sm shadow-rose-500/10 dark:text-rose-400',
     barActive: 'bg-rose-500',
     badge: 'bg-rose-500/15 text-rose-700 dark:text-rose-400',
+  },
+  soufiane: {
+    bars: 1,
+    accent: 'text-violet-600 dark:text-violet-400',
+    active:
+      'border-violet-500 bg-violet-500/10 text-violet-700 shadow-sm shadow-violet-500/10 dark:text-violet-400',
+    barActive: 'bg-violet-500',
+    badge: 'bg-violet-500/15 text-violet-700 dark:text-violet-400',
   },
 }
 
@@ -211,73 +222,6 @@ function EvalBar({
   )
 }
 
-function ThemeStepper({
-  label,
-  indexLabel,
-  value,
-  options,
-  onChange,
-  prevLabel,
-  nextLabel,
-  preview,
-  preloadKind,
-}: {
-  label: string
-  indexLabel: string
-  value: string
-  options: readonly string[]
-  onChange: (value: string) => void
-  prevLabel: string
-  nextLabel: string
-  preview: ReactNode
-  preloadKind?: 'piece' | 'board'
-}) {
-  const index = Math.max(0, options.indexOf(value))
-  const total = options.length
-
-  const step = (direction: -1 | 1) => {
-    if (total === 0) return
-    const nextIndex = (index + direction + total) % total
-    const nextValue = options[nextIndex]!
-    if (preloadKind === 'piece') preloadPieceSet(nextValue as ChessPieceSetId)
-    if (preloadKind === 'board') preloadBoardTheme(nextValue as ChessBoardThemeId)
-    onChange(nextValue)
-  }
-
-  return (
-    <div className="min-w-0 space-y-1.5">
-      <div className="flex items-baseline justify-between gap-2">
-        <div className="min-w-0">
-          <p className="text-sm font-medium">{label}</p>
-          <p className="truncate text-xs font-semibold text-primary">{formatThemeLabel(value)}</p>
-        </div>
-        <p className="shrink-0 text-xs text-muted-foreground tabular-nums">{indexLabel}</p>
-      </div>
-      <div className="flex items-center gap-2">
-        <button
-          type="button"
-          onClick={() => step(-1)}
-          className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-border text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
-          aria-label={prevLabel}
-        >
-          <ChevronLeft className="h-5 w-5" />
-        </button>
-        <div className="flex min-h-11 min-w-0 flex-1 items-center justify-center rounded-xl border border-border bg-card px-3 py-2.5">
-          {preview}
-        </div>
-        <button
-          type="button"
-          onClick={() => step(1)}
-          className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-border text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
-          aria-label={nextLabel}
-        >
-          <ChevronRight className="h-5 w-5" />
-        </button>
-      </div>
-    </div>
-  )
-}
-
 function PieceSetPreview({ setId }: { setId: ChessPieceSetId }) {
   // Light / dark squares so both colors stay readable in light and dark UI themes
   return (
@@ -362,6 +306,204 @@ function BoardThemePreview({ themeId }: { themeId: ChessBoardThemeId }) {
   )
 }
 
+function ThemeGridModal<T extends string>({
+  open,
+  onClose,
+  title,
+  searchPlaceholder,
+  emptyLabel,
+  options,
+  current,
+  onSelect,
+  renderItem,
+}: {
+  open: boolean
+  onClose: () => void
+  title: string
+  searchPlaceholder: string
+  emptyLabel: string
+  options: readonly T[]
+  current: T
+  onSelect: (value: T) => void
+  renderItem: (value: T, isSelected: boolean) => ReactNode
+}) {
+  const [query, setQuery] = useState('')
+
+  const filtered = useMemo(() => {
+    if (!query.trim()) return options
+    const q = query.toLowerCase()
+    return options.filter((id) => formatThemeLabel(id).toLowerCase().includes(q))
+  }, [query, options])
+
+  useEffect(() => {
+    if (!open) setQuery('')
+  }, [open])
+
+  useEffect(() => {
+    if (!open) return
+    const handleKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose()
+    }
+    window.addEventListener('keydown', handleKey)
+    return () => window.removeEventListener('keydown', handleKey)
+  }, [open, onClose])
+
+  if (!open) return null
+
+  return createPortal(
+    <div
+      className="fixed inset-0 z-[200] flex items-center justify-center bg-black/50 p-4 backdrop-blur-sm"
+      role="dialog"
+      aria-modal="true"
+      aria-label={title}
+      onClick={onClose}
+    >
+      <div
+        className="relative flex max-h-[80dvh] w-full max-w-2xl flex-col rounded-2xl border border-border bg-card shadow-2xl"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <div className="flex items-center justify-between border-b border-border px-4 py-3 sm:px-5">
+          <h3 className="font-display text-sm font-semibold tracking-wide">{title}</h3>
+          <button
+            type="button"
+            onClick={onClose}
+            className="inline-flex h-8 w-8 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+            aria-label="Close"
+          >
+            <X className="h-4 w-4" />
+          </button>
+        </div>
+
+        <div className="border-b border-border px-4 py-2.5 sm:px-5">
+          <div className="relative">
+            <Search className="absolute left-2.5 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+            <input
+              type="text"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              placeholder={searchPlaceholder}
+              className="w-full rounded-lg border border-border bg-background py-2 pl-8 pr-3 text-sm outline-none transition-colors placeholder:text-muted-foreground focus:border-primary"
+              autoFocus
+            />
+          </div>
+        </div>
+
+        <div className="flex-1 overflow-y-auto p-4 sm:p-5">
+          {filtered.length === 0 ? (
+            <p className="py-8 text-center text-sm text-muted-foreground">{emptyLabel}</p>
+          ) : (
+            <div className="grid grid-cols-4 gap-2 sm:grid-cols-5 md:grid-cols-6">
+              {filtered.map((id) => (
+                <button
+                  key={id}
+                  type="button"
+                  onClick={() => {
+                    onSelect(id)
+                    onClose()
+                  }}
+                  className={`flex flex-col items-center gap-1.5 rounded-xl border p-2 transition-all hover:bg-muted/50 ${
+                    id === current
+                      ? 'border-primary ring-2 ring-primary/25'
+                      : 'border-border'
+                  }`}
+                >
+                  {renderItem(id, id === current)}
+                  <span className="w-full truncate text-center text-[0.6rem] font-medium text-muted-foreground sm:text-xs">
+                    {formatThemeLabel(id)}
+                  </span>
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
+      </div>
+    </div>,
+    document.body,
+  )
+}
+
+function PieceSetGridItem({ setId }: { setId: ChessPieceSetId }) {
+  return (
+    <div className="flex items-center justify-center gap-1">
+      <span
+        className="inline-flex h-7 w-7 items-center justify-center rounded-md"
+        style={{ backgroundColor: '#2563eb' }}
+        aria-hidden
+      >
+        <img
+          src={pieceAssetUrl(setId, 'w', 'k')}
+          alt=""
+          width={20}
+          height={20}
+          decoding="async"
+          className="h-5 w-5 object-contain"
+          draggable={false}
+        />
+      </span>
+      <span
+        className="inline-flex h-7 w-7 items-center justify-center rounded-md"
+        style={{ backgroundColor: '#dbeafe' }}
+        aria-hidden
+      >
+        <img
+          src={pieceAssetUrl(setId, 'b', 'q')}
+          alt=""
+          width={20}
+          height={20}
+          decoding="async"
+          className="h-5 w-5 object-contain"
+          draggable={false}
+        />
+      </span>
+    </div>
+  )
+}
+
+function BoardThemeGridItem({ themeId }: { themeId: ChessBoardThemeId }) {
+  const theme = boardThemeFromId(themeId)
+
+  if (theme.type === 'solid') {
+    return (
+      <div className="flex items-center justify-center gap-1">
+        <span
+          className="h-6 w-6 rounded-sm border border-border"
+          style={{ backgroundColor: theme.light }}
+          aria-hidden
+        />
+        <span
+          className="h-6 w-6 rounded-sm border border-border"
+          style={{ backgroundColor: theme.dark }}
+          aria-hidden
+        />
+      </div>
+    )
+  }
+
+  const url = boardImageUrl(theme.path)
+  return (
+    <div className="flex items-center justify-center gap-1">
+      <span
+        className="h-6 w-6 rounded-sm border border-border"
+        style={{
+          backgroundImage: `url(${url})`,
+          backgroundSize: '800% 800%',
+          backgroundPosition: '0% 100%',
+        }}
+        aria-hidden
+      />
+      <span
+        className="h-6 w-6 rounded-sm border border-border"
+        style={{
+          backgroundImage: `url(${url})`,
+          backgroundSize: '800% 800%',
+          backgroundPosition: '14.2857% 100%',
+        }}
+        aria-hidden
+      />
+    </div>
+  )
+}
+
 function MoveNotationList({
   moves,
   viewPly,
@@ -397,6 +539,10 @@ function MoveNotationList({
     return pairs
   }, [moves])
 
+  const currentRowIdx = rows.findIndex(
+    (r) => viewPly === r.whitePly || viewPly === r.blackPly,
+  )
+
   return (
     <div className="space-y-2">
       <div className="flex items-center justify-center gap-2">
@@ -415,40 +561,70 @@ function MoveNotationList({
           {emptyLabel}
         </p>
       ) : (
-        <div className="max-h-28 overflow-y-auto rounded-xl border border-border/80 bg-muted/20 p-1.5 sm:max-h-40 lg:max-h-48">
-          <ol className="space-y-0.5">
-            {rows.map((row) => (
-              <li key={row.number} className="grid grid-cols-[1.75rem_1fr_1fr] items-center gap-1 text-sm">
-                <span className="text-right text-xs tabular-nums text-muted-foreground">{row.number}.</span>
-                {row.white ? (
-                  <NotationMoveButton
-                    move={row.white}
-                    active={viewPly === row.whitePly}
-                    label={t.chessGame.moveQuality}
-                    showQuality={showQualities}
-                    onClick={() => onGoToPly(row.whitePly)}
-                  />
-                ) : (
-                  <span />
-                )}
-                {row.black ? (
-                  <NotationMoveButton
-                    move={row.black}
-                    active={viewPly === row.blackPly}
-                    label={t.chessGame.moveQuality}
-                    showQuality={showQualities}
-                    onClick={() => onGoToPly(row.blackPly)}
-                  />
-                ) : (
-                  <span />
-                )}
-              </li>
-            ))}
+        <div className="max-h-28 overflow-y-auto rounded-xl border border-border/80 bg-muted/20 p-0 sm:max-h-40 lg:max-h-48">
+          <ol className="py-1">
+            {rows.map((row, rowIdx) => {
+              const isCurrentRow = rowIdx === currentRowIdx
+              return (
+                <li
+                  key={row.number}
+                  className={cn(
+                    'grid grid-cols-[2.25rem_1fr_1fr] items-center transition-colors duration-150',
+                    isCurrentRow && 'bg-primary/8 border-l-2 border-l-primary',
+                    !isCurrentRow && rowIdx % 2 === 0 && 'bg-transparent',
+                    !isCurrentRow && rowIdx % 2 === 1 && 'bg-muted/30',
+                  )}
+                >
+                  <span
+                    className={cn(
+                      'pr-2 text-right font-mono text-[0.65rem] font-bold tabular-nums',
+                      isCurrentRow ? 'text-primary' : 'text-muted-foreground/60',
+                    )}
+                  >
+                    {row.number}.
+                  </span>
+                  <div className="min-w-0 py-0.5 pr-1">
+                    {row.white ? (
+                      <NotationMoveButton
+                        move={row.white}
+                        active={viewPly === row.whitePly}
+                        label={t.chessGame.moveQuality}
+                        showQuality={showQualities}
+                        onClick={() => onGoToPly(row.whitePly)}
+                      />
+                    ) : null}
+                  </div>
+                  <div className="min-w-0 py-0.5 pl-1">
+                    {row.black ? (
+                      <NotationMoveButton
+                        move={row.black}
+                        active={viewPly === row.blackPly}
+                        label={t.chessGame.moveQuality}
+                        showQuality={showQualities}
+                        onClick={() => onGoToPly(row.blackPly)}
+                      />
+                    ) : null}
+                  </div>
+                </li>
+              )
+            })}
           </ol>
         </div>
       )}
     </div>
   )
+}
+
+const QUALITY_DOT_COLORS: Record<MoveQuality, string> = {
+  brilliant: 'bg-[#1baca6]',
+  great: 'bg-[#749900]',
+  best: 'bg-[#749900]',
+  excellent: 'bg-[#749900]',
+  good: 'bg-[#629924]',
+  book: 'bg-[#a88865]',
+  inaccuracy: 'bg-[#e69d00]',
+  mistake: 'bg-[#e6912c]',
+  blunder: 'bg-[#cc3333]',
 }
 
 function NotationMoveButton({
@@ -466,6 +642,9 @@ function NotationMoveButton({
 }) {
   const quality = showQuality ? move.quality : undefined
   const title = quality ? `${move.san} — ${label[quality]}` : move.san
+  const hasCheck = move.san.endsWith('+')
+  const hasCheckmate = move.san.endsWith('#')
+  const hasCapture = move.san.includes('x')
 
   return (
     <button
@@ -473,12 +652,49 @@ function NotationMoveButton({
       title={title}
       onClick={onClick}
       className={cn(
-        'flex min-w-0 items-center gap-1 rounded-lg px-1.5 py-1 text-left font-medium tabular-nums transition-colors',
-        active ? 'bg-primary/15 text-primary' : 'text-foreground hover:bg-muted',
+        'group flex min-w-0 items-center gap-1 rounded-md px-1.5 py-[3px] text-left font-mono text-sm tabular-nums transition-all duration-150',
+        active && 'bg-primary text-primary-foreground shadow-sm',
+        !active && 'text-foreground hover:bg-muted/70',
       )}
     >
-      <span className="truncate">{move.san}</span>
-      {quality ? <QualityGlyph quality={quality} size="sm" /> : null}
+      {quality ? (
+        <span
+          className={cn(
+            'inline-block h-[5px] w-[5px] shrink-0 rounded-full',
+            QUALITY_DOT_COLORS[quality],
+            active && 'ring-1 ring-primary-foreground/40',
+          )}
+          aria-hidden
+        />
+      ) : null}
+      <span className="truncate leading-none">
+        {hasCheckmate ? (
+          <>
+            {move.san.slice(0, -1)}
+            <span className={cn('font-bold', active ? 'text-primary-foreground' : 'text-red-600 dark:text-red-400')}>#</span>
+          </>
+        ) : hasCheck ? (
+          <>
+            {move.san.slice(0, -1)}
+            <span className={cn(active ? 'text-primary-foreground' : 'text-red-600 dark:text-red-400')}>+</span>
+          </>
+        ) : hasCapture ? (
+          <>
+            {move.san.split('x')[0]}
+            <span className={cn('font-semibold', active ? 'text-primary-foreground/80' : 'text-foreground/70')}>×</span>
+            {move.san.split('x')[1]}
+          </>
+        ) : (
+          move.san
+        )}
+      </span>
+      {quality ? (
+        <QualityGlyph
+          quality={quality}
+          size="sm"
+          className={cn(active ? 'opacity-80' : 'opacity-0 group-hover:opacity-100 transition-opacity')}
+        />
+      ) : null}
     </button>
   )
 }
@@ -531,7 +747,8 @@ function ChessGamePlaying({
 
   useEffect(() => {
     preloadChessSounds()
-  }, [])
+    playChessSound('gameStart', soundOn)
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     if (!leaderboardEnabled) return
@@ -560,10 +777,14 @@ function ChessGamePlaying({
     if (game.moves.length > prevMoveCount.current) {
       skipNavSound.current = true
       const last = game.moves[game.moves.length - 1]
-      if (last) playChessSound(chessSoundFromSan(last.san), soundOn)
+      if (last) {
+        const moveIndex = game.moves.length - 1
+        const isPlayerMove = (moveIndex % 2 === 0) === (playerColor === 'w')
+        playChessSound(chessSoundFromSan(last.san, isPlayerMove), soundOn)
+      }
     }
     prevMoveCount.current = game.moves.length
-  }, [game.moves, soundOn])
+  }, [game.moves, soundOn, playerColor])
 
   // Replay / scrub: play the move sound for the ply we land on
   useEffect(() => {
@@ -575,8 +796,12 @@ function ChessGamePlaying({
     }
     if (game.viewPly <= 0) return
     const move = game.moves[game.viewPly - 1]
-    if (move) playChessSound(chessSoundFromSan(move.san), soundOn)
-  }, [game.viewPly, game.moves, soundOn])
+    if (move) {
+      const moveIndex = game.viewPly - 1
+      const isPlayerMove = (moveIndex % 2 === 0) === (playerColor === 'w')
+      playChessSound(chessSoundFromSan(move.san, isPlayerMove), soundOn)
+    }
+  }, [game.viewPly, game.moves, soundOn, playerColor])
 
   useEffect(() => {
     if (game.outcome && game.outcome !== prevOutcome.current) {
@@ -627,6 +852,13 @@ function ChessGamePlaying({
     const seconds = Math.max(0, Math.round((Date.now() - startedAtRef.current) / 1000))
 
     try {
+      const moveNotation = game.moves
+        .map((move, i) => {
+          const moveNum = Math.floor(i / 2) + 1
+          if (i % 2 === 0) return `${moveNum}. ${move.san}`
+          return move.san
+        })
+        .join(' ')
       await submitChessGame({
         playerName: trimmedName,
         difficulty,
@@ -636,6 +868,8 @@ function ChessGamePlaying({
         seconds,
         openingName: game.openingName,
         uciMoves: game.moves.map((move) => move.uci).join(' '),
+        moveNotation,
+        hintsUsed: game.hintCount,
         locale,
       })
       recordClientRateLimitAttempt(
@@ -771,7 +1005,7 @@ function ChessGamePlaying({
             ~{botElo}
           </span>
           <p className="text-[0.65rem] font-semibold tracking-wide text-muted-foreground uppercase">
-            {t.chessGame.bot}
+            {difficulty === 'soufiane' ? 'Soufiane' : t.chessGame.bot}
           </p>
           <div className="mt-1.5 flex flex-col items-center gap-1">
             <span
@@ -1105,6 +1339,8 @@ function ChessSetup({
   const previewChess = useMemo(() => createChess(), [])
   const [previewExpanded, setPreviewExpanded] = useState(false)
   const [nameError, setNameError] = useState<string | null>(null)
+  const [pieceModalOpen, setPieceModalOpen] = useState(false)
+  const [boardModalOpen, setBoardModalOpen] = useState(false)
   const leaderboardEnabled = isChessLeaderboardEnabled()
 
   useEffect(() => {
@@ -1235,11 +1471,12 @@ function ChessSetup({
 
             <div>
               <p className="mb-2 text-sm font-medium text-muted-foreground">{t.chessGame.difficulty}</p>
-              <div className="grid grid-cols-3 gap-2">
+              <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
                 {DIFFICULTIES.map((level) => {
                   const elo = DIFFICULTY_PRESETS[level].approxElo
                   const selected = difficulty === level
                   const meta = DIFFICULTY_META[level]
+                  const isSoufiane = level === 'soufiane'
                   return (
                     <button
                       key={level}
@@ -1247,11 +1484,19 @@ function ChessSetup({
                       onClick={() => onDifficulty(level)}
                       className={cn(
                         'relative flex flex-col items-center gap-2 rounded-2xl border px-2 py-3 text-center transition-all sm:px-3',
+                        isSoufiane && 'border-dashed',
                         selected
-                          ? meta.active
+                          ? isSoufiane
+                            ? 'border-violet-500 bg-gradient-to-b from-violet-500/15 to-violet-500/5 text-violet-700 shadow-sm shadow-violet-500/20 dark:text-violet-400'
+                            : meta.active
                           : 'border-border text-muted-foreground hover:border-primary/30 hover:bg-muted/50',
                       )}
                     >
+                      {isSoufiane && (
+                        <span className="absolute -top-2 -right-1">
+                          <Crown className="h-4 w-4 text-violet-500" />
+                        </span>
+                      )}
                       <span
                         className={cn(
                           'inline-flex items-center gap-1.5 rounded-full px-2 py-0.5 text-[0.65rem] font-semibold tabular-nums sm:text-xs',
@@ -1264,6 +1509,7 @@ function ChessSetup({
                             level === 'beginner' && 'bg-emerald-500',
                             level === 'intermediate' && 'bg-amber-500',
                             level === 'expert' && 'bg-rose-500',
+                            level === 'soufiane' && 'bg-violet-500',
                           )}
                           aria-hidden
                         />
@@ -1276,7 +1522,10 @@ function ChessSetup({
                           barActiveClass={meta.barActive}
                         />
                       </span>
-                      <span className="block text-xs font-semibold sm:text-sm">
+                      <span className={cn(
+                        'block text-xs font-semibold sm:text-sm',
+                        isSoufiane && 'bg-gradient-to-r from-violet-600 to-fuchsia-500 bg-clip-text text-transparent dark:from-violet-400 dark:to-fuchsia-400',
+                      )}>
                         {t.chessGame.levels[level]}
                       </span>
                     </button>
@@ -1343,39 +1592,155 @@ function ChessSetup({
 
           {/* Look: pieces + board */}
           <section className="space-y-4 rounded-2xl border border-border bg-card p-4 sm:p-5">
-            <h3 className="font-display text-sm font-semibold tracking-wide text-foreground">
-              {t.chessGame.setupLook}
-            </h3>
+            <div className="flex items-center justify-between">
+              <h3 className="font-display text-sm font-semibold tracking-wide text-foreground">
+                {t.chessGame.setupLook}
+              </h3>
+              <button
+                type="button"
+                onClick={() => {
+                  const randomPiece = CHESS_PIECE_SET_IDS[Math.floor(Math.random() * CHESS_PIECE_SET_IDS.length)]!
+                  const randomBoard = CHESS_BOARD_THEME_IDS[Math.floor(Math.random() * CHESS_BOARD_THEME_IDS.length)]!
+                  preloadPieceSet(randomPiece as ChessPieceSetId)
+                  preloadBoardTheme(randomBoard as ChessBoardThemeId)
+                  onPieceSet(randomPiece as ChessPieceSetId)
+                  onBoardTheme(randomBoard as ChessBoardThemeId)
+                }}
+                className="inline-flex items-center gap-1.5 rounded-lg border border-border px-2.5 py-1.5 text-xs font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+              >
+                <Shuffle className="h-3.5 w-3.5" />
+                {t.chessGame.randomTheme}
+              </button>
+            </div>
 
             <div className="space-y-4">
-              <ThemeStepper
-                label={t.chessGame.pieceSet}
-                indexLabel={`${Math.max(1, CHESS_PIECE_SET_IDS.indexOf(pieceSet) + 1)} / ${CHESS_PIECE_SET_IDS.length}`}
-                value={pieceSet}
-                options={CHESS_PIECE_SET_IDS}
-                onChange={(value) => onPieceSet(value as ChessPieceSetId)}
-                prevLabel={t.chessGame.prevTheme}
-                nextLabel={t.chessGame.nextTheme}
-                preview={<PieceSetPreview setId={pieceSet} />}
-                preloadKind="piece"
-              />
-              <ThemeStepper
-                label={t.chessGame.boardTheme}
-                indexLabel={`${Math.max(1, CHESS_BOARD_THEME_IDS.indexOf(boardTheme) + 1)} / ${CHESS_BOARD_THEME_IDS.length}`}
-                value={boardTheme}
-                options={CHESS_BOARD_THEME_IDS}
-                onChange={(value) => onBoardTheme(value as ChessBoardThemeId)}
-                prevLabel={t.chessGame.prevTheme}
-                nextLabel={t.chessGame.nextTheme}
-                preview={<BoardThemePreview themeId={boardTheme} />}
-                preloadKind="board"
-              />
+              <div className="min-w-0 space-y-1.5">
+                <p className="text-sm font-medium">{t.chessGame.pieceSet}</p>
+                <div className="flex items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const i = CHESS_PIECE_SET_IDS.indexOf(pieceSet)
+                      const prev = CHESS_PIECE_SET_IDS[(i - 1 + CHESS_PIECE_SET_IDS.length) % CHESS_PIECE_SET_IDS.length]!
+                      preloadPieceSet(prev as ChessPieceSetId)
+                      onPieceSet(prev as ChessPieceSetId)
+                    }}
+                    className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-border text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+                    aria-label={t.chessGame.prevTheme}
+                  >
+                    <ChevronLeft className="h-4 w-4" />
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setPieceModalOpen(true)}
+                    className="flex min-w-0 flex-1 items-center gap-3 rounded-xl border border-border bg-card px-3 py-2 text-left transition-colors hover:bg-muted/50"
+                  >
+                    <PieceSetPreview setId={pieceSet} />
+                    <div className="min-w-0 flex-1">
+                      <p className="truncate text-xs font-semibold text-primary">{formatThemeLabel(pieceSet)}</p>
+                      <p className="text-[0.65rem] text-muted-foreground">
+                        {Math.max(1, CHESS_PIECE_SET_IDS.indexOf(pieceSet) + 1)} / {CHESS_PIECE_SET_IDS.length}
+                      </p>
+                    </div>
+                    <Grid3X3 className="h-4 w-4 shrink-0 text-muted-foreground" />
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const i = CHESS_PIECE_SET_IDS.indexOf(pieceSet)
+                      const next = CHESS_PIECE_SET_IDS[(i + 1) % CHESS_PIECE_SET_IDS.length]!
+                      preloadPieceSet(next as ChessPieceSetId)
+                      onPieceSet(next as ChessPieceSetId)
+                    }}
+                    className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-border text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+                    aria-label={t.chessGame.nextTheme}
+                  >
+                    <ChevronRight className="h-4 w-4" />
+                  </button>
+                </div>
+              </div>
+
+              <div className="min-w-0 space-y-1.5">
+                <p className="text-sm font-medium">{t.chessGame.boardTheme}</p>
+                <div className="flex items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const i = CHESS_BOARD_THEME_IDS.indexOf(boardTheme)
+                      const prev = CHESS_BOARD_THEME_IDS[(i - 1 + CHESS_BOARD_THEME_IDS.length) % CHESS_BOARD_THEME_IDS.length]!
+                      preloadBoardTheme(prev as ChessBoardThemeId)
+                      onBoardTheme(prev as ChessBoardThemeId)
+                    }}
+                    className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-border text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+                    aria-label={t.chessGame.prevTheme}
+                  >
+                    <ChevronLeft className="h-4 w-4" />
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setBoardModalOpen(true)}
+                    className="flex min-w-0 flex-1 items-center gap-3 rounded-xl border border-border bg-card px-3 py-2 text-left transition-colors hover:bg-muted/50"
+                  >
+                    <BoardThemePreview themeId={boardTheme} />
+                    <div className="min-w-0 flex-1">
+                      <p className="truncate text-xs font-semibold text-primary">{formatThemeLabel(boardTheme)}</p>
+                      <p className="text-[0.65rem] text-muted-foreground">
+                        {Math.max(1, CHESS_BOARD_THEME_IDS.indexOf(boardTheme) + 1)} / {CHESS_BOARD_THEME_IDS.length}
+                      </p>
+                    </div>
+                    <Grid3X3 className="h-4 w-4 shrink-0 text-muted-foreground" />
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const i = CHESS_BOARD_THEME_IDS.indexOf(boardTheme)
+                      const next = CHESS_BOARD_THEME_IDS[(i + 1) % CHESS_BOARD_THEME_IDS.length]!
+                      preloadBoardTheme(next as ChessBoardThemeId)
+                      onBoardTheme(next as ChessBoardThemeId)
+                    }}
+                    className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-border text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+                    aria-label={t.chessGame.nextTheme}
+                  >
+                    <ChevronRight className="h-4 w-4" />
+                  </button>
+                </div>
+              </div>
             </div>
           </section>
 
           <div className="pt-1 sm:pt-2">{startButton}</div>
         </div>
       </div>
+
+      <ThemeGridModal
+        open={pieceModalOpen}
+        onClose={() => setPieceModalOpen(false)}
+        title={t.chessGame.pieceSet}
+        searchPlaceholder={t.chessGame.themeSearch}
+        emptyLabel={t.chessGame.themeEmpty}
+        options={CHESS_PIECE_SET_IDS}
+        current={pieceSet}
+        onSelect={(value) => {
+          preloadPieceSet(value as ChessPieceSetId)
+          onPieceSet(value as ChessPieceSetId)
+        }}
+        renderItem={(id) => <PieceSetGridItem setId={id as ChessPieceSetId} />}
+      />
+
+      <ThemeGridModal
+        open={boardModalOpen}
+        onClose={() => setBoardModalOpen(false)}
+        title={t.chessGame.boardTheme}
+        searchPlaceholder={t.chessGame.themeSearch}
+        emptyLabel={t.chessGame.themeEmpty}
+        options={CHESS_BOARD_THEME_IDS}
+        current={boardTheme}
+        onSelect={(value) => {
+          preloadBoardTheme(value as ChessBoardThemeId)
+          onBoardTheme(value as ChessBoardThemeId)
+        }}
+        renderItem={(id) => <BoardThemeGridItem themeId={id as ChessBoardThemeId} />}
+      />
 
       {previewExpanded &&
         createPortal(
@@ -1418,7 +1783,7 @@ export function ChessGame({
   const { locale } = useTranslation()
   const [playerColor, setPlayerColor] = useState<Color>('w')
   const [colorMode, setColorMode] = useState<'w' | 'b' | 'random'>('w')
-  const [difficulty, setDifficulty] = useState<ChessDifficulty>('expert')
+  const [difficulty, setDifficulty] = useState<ChessDifficulty>('soufiane')
   const [pieceSet, setPieceSet] = useState<ChessPieceSetId>(DEFAULT_CHESS_PIECE_SET)
   const [boardTheme, setBoardTheme] = useState<ChessBoardThemeId>(DEFAULT_CHESS_BOARD_THEME)
   const [playerName, setPlayerName] = useState(() => getSavedPlayerName())

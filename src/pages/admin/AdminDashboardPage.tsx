@@ -72,7 +72,10 @@ export function AdminDashboardPage() {
       </div>
 
       {isLoading ? (
-        <p className="text-sm text-muted-foreground">{t.common.loading}</p>
+        <div className="flex flex-col items-center gap-2 py-8">
+          <div className="h-6 w-6 animate-spin rounded-full border-[3px] border-primary/20 border-t-primary" />
+          <p className="text-sm text-muted-foreground">{t.common.loading}</p>
+        </div>
       ) : stats ? (
         <>
           <div className="grid grid-cols-2 gap-3 sm:gap-4 xl:grid-cols-4">

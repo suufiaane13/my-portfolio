@@ -1,6 +1,6 @@
 {
   "version": "3",
-  "generatedAt": "2026-07-23T12:06:47.223Z",
+  "generatedAt": "2026-08-05T14:17:42.728Z",
   "format": "wav",
   "provider": "gemini-tts",
   "voices": {
@@ -8,6 +8,36 @@
     "en": "gemini:Orus"
   },
   "files": {
+    "fr": [
+      "about-main",
+      "about-availability",
+      "skills-overview",
+      "experience-list",
+      "education-list",
+      "contact-main",
+      "cv-download",
+      "game-info",
+      "project-myfood",
+      "project-pure-power-menu",
+      "project-world-explorer",
+      "project-sultan-kunafa"
+    ],
+    "en": [
+      "about-main",
+      "about-availability",
+      "skills-overview",
+      "experience-list",
+      "education-list",
+      "contact-main",
+      "cv-download",
+      "game-info",
+      "project-myfood",
+      "project-pure-power-menu",
+      "project-world-explorer",
+      "project-sultan-kunafa"
+    ]
+  },
+  "gemini": {
     "fr": [
       "about-availability",
       "about-main",
@@ -36,21 +66,5 @@
       "project-world-explorer",
       "skills-overview"
     ]
-  },
-  "gemini": {
-    "fr": [
-      "about-availability",
-      "about-main",
-      "contact-main",
-      "cv-download",
-      "education-list",
-      "experience-list",
-      "game-info",
-      "project-myfood",
-      "project-pure-power-menu",
-      "project-world-explorer",
-      "skills-overview"
-    ],
-    "en": []
   }
 }

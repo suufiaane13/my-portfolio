@@ -39,6 +39,7 @@ const adminNavItems = [
   { to: '/admin/messages', icon: Mail, labelKey: 'messages' as const },
   { to: '/admin/analytics', icon: BarChart3, labelKey: 'analytics' as const },
   { to: '/admin/newsletter', icon: Newspaper, labelKey: 'newsletter' as const },
+  { to: '/admin/guide', icon: Newspaper, labelKey: 'guide' as const },
 ]
 
 const gameNavOptions = [

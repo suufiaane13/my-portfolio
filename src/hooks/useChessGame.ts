@@ -16,6 +16,7 @@ import {
 } from '@/lib/chess/moveQuality'
 import { markSkipMoveAnimation } from '@/lib/chess/moveAnimSkip'
 import { OPENING_BOOK, openingNameForHistory, pickBookMove } from '@/lib/chess/openingBook'
+import { pickSoufianeMove } from '@/lib/chess/soufianeBook'
 import {
   StockfishEngine,
   moveToUci,
@@ -59,6 +60,7 @@ export function useChessGame({ playerColor, difficulty }: UseChessGameOptions) {
   const [viewPly, setViewPly] = useState(0)
   const [resigned, setResigned] = useState(false)
   const [hintSquare, setHintSquare] = useState<Square | null>(null)
+  const [hintCount, setHintCount] = useState(0)
   const [analyzing, setAnalyzing] = useState(false)
   const [premove, setPremove] = useState<{ from: Square; to: Square } | null>(null)
   const premoveViaDragRef = useRef(false)
@@ -229,6 +231,24 @@ export function useChessGame({ playerColor, difficulty }: UseChessGameOptions) {
       // Expert skips the opening book — play full strength from move 1
       const useBook = difficulty !== 'expert'
       const bookPick = useBook ? pickBookMove(OPENING_BOOK, uciHistory) : null
+
+      // Soufiane bot: try the personal repertoire first
+      if (difficulty === 'soufiane') {
+        const legalUci = liveChess.moves({ verbose: true }).map((m) => moveToUci(m.from, m.to, m.promotion))
+        const soufianePick = pickSoufianeMove(liveChess.fen(), legalUci)
+        if (soufianePick) {
+          await waitMinThink()
+          const parsed = uciToMove(soufianePick)
+          applyMove(
+            parsed.from as Square,
+            parsed.to as Square,
+            parsed.promotion as PieceSymbol | undefined,
+            { isBook: true },
+          )
+          return
+        }
+        // Not in book → fall through to Stockfish (beginner level)
+      }
       if (
         bookPick &&
         liveChess
@@ -295,13 +315,16 @@ export function useChessGame({ playerColor, difficulty }: UseChessGameOptions) {
   // Full post-game analysis — reveal glyphs progressively as each move is classified
   useEffect(() => {
     if (!outcome || !engineReady || analyzeBusy.current) return
-    if (moves.length === 0) return
-    if (moves.every((move) => move.quality)) return
+    const currentMoves = movesRef.current
+    if (currentMoves.length === 0) return
+    if (currentMoves.every((move) => move.quality)) return
 
     const engine = engineRef.current
     if (!engine) return
 
-    const snapshot = moves
+    // Capture snapshot once when the analysis starts — progressive quality updates
+    // mutate this array directly so the loop sees already-classified moves.
+    const snapshot = currentMoves
     let cancelled = false
     analyzeBusy.current = true
     setAnalyzing(true)
@@ -348,8 +371,8 @@ export function useChessGame({ playerColor, difficulty }: UseChessGameOptions) {
       cancelled = true
       analyzeBusy.current = false
     }
-    // Only re-run when a new game ends — not on each progressive quality update
-    // eslint-disable-next-line react-hooks/exhaustive-deps -- snapshot taken once per outcome
+    // Only re-run when a new game ends — not on each progressive quality update.
+    // movesRef.current captures the full array; moves.length is the trigger.
   }, [engineReady, outcome, moves.length, playerColor])
 
   const canPremove =
@@ -571,6 +594,7 @@ export function useChessGame({ playerColor, difficulty }: UseChessGameOptions) {
     setEvaluation(null)
     setReviewEval(null)
     setHintSquare(null)
+    setHintCount(0)
     setEngineError(null)
     refresh()
   }, [liveChess, refresh])
@@ -594,6 +618,7 @@ export function useChessGame({ playerColor, difficulty }: UseChessGameOptions) {
           .moves({ square: parsed.from as Square, verbose: true })
           .map((move) => move.to),
       )
+      setHintCount((c) => c + 1)
     } catch {
       setEngineError('engine')
     } finally {
@@ -725,6 +750,7 @@ export function useChessGame({ playerColor, difficulty }: UseChessGameOptions) {
     openingName,
     displayEval: reviewEval ?? evaluation,
     hintSquare: atLive ? hintSquare : null,
+    hintCount,
     moves,
     viewPly,
     atLive,

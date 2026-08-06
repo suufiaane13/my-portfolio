@@ -4,6 +4,7 @@ import { AuthProvider } from '@/hooks/AuthProvider'
 import { initLocale, LanguageProvider } from '@/i18n/LanguageProvider'
 import { initTheme, ThemeProvider } from '@/hooks/useTheme'
 import App from './App.tsx'
+import './fonts.css'
 import './index.css'
 
 initTheme()

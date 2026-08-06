@@ -8,7 +8,7 @@ import { Button } from '@/components/ui/Button'
 import { Card } from '@/components/ui/Card'
 import { ADMIN_PAGE_SIZE, useClientPagination } from '@/hooks/useClientPagination'
 import { useTranslation } from '@/i18n/LanguageProvider'
-import { formatDateTime } from '@/lib/formatDate'
+import { formatSmartDate } from '@/lib/time'
 import { cn } from '@/lib/utils'
 import {
   deleteContactMessage,
@@ -130,7 +130,10 @@ export function AdminMessagesPage() {
       </div>
 
       {isLoading ? (
-        <p className="text-sm text-muted-foreground">{t.common.loading}</p>
+        <div className="flex flex-col items-center gap-2 py-8">
+          <div className="h-6 w-6 animate-spin rounded-full border-[3px] border-primary/20 border-t-primary" />
+          <p className="text-sm text-muted-foreground">{t.common.loading}</p>
+        </div>
       ) : total === 0 ? (
         <Card className="p-8 text-center text-sm text-muted-foreground">
           {t.admin.messages.empty}
@@ -158,7 +161,7 @@ export function AdminMessagesPage() {
                     </div>
                     <p className="line-clamp-2 text-sm text-muted-foreground">{message.message}</p>
                     <p className="mt-2 text-xs text-muted-foreground">
-                      {formatDateTime(message.createdAt, locale)}
+                      {formatSmartDate(message.createdAt, locale)}
                     </p>
                   </button>
                 </li>
@@ -189,7 +192,7 @@ export function AdminMessagesPage() {
               </div>
 
               <p className="mb-4 text-xs text-muted-foreground">
-                {formatDateTime(selected.createdAt, locale)} · {selected.locale.toUpperCase()}
+                {formatSmartDate(selected.createdAt, locale)} · {selected.locale.toUpperCase()}
               </p>
 
               <div className="mb-6 rounded-xl border border-border bg-muted/30 p-4 text-sm leading-relaxed whitespace-pre-wrap">

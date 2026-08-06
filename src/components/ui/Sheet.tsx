@@ -2,6 +2,7 @@ import { AnimatePresence, motion } from 'framer-motion'
 import { X } from 'lucide-react'
 import type { ReactNode } from 'react'
 import { useEffect } from 'react'
+import { useTranslation } from '@/i18n/LanguageProvider'
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/Button'
 
@@ -15,6 +16,8 @@ interface SheetProps {
 }
 
 export function Sheet({ open, onClose, children, title, ariaLabel = 'Menu', className }: SheetProps) {
+  const { t } = useTranslation()
+
   useEffect(() => {
     if (!open) return
 
@@ -42,7 +45,7 @@ export function Sheet({ open, onClose, children, title, ariaLabel = 'Menu', clas
         >
           <motion.button
             type="button"
-            aria-label="Fermer le menu"
+            aria-label={t.admin.closeMenu}
             className="absolute inset-0 bg-black/50 backdrop-blur-sm"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -67,7 +70,7 @@ export function Sheet({ open, onClose, children, title, ariaLabel = 'Menu', clas
               )}
             >
               {title ? <div className="font-display text-lg font-semibold">{title}</div> : null}
-              <Button variant="ghost" size="icon" onClick={onClose} aria-label="Fermer">
+              <Button variant="ghost" size="icon" onClick={onClose} aria-label={t.admin.closeMenu}>
                 <X className="h-5 w-5" />
               </Button>
             </div>

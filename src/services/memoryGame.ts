@@ -1,5 +1,8 @@
 import { getSupabase, isSupabaseConfigured } from '@/lib/supabase'
+import { formatDuration } from '@/lib/time'
 import { isTimeoutError, withTimeout } from '@/lib/withTimeout'
+
+export { formatDuration as formatLeaderboardTime }
 
 const FETCH_TIMEOUT_MS = 12_000
 const INVOKE_TIMEOUT_MS = 15_000
@@ -114,16 +117,6 @@ export function getSavedPlayerName(): string {
 export function savePlayerName(name: string) {
   if (typeof window === 'undefined') return
   localStorage.setItem(PLAYER_NAME_KEY, name.trim())
-}
-
-function formatTime(seconds: number) {
-  const mins = Math.floor(seconds / 60)
-  const secs = seconds % 60
-  return `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`
-}
-
-export function formatLeaderboardTime(seconds: number) {
-  return formatTime(seconds)
 }
 
 export async function fetchLeaderboard(gridSize: GridSize): Promise<LeaderboardEntry[]> {

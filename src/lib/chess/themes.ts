@@ -60,6 +60,14 @@ const SOLID_BOARDS: Record<string, Omit<SolidBoardTheme, 'id'>> = {
   'rose-solid': { type: 'solid', light: '#f3d6e2', dark: '#a85575', label: 'Rose' },
   'walnut-solid': { type: 'solid', light: '#e8d5b5', dark: '#6b4423', label: 'Walnut' },
   'slate-solid': { type: 'solid', light: '#e2e8f0', dark: '#475569', label: 'Slate' },
+  // Seasonal / Event themed
+  'halloween-solid': { type: 'solid', light: '#f97316', dark: '#1c1917', label: 'Halloween' },
+  'skulls-solid': { type: 'solid', light: '#292524', dark: '#0c0a09', label: 'Skulls' },
+  'christmas-solid': { type: 'solid', light: '#dc2626', dark: '#14532d', label: 'Christmas' },
+  'valentine-solid': { type: 'solid', light: '#fda4af', dark: '#881337', label: 'Valentine' },
+  'autumn-solid': { type: 'solid', light: '#c2410c', dark: '#78350f', label: 'Autumn' },
+  'winter-solid': { type: 'solid', light: '#bfdbfe', dark: '#e0f2fe', label: 'Winter' },
+  'spring-solid': { type: 'solid', light: '#86efac', dark: '#fbcfe8', label: 'Spring' },
 }
 
 export function pieceAssetUrl(setId: ChessPieceSetId, color: Color, type: PieceSymbol): string {
@@ -167,6 +175,14 @@ export function boardEvalColors(id: ChessBoardThemeId): { light: string; dark: s
     wood3: { light: '#e6c9a0', dark: '#8b5a2b' },
     wood4: { light: '#ecd2a8', dark: '#a07040' },
     newspaper: { light: '#f2f0e8', dark: '#8a8a82' },
+    // Seasonal / Event boards
+    halloween: { light: '#f97316', dark: '#1c1917' },
+    skulls: { light: '#292524', dark: '#0c0a09' },
+    christmas: { light: '#dc2626', dark: '#14532d' },
+    valentine: { light: '#fda4af', dark: '#881337' },
+    autumn: { light: '#c2410c', dark: '#78350f' },
+    winter: { light: '#bfdbfe', dark: '#e0f2fe' },
+    spring: { light: '#86efac', dark: '#fbcfe8' },
   }
   return approx[id] ?? { light: '#f0d9b5', dark: '#b58863' }
 }

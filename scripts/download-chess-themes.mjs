@@ -85,6 +85,208 @@ const EXTRA_PIECE_SETS = [
       'bP.svg': 'bp.svg',
     },
   },
+  // Halloween — BurraAbhishek (MIT)
+  {
+    id: 'halloween',
+    baseUrl: 'https://raw.githubusercontent.com/BurraAbhishek/halloween-chess-piece-set/main/halloween',
+    files: {
+      'wK.svg': 'wK.svg',
+      'wQ.svg': 'wQ.svg',
+      'wR.svg': 'wR.svg',
+      'wB.svg': 'wB.svg',
+      'wN.svg': 'wN.svg',
+      'wP.svg': 'wP.svg',
+      'bK.svg': 'bK.svg',
+      'bQ.svg': 'bQ.svg',
+      'bR.svg': 'bR.svg',
+      'bB.svg': 'bB.svg',
+      'bN.svg': 'bN.svg',
+      'bP.svg': 'bP.svg',
+    },
+  },
+  // maurimo/chess-art fancy sets (MIT) — lowercase source files
+  {
+    id: 'skulls',
+    baseUrl: 'https://raw.githubusercontent.com/maurimo/chess-art/main/fancy/skulls',
+    files: {
+      'wK.svg': 'wk.svg',
+      'wQ.svg': 'wq.svg',
+      'wR.svg': 'wr.svg',
+      'wB.svg': 'wb.svg',
+      'wN.svg': 'wn.svg',
+      'wP.svg': 'wp.svg',
+      'bK.svg': 'bk.svg',
+      'bQ.svg': 'bq.svg',
+      'bR.svg': 'br.svg',
+      'bB.svg': 'bb.svg',
+      'bN.svg': 'bn.svg',
+      'bP.svg': 'bp.svg',
+    },
+  },
+  {
+    id: 'eyes',
+    baseUrl: 'https://raw.githubusercontent.com/maurimo/chess-art/main/fancy/eyes',
+    files: {
+      'wK.svg': 'wk.svg',
+      'wQ.svg': 'wq.svg',
+      'wR.svg': 'wr.svg',
+      'wB.svg': 'wb.svg',
+      'wN.svg': 'wn.svg',
+      'wP.svg': 'wp.svg',
+      'bK.svg': 'bk.svg',
+      'bQ.svg': 'bq.svg',
+      'bR.svg': 'br.svg',
+      'bB.svg': 'bb.svg',
+      'bN.svg': 'bn.svg',
+      'bP.svg': 'bp.svg',
+    },
+  },
+  {
+    id: 'freak',
+    baseUrl: 'https://raw.githubusercontent.com/maurimo/chess-art/main/fancy/freak',
+    files: {
+      'wK.svg': 'wk.svg',
+      'wQ.svg': 'wq.svg',
+      'wR.svg': 'wr.svg',
+      'wB.svg': 'wb.svg',
+      'wN.svg': 'wn.svg',
+      'wP.svg': 'wp.svg',
+      'bK.svg': 'bk.svg',
+      'bQ.svg': 'bq.svg',
+      'bR.svg': 'br.svg',
+      'bB.svg': 'bb.svg',
+      'bN.svg': 'bn.svg',
+      'bP.svg': 'bp.svg',
+    },
+  },
+  {
+    id: 'prmi',
+    baseUrl: 'https://raw.githubusercontent.com/maurimo/chess-art/main/fancy/prmi',
+    files: {
+      'wK.svg': 'wk.svg',
+      'wQ.svg': 'wq.svg',
+      'wR.svg': 'wr.svg',
+      'wB.svg': 'wb.svg',
+      'wN.svg': 'wn.svg',
+      'wP.svg': 'wp.svg',
+      'bK.svg': 'bk.svg',
+      'bQ.svg': 'bq.svg',
+      'bR.svg': 'br.svg',
+      'bB.svg': 'bb.svg',
+      'bN.svg': 'bn.svg',
+      'bP.svg': 'bp.svg',
+    },
+  },
+  // kmar/chess_svg_piece_sets (CC0)
+  {
+    id: 'livius',
+    baseUrl: 'https://raw.githubusercontent.com/kmar/chess_svg_piece_sets/main/livius',
+    files: {
+      'wK.svg': 'wk.svg',
+      'wQ.svg': 'wq.svg',
+      'wR.svg': 'wr.svg',
+      'wB.svg': 'wb.svg',
+      'wN.svg': 'wn.svg',
+      'wP.svg': 'wp.svg',
+      'bK.svg': 'bk.svg',
+      'bQ.svg': 'bq.svg',
+      'bR.svg': 'br.svg',
+      'bB.svg': 'bb.svg',
+      'bN.svg': 'bn.svg',
+      'bP.svg': 'bp.svg',
+    },
+  },
+  {
+    id: 'meridian',
+    baseUrl: 'https://raw.githubusercontent.com/kmar/chess_svg_piece_sets/main/meridian',
+    files: {
+      'wK.svg': 'wk.svg',
+      'wQ.svg': 'wq.svg',
+      'wR.svg': 'wr.svg',
+      'wB.svg': 'wb.svg',
+      'wN.svg': 'wn.svg',
+      'wP.svg': 'wp.svg',
+      'bK.svg': 'bk.svg',
+      'bQ.svg': 'bq.svg',
+      'bR.svg': 'br.svg',
+      'bB.svg': 'bb.svg',
+      'bN.svg': 'bn.svg',
+      'bP.svg': 'bp.svg',
+    },
+  },
+  {
+    id: 'meridian-shaded',
+    baseUrl: 'https://raw.githubusercontent.com/kmar/chess_svg_piece_sets/main/meridian_shaded',
+    files: {
+      'wK.svg': 'wk.svg',
+      'wQ.svg': 'wq.svg',
+      'wR.svg': 'wr.svg',
+      'wB.svg': 'wb.svg',
+      'wN.svg': 'wn.svg',
+      'wP.svg': 'wp.svg',
+      'bK.svg': 'bk.svg',
+      'bQ.svg': 'bq.svg',
+      'bR.svg': 'br.svg',
+      'bB.svg': 'bb.svg',
+      'bN.svg': 'bn.svg',
+      'bP.svg': 'bp.svg',
+    },
+  },
+  // Kadagaden/chess-pieces (CC-BY-4.0) — standard naming
+  {
+    id: '1kbyte-gambit',
+    baseUrl: 'https://raw.githubusercontent.com/Kadagaden/chess-pieces/master/chess_1Kbyte_gambit',
+    files: {
+      'wK.svg': 'wK.svg',
+      'wQ.svg': 'wQ.svg',
+      'wR.svg': 'wR.svg',
+      'wB.svg': 'wB.svg',
+      'wN.svg': 'wN.svg',
+      'wP.svg': 'wP.svg',
+      'bK.svg': 'bK.svg',
+      'bQ.svg': 'bQ.svg',
+      'bR.svg': 'bR.svg',
+      'bB.svg': 'bB.svg',
+      'bN.svg': 'bN.svg',
+      'bP.svg': 'bP.svg',
+    },
+  },
+  {
+    id: 'kaneo',
+    baseUrl: 'https://raw.githubusercontent.com/Kadagaden/chess-pieces/master/chess_kaneo',
+    files: {
+      'wK.svg': 'wK.svg',
+      'wQ.svg': 'wQ.svg',
+      'wR.svg': 'wR.svg',
+      'wB.svg': 'wB.svg',
+      'wN.svg': 'wN.svg',
+      'wP.svg': 'wP.svg',
+      'bK.svg': 'bK.svg',
+      'bQ.svg': 'bQ.svg',
+      'bR.svg': 'bR.svg',
+      'bB.svg': 'bB.svg',
+      'bN.svg': 'bN.svg',
+      'bP.svg': 'bP.svg',
+    },
+  },
+  {
+    id: 'kaneo-midnight',
+    baseUrl: 'https://raw.githubusercontent.com/Kadagaden/chess-pieces/master/chess_kaneo_midnight',
+    files: {
+      'wK.svg': 'wK.svg',
+      'wQ.svg': 'wQ.svg',
+      'wR.svg': 'wR.svg',
+      'wB.svg': 'wB.svg',
+      'wN.svg': 'wN.svg',
+      'wP.svg': 'wP.svg',
+      'bK.svg': 'bK.svg',
+      'bQ.svg': 'bQ.svg',
+      'bR.svg': 'bR.svg',
+      'bB.svg': 'bB.svg',
+      'bN.svg': 'bN.svg',
+      'bP.svg': 'bP.svg',
+    },
+  },
 ]
 
 const PIECE_FILES = [
@@ -331,6 +533,14 @@ async function main() {
     { id: 'rose-solid', light: '#f3d6e2', dark: '#a85575', label: 'Rose' },
     { id: 'walnut-solid', light: '#e8d5b5', dark: '#6b4423', label: 'Walnut' },
     { id: 'slate-solid', light: '#e2e8f0', dark: '#475569', label: 'Slate' },
+    // Seasonal / Event themed boards
+    { id: 'halloween-solid', light: '#f97316', dark: '#1c1917', label: 'Halloween' },
+    { id: 'skulls-solid', light: '#292524', dark: '#0c0a09', label: 'Skulls' },
+    { id: 'christmas-solid', light: '#dc2626', dark: '#14532d', label: 'Christmas' },
+    { id: 'valentine-solid', light: '#fda4af', dark: '#881337', label: 'Valentine' },
+    { id: 'autumn-solid', light: '#c2410c', dark: '#78350f', label: 'Autumn' },
+    { id: 'winter-solid', light: '#bfdbfe', dark: '#e0f2fe', label: 'Winter' },
+    { id: 'spring-solid', light: '#86efac', dark: '#fbcfe8', label: 'Spring' },
   ]
 
   // Stable piece order: Lichess sets alphabetically, then extras
@@ -345,7 +555,7 @@ async function main() {
   const manifest = {
     source: 'https://github.com/lichess-org/lila',
     licenseNote:
-      'Piece/board assets from Lichess (lila) plus extra open-source sets (ansuz, skak, echecs). See NOTICE.md.',
+      'Piece/board assets from Lichess (lila) plus extra open-source sets. See NOTICE.md.',
     generatedAt: new Date().toISOString(),
     pieceSets: sortedPieceResults
       .filter((item) => item.downloaded + item.skipped > 0)
@@ -392,6 +602,10 @@ Assets in this folder were downloaded from open-source sources:
 - **ansuz** — https://github.com/quotepilgrim/ansuz (CC BY-SA 4.0)
 - **skak** — https://github.com/MuTsunTsai/skak-svg (skak / Piet Tutelaers lineage)
 - **echecs** — https://github.com/MuTsunTsai/1echecs-svg (1echecs font lineage)
+- **halloween** — https://github.com/BurraAbhishek/halloween-chess-piece-set (MIT)
+- **skulls, eyes, freak, prmi** — https://github.com/maurimo/chess-art (MIT)
+- **livius, meridian, meridian-shaded** — https://github.com/kmar/chess_svg_piece_sets (CC0)
+- **1kbyte-gambit, kaneo, kaneo-midnight** — https://github.com/Kadagaden/chess-pieces (CC-BY-4.0)
 
 **Not included:** Chess.com piece sets, boards, or branding (proprietary; do not scrape). Excluded: monarchy.
 

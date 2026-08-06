@@ -42,7 +42,18 @@ export const CHESS_PIECE_SET_IDS = [
   "xkcd",
   "ansuz",
   "skak",
-  "echecs"
+  "echecs",
+  "halloween",
+  "skulls",
+  "eyes",
+  "freak",
+  "prmi",
+  "livius",
+  "meridian",
+  "meridian-shaded",
+  "1kbyte-gambit",
+  "kaneo",
+  "kaneo-midnight"
 ] as const
 
 export type ChessPieceSetId = (typeof CHESS_PIECE_SET_IDS)[number]
@@ -62,6 +73,13 @@ export const CHESS_BOARD_THEME_IDS = [
   "rose-solid",
   "walnut-solid",
   "slate-solid",
+  "halloween-solid",
+  "skulls-solid",
+  "christmas-solid",
+  "valentine-solid",
+  "autumn-solid",
+  "winter-solid",
+  "spring-solid",
   "blue-marble",
   "blue",
   "blue2",

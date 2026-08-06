@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/Button'
 import { Card } from '@/components/ui/Card'
 import { ADMIN_PAGE_SIZE, useClientPagination } from '@/hooks/useClientPagination'
 import { useTranslation } from '@/i18n/LanguageProvider'
-import { formatDateTime } from '@/lib/formatDate'
+import { formatSmartDate } from '@/lib/time'
 import { formatLeaderboardTime } from '@/services/memoryGame'
 import { deleteScore, fetchAllScores } from '@/services/adminScores'
 import type { MemoryScoreRow } from '@/types/admin'
@@ -59,7 +59,10 @@ export function AdminScoresPage() {
       </div>
 
       {isLoading ? (
-        <p className="text-sm text-muted-foreground">{t.common.loading}</p>
+        <div className="flex flex-col items-center gap-2 py-8">
+          <div className="h-6 w-6 animate-spin rounded-full border-[3px] border-primary/20 border-t-primary" />
+          <p className="text-sm text-muted-foreground">{t.common.loading}</p>
+        </div>
       ) : pagination.total === 0 ? (
         <Card className="px-4 py-10 text-center text-sm text-muted-foreground">
           {t.admin.scores.empty}
@@ -99,7 +102,7 @@ export function AdminScoresPage() {
                       <div className="min-w-0">
                         <dt className="text-muted-foreground">{t.admin.scores.columns.date}</dt>
                         <dd className="mt-0.5 overflow-x-auto whitespace-nowrap text-foreground">
-                          {formatDateTime(score.createdAt, locale)}
+                          {formatSmartDate(score.createdAt, locale)}
                         </dd>
                       </div>
                     </dl>
@@ -144,7 +147,7 @@ export function AdminScoresPage() {
                       {formatLeaderboardTime(score.seconds)}
                     </td>
                     <td className="px-4 py-3 text-muted-foreground">
-                      {formatDateTime(score.createdAt, locale)}
+                      {formatSmartDate(score.createdAt, locale)}
                     </td>
                     <td className="px-4 py-3">
                       <Button

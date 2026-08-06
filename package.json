@@ -11,13 +11,16 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "logo:generate": "node scripts/generate-logo-base64.mjs",
+    "og:generate": "node scripts/generate-og-card.mjs",
+    "fonts:download": "node scripts/download-fonts.mjs",
     "cms:seed:sql": "node scripts/generate-cms-seed.mjs",
     "guide:scripts": "npx vite-node scripts/rewrite-guide-scripts.ts",
     "guide:audio": "npx vite-node scripts/generate-guide-audio.ts",
     "guide:audio:force": "npx vite-node scripts/generate-guide-audio.ts --force",
     "guide:audio:piper": "npx vite-node scripts/generate-guide-audio.ts --piper",
     "chess:themes": "node scripts/download-chess-themes.mjs",
-    "chess:themes:force": "node scripts/download-chess-themes.mjs --force"
+    "chess:themes:force": "node scripts/download-chess-themes.mjs --force",
+    "chess:book": "npx vite-node scripts/generate-soufiane-book.ts"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.4.0",

@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { buildChatKnowledge } from '@/lib/portfolioChat/knowledge'
 import { getGuideReplyForProject, getGuideReplyForTopic } from '@/lib/portfolioChat/guide'
 import {
@@ -12,6 +12,7 @@ import type { ChatReply } from '@/lib/portfolioChat/types'
 import { usePortfolioContent } from '@/hooks/PortfolioContentProvider'
 import { useTranslation } from '@/i18n/LanguageProvider'
 import { trackEvent } from '@/services/analytics'
+import { initGuideScripts } from '@/lib/guideSpeech'
 
 export type GuideView = 'menu' | 'projects' | 'answer'
 
@@ -36,6 +37,11 @@ export function usePortfolioGuide() {
     () => buildChatKnowledge(content, locale, t),
     [content, locale, t],
   )
+
+  // Load DB scripts into memory cache on first mount
+  useEffect(() => {
+    void initGuideScripts()
+  }, [])
 
   // Clear open answer when language changes so bubbles never mix FR/EN copy.
   const [guideLocale, setGuideLocale] = useState(locale)

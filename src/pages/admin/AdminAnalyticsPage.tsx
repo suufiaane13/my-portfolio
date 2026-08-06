@@ -18,7 +18,8 @@ import { StatCard } from '@/components/admin/StatCard'
 import { Card } from '@/components/ui/Card'
 import { ADMIN_PAGE_SIZE, useClientPagination } from '@/hooks/useClientPagination'
 import { useTranslation } from '@/i18n/LanguageProvider'
-import { formatDateOnly, formatDateTime } from '@/lib/formatDate'
+import { formatDateOnly } from '@/lib/formatDate'
+import { formatSmartDate } from '@/lib/time'
 import {
   aggregateEventsByDay,
   aggregateEventTypes,
@@ -108,7 +109,10 @@ export function AdminAnalyticsPage() {
       </div>
 
       {isLoading ? (
-        <p className="text-sm text-muted-foreground">{t.common.loading}</p>
+        <div className="flex flex-col items-center gap-2 py-8">
+          <div className="h-6 w-6 animate-spin rounded-full border-[3px] border-primary/20 border-t-primary" />
+          <p className="text-sm text-muted-foreground">{t.common.loading}</p>
+        </div>
       ) : (
         <>
           <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-3 xl:grid-cols-4">
@@ -185,7 +189,7 @@ export function AdminAnalyticsPage() {
                         </span>
                       </div>
                       <p className="text-xs text-muted-foreground">
-                        {formatDateTime(event.createdAt, locale)}
+                        {formatSmartDate(event.createdAt, locale)}
                       </p>
                     </li>
                   ))}
@@ -210,7 +214,7 @@ export function AdminAnalyticsPage() {
                             {event.sectionId ?? event.projectId ?? '—'}
                           </td>
                           <td className="px-4 py-3 text-muted-foreground">
-                            {formatDateTime(event.createdAt, locale)}
+                            {formatSmartDate(event.createdAt, locale)}
                           </td>
                         </tr>
                       ))}

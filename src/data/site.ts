@@ -4,7 +4,7 @@ export const siteConfig = {
   description:
     'Portfolio de Soufiane HAJJI. Développeur Full-Stack & UI/UX Designer spécialisé en React, TypeScript, Node.js et Tailwind CSS.',
   url: import.meta.env.VITE_SITE_URL ?? 'https://soufiane-hajji.netlify.app',
-  ogImage: '/logo.png',
+  ogImage: '/og-card.png',
   locale: 'fr_FR',
   twitterHandle: '@suufiaane',
   keywords: [

@@ -6,7 +6,7 @@ import { ConfirmDeleteDialog } from '@/components/admin/ConfirmDeleteDialog'
 import { Card } from '@/components/ui/Card'
 import { ADMIN_PAGE_SIZE, useClientPagination } from '@/hooks/useClientPagination'
 import { useTranslation } from '@/i18n/LanguageProvider'
-import { formatDateTime } from '@/lib/formatDate'
+import { formatSmartDate } from '@/lib/time'
 import {
   deleteNewsletterSubscriber,
   fetchNewsletterSubscribers,
@@ -60,7 +60,10 @@ export function AdminNewsletterPage() {
 
       <Card className="overflow-hidden">
         {isLoading ? (
-          <p className="px-4 py-8 text-sm text-muted-foreground">{t.common.loading}</p>
+          <div className="flex flex-col items-center gap-2 px-4 py-8">
+            <div className="h-6 w-6 animate-spin rounded-full border-[3px] border-primary/20 border-t-primary" />
+            <p className="text-sm text-muted-foreground">{t.common.loading}</p>
+          </div>
         ) : total === 0 ? (
           <p className="px-4 py-10 text-center text-sm text-muted-foreground">
             {t.admin.newsletter.empty}
@@ -83,7 +86,7 @@ export function AdminNewsletterPage() {
                         </span>
                       </div>
                       <p className="mt-2 text-xs text-muted-foreground">
-                        {formatDateTime(subscriber.subscribedAt, locale)}
+                        {formatSmartDate(subscriber.subscribedAt, locale)}
                       </p>
                     </div>
                     <button
@@ -118,7 +121,7 @@ export function AdminNewsletterPage() {
                       <td className="px-4 py-3 text-muted-foreground">{subscriber.locale}</td>
                       <td className="px-4 py-3 text-muted-foreground">{subscriber.source}</td>
                       <td className="px-4 py-3 text-muted-foreground">
-                        {formatDateTime(subscriber.subscribedAt, locale)}
+                        {formatSmartDate(subscriber.subscribedAt, locale)}
                       </td>
                       <td className="px-4 py-3 text-right">
                         <button

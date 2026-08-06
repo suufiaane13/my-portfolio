@@ -1,54 +1,54 @@
-/** Source scripts used by npm run guide:scripts (before Gemini rewrite). */
+﻿/** Source scripts used by npm run guide:scripts (before Gemini rewrite). */
 export const GUIDE_SPEECH_SCRIPTS_SOURCE = {
   fr: {
     'about-main':
-      'À propos. Développeur full stack et étudiant en licence professionnelle informatique à SUP MTI. Je cherche un poste pour mettre en pratique mes compétences en développement web : HTML, CSS, PHP, JavaScript, React, Laravel, et logiciel : Java et Kotlin. Curieux et rigoureux, je souhaite contribuer à des projets concrets au sein d’une équipe dynamique. À la recherche d’un poste, disponible pour des missions.',
+      'À propos. Développeur full-stack et UI-UX designer, titulaire d\'une licence professionnelle en informatique à l\'école SUPMTI à Oujda. Mon parcours mêle développement web avec React, TypeScript, Laravel et PHP, et développement mobile avec Kotlin et Jetpack Compose. Curieux et rigoureux, je cherche un poste ou des missions pour contribuer à des projets ambitieux dans une équipe dynamique.',
     'about-availability':
-      'Disponibilité. Je suis à la recherche d’un poste et disponible pour des missions. Développement web avec HTML, CSS, PHP, JavaScript, React et Laravel, ainsi que Java et Kotlin.',
+      'Disponibilité. Je suis à la recherche d\'un poste et disponible pour de nouvelles missions. Développement web avec React, TypeScript, Laravel et PHP, ainsi que mobile avec Kotlin et Java.',
     'skills-overview':
-      'Compétences. Stack clé : React, TypeScript, Laravel, Kotlin, Soupa base et Docker. Frontend : HTML 5, CSS 3, JavaScript, TypeScript, React, Vite, Tailwind CSS et Bootstrap. Backend : PHP, Python, Laravel, FastAPI, Node JS, Express JS et API REST. Mobile et desktop : Kotlin, Jetpack Compose, React Native, Rust et Tauri. Data et DevOps : MySQL, MongoDB, Oracle, Soupa base, Docker, Git et GitHub. Design : Figma, Canva, UI UX, responsive et PWA.',
+      'Compétences. Stack clé : React, TypeScript, Laravel, Kotlin, Supabase et Docker. Frontend : HTML 5, CSS 3, JavaScript, TypeScript, React, Vite, Tailwind CSS et Bootstrap. Backend : PHP, Python, Laravel, FastAPI, Node JS et API REST. Mobile et desktop : Kotlin, Jetpack Compose, React Native, Rust et Tauri. Data et DevOps : MySQL, MongoDB, Oracle, Supabase, Docker, Git et GitHub. Design : Figma, UI UX.',
     'experience-list':
-      'Expérience. Développeur full stack freelance, Maroc, à distance, de 2024 à aujourd’hui. Plus de 33 dépôts publics sur GitHub. Dashboards, apps mobile en Kotlin et Compose, menus digitaux et sites vitrine. Développeur frontend chez Pure Power, snack fitness à Oujda, en 2026. Menu digital mobile first avec QR code par table. Stage de mars 2025, un mois, stagiaire informatique au service informatique de la Faculté des Sciences d’Oujda, Université Mohammed Premier.',
+      'Expérience. Développeur full-stack freelance, Maroc, à distance, depuis 2024. Plus de 33 dépôts publics sur GitHub : dashboards, apps mobile en Kotlin et Compose, menus digitaux et sites vitrine. Développeur frontend chez Pure Power, snack fitness à Oujda, en 2026. Menu digital mobile-first avec QR code par table. Stage de mars 2025, un mois, stagiaire informatique au service informatique de la Faculté des Sciences d\'Oujda, Université Mohammed Premier.',
     'education-list':
-      'Formation. Licence professionnelle en informatique, 2025–2026, école SUP MTI à Oujda, en cours. Technicien spécialisé en développement digital, 2023–2025, Centre Mixte de Formation Professionnelle d’Oujda. Baccalauréat sciences physiques, option français, 2022–2023, lycée Ennahda à Ahfir.',
+      'Formation. Licence professionnelle en informatique, 2025, école SUPMTI à Oujda, diplôme obtenu. Technicien spécialisé en développement digital, 2023-2025, Centre Mixte de Formation Professionnelle d\'Oujda. Baccalauréat sciences physiques option français, 2022-2023, lycée Ennahda à Ahfir.',
     'contact-main':
-      'Contact. Email : hji point sfn arobase gmail point com. WhatsApp : plus 212 641 454 572. Adresse : Oujda, Maroc.',
+      'Contact. Email : hji point sfn arobase gmail point com. WhatsApp : plus 212 6 41 45 45 72. Adresse : Oujda, Maroc.',
     'cv-download':
       'CV. Mon curriculum vitae est disponible au téléchargement. Utilisez le bouton Télécharger mon CV dans le hero, ou le bouton ci-dessous.',
     'game-info':
-      'Jeu mémoire. Le portfolio inclut un mini-jeu mémoire avec classement top 5. Lancez une partie et tentez de battre votre record.',
+      'Jeux. Le portfolio propose deux mini-jeux : un jeu de mémoire avec classement top 5, et un jeu d\'échecs contre un bot Stockfish avec ouvertures et niveau Expert. Choisissez dans le menu Jeux.',
     'project-myfood':
-      'MyFood. Application mobile Kotlin et Jetpack Compose, avec backend Soupa base : authentification, PostgreSQL et stockage. Parcours complet client et espace de gestion pour restaurateurs. Technologies : Kotlin, Jetpack Compose, Soupa base et Android.',
+      'MyFood. Application mobile Android en Kotlin et Jetpack Compose, avec backend Supabase : authentification, PostgreSQL et stockage. Parcours complet client et espace de gestion pour restaurateurs.',
     'project-pure-power-menu':
-      'Pure Power Menu. Carte digitale interactive pour Pure Power, avec fiches produits Mass Gainer et Shred, macros nutritionnels, QR code par table et design mobile first. Technologies : TypeScript, React, Tailwind CSS et Vite.',
+      'Pure Power Menu. Carte digitale interactive pour Pure Power à Oujda, avec fiches produits, macros nutritionnels, QR code par table et design mobile-first. Technologies : TypeScript, React, Tailwind CSS et Vite.',
     'project-world-explorer':
-      'World Explorer. Application web interactive pour découvrir le monde : données en temps réel, favoris, anecdotes générées par IA et design moderne. Gratuit et interactif. Technologies : JavaScript, React, Tailwind CSS et API.',
+      'World Explorer. Application web interactive pour découvrir le monde : données en temps réel, favoris, anecdotes générées par IA et design moderne. Technologies : JavaScript, React et Tailwind CSS.',
     'project-sultan-kunafa':
       'Sultan Kunafa. Landing page haut de gamme autour de la kunafa. Frontend optimisé pour la conversion et la commande via WhatsApp. Technologies : TypeScript, React, Tailwind CSS et Vite.',
   },
   en: {
     'about-main':
-      'About. Full stack developer and professional bachelor student in computer science at SUP MTI. I am looking for a role to apply my skills in web development: HTML, CSS, PHP, JavaScript, React, Laravel, and software: Java and Kotlin. Curious and rigorous, I want to contribute to real projects within a dynamic team. Open to opportunities and available for work.',
+      'About. Full-stack developer and UI-UX designer, professional bachelor\'s graduate in computer science at SUP MTI in Oujda. My background covers web development with React, TypeScript, Laravel and PHP, and mobile development with Kotlin and Jetpack Compose. Curious and rigorous, I am looking for a role or missions to contribute to ambitious projects in a dynamic team.',
     'about-availability':
-      'Availability. I am looking for a role and available for work. Web development with HTML, CSS, PHP, JavaScript, React and Laravel, as well as Java and Kotlin.',
+      'Availability. I am actively looking for a role and available for new opportunities. Web development with React, TypeScript, Laravel and PHP, as well as mobile with Kotlin and Java.',
     'skills-overview':
-      'Skills. Core stack: React, TypeScript, Laravel, Kotlin, Super base, and Docker. Frontend: HTML 5, CSS 3, JavaScript, TypeScript, React, Vite, Tailwind CSS, and Bootstrap. Backend: PHP, Python, Laravel, FastAPI, Node JS, Express JS, and REST API. Mobile and desktop: Kotlin, Jetpack Compose, React Native, Rust, and Tauri. Data and DevOps: MySQL, MongoDB, Oracle, Super base, Docker, Git and GitHub. Design: Figma, Canva, UI UX, responsive, and PWA.',
+      'Skills. Core stack: React, TypeScript, Laravel, Kotlin, Supabase, and Docker. Frontend: HTML 5, CSS 3, JavaScript, TypeScript, React, Vite, Tailwind CSS, and Bootstrap. Backend: PHP, Python, Laravel, FastAPI, Node JS, and REST APIs. Mobile and desktop: Kotlin, Jetpack Compose, React Native, Rust, and Tauri. Data and DevOps: MySQL, MongoDB, Oracle, Supabase, Docker, Git, and GitHub. Design: Figma, UI UX.',
     'experience-list':
-      'Experience. Freelance full stack developer, Morocco, remote, from 2024 to present. More than 33 public repos on GitHub. Dashboards, mobile apps in Kotlin and Compose, digital menus and showcase sites. Frontend developer at Pure Power, a fitness snack bar in Oujda, in 2026. Mobile first digital menu with per table QR codes. Internship in March 2025, one month, IT intern at the IT department of the Faculty of Sciences of Oujda, Mohammed First University.',
+      'Experience. Freelance full-stack developer, Morocco, remote, since 2024. Over 33 public repos on GitHub: dashboards, mobile apps in Kotlin and Compose, digital menus, and showcase sites. Frontend developer at Pure Power, a fitness snack bar in Oujda, in 2026. Mobile-first digital menu with per-table QR codes. Internship in March 2025, one month, IT intern at the Faculty of Sciences IT department, Mohammed First University in Oujda.',
     'education-list':
-      'Education. Professional bachelor in computer science, 2025–2026, SUP MTI school in Oujda, in progress. Specialized technician in digital development, 2023–2025, Professional Training Center in Oujda. High school diploma in physical sciences, French option, 2022–2023, Ennahda High School in Ahfir.',
+      'Education. Professional bachelor in computer science, 2025, SUP MTI school in Oujda, degree obtained. Specialized technician in digital development, 2023 to 2025, Professional Training Center in Oujda. High school diploma in physical sciences, French option, 2022 to 2023, Ennahda High School in Ahfir.',
     'contact-main':
       'Contact. Email: hji dot sfn at gmail dot com. WhatsApp: plus 212 641 454 572. Address: Oujda, Morocco.',
     'cv-download':
       'CV. My curriculum vitae is available for download. Use the Download my CV button in the hero, or the button below.',
     'game-info':
-      'Memory game. The portfolio includes a memory matching game with a top 5 leaderboard. Play a round and try to beat your personal best.',
+      'Games. The portfolio includes two mini-games: a memory matching game with a top 5 leaderboard, and a chess game against a Stockfish bot with openings and multiple difficulty levels including beginner, intermediate, and expert. Choose from the Games menu.',
     'project-myfood':
-      'MyFood. Kotlin and Jetpack Compose mobile app with a Super base backend: auth, PostgreSQL, and storage. Full customer journey and management space for restaurant owners. Technologies: Kotlin, Jetpack Compose, Super base, and Android.',
+      'MyFood. Android mobile app built with Kotlin and Jetpack Compose, powered by a Supabase backend: auth, PostgreSQL, and storage. Full customer journey and management dashboard for restaurant owners.',
     'project-pure-power-menu':
-      'Pure Power Menu. Interactive digital menu for Pure Power with Mass Gainer and Shred product pages, nutritional macros, per table QR codes, and mobile first design. Technologies: TypeScript, React, Tailwind CSS, and Vite.',
+      'Pure Power Menu. Interactive digital menu for Pure Power in Oujda, with product pages, nutritional macros, per-table QR codes, and mobile-first design. Technologies: TypeScript, React, Tailwind CSS, and Vite.',
     'project-world-explorer':
-      'World Explorer. Interactive web app to discover the world: real-time data, favorites, AI generated anecdotes, and modern design. Free and interactive. Technologies: JavaScript, React, Tailwind CSS, and API.',
+      'World Explorer. Interactive web app to discover the world: real-time data, favorites, AI-generated anecdotes, and modern design. Technologies: JavaScript, React, and Tailwind CSS.',
     'project-sultan-kunafa':
       'Sultan Kunafa. High-end landing page highlighting the visual experience around kunafa. Frontend optimized for conversion and WhatsApp ordering. Technologies: TypeScript, React, Tailwind CSS, and Vite.',
   },

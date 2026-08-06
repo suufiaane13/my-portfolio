@@ -4,7 +4,11 @@ import {
   guideAudioUrl,
   isGuideAudioAvailable,
 } from '@/lib/portfolioChat/guideAudio'
-import { resolveGuideSpeechText } from '@/lib/portfolioChat/guideSpeechScripts'
+import {
+  resolveGuideSpeechText,
+  setGuideScriptCache,
+  clearGuideScriptCache,
+} from '@/lib/portfolioChat/guideSpeechScripts'
 
 let activeUtterance: SpeechSynthesisUtterance | null = null
 let activeAudio: HTMLAudioElement | null = null
@@ -234,4 +238,39 @@ export async function speakGuideAnswer(
 
   options.onFallback?.()
   await speakWithWebSpeech(chunkId, title, body, locale, options)
+}
+
+/**
+ * Load TTS scripts from Supabase and populate the in-memory cache.
+ * Called once when the guide mounts. Falls back silently if Supabase is unavailable.
+ */
+let scriptsInitialized = false
+
+export async function initGuideScripts(): Promise<void> {
+  if (scriptsInitialized) return
+  scriptsInitialized = true
+
+  try {
+    const { getSupabase } = await import('@/lib/supabase')
+    const supabase = getSupabase()
+    if (!supabase) return
+
+    const { data } = await supabase
+      .from('guide_scripts')
+      .select('chunk_id, locale, speech_text')
+      .order('chunk_id')
+
+    if (data) {
+      clearGuideScriptCache()
+      for (const row of data) {
+        setGuideScriptCache(
+          row.chunk_id as string,
+          row.locale as Locale,
+          row.speech_text as string,
+        )
+      }
+    }
+  } catch {
+    // Supabase unavailable — hardcoded scripts will be used as fallback
+  }
 }

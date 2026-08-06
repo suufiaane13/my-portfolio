@@ -1,36 +1,38 @@
 /**
- * Chess sounds from Lichess (open-source).
- * - move / capture / select / confirmation / error → standard
- * - check → woodland Check
- * - checkmate → woodland Explosion (Lichess Checkmate ≈ Check; Victory kept for wins only)
- * - victory / defeat / draw → woodland
- * Chess.com sounds are proprietary and not used.
+ * Chess sounds from Lichess woodland set (`public/chess/sounds/default/`).
  * Upstream: https://github.com/lichess-org/lila/tree/master/public/sound
+ * Chess.com sounds are proprietary and not used.
  */
 
 export type ChessSoundName =
-  | 'move'
+  | 'moveSelf'
+  | 'moveOpponent'
   | 'capture'
   | 'check'
   | 'checkmate'
+  | 'castle'
+  | 'promote'
   | 'victory'
   | 'defeat'
   | 'draw'
-  | 'select'
-  | 'confirmation'
-  | 'error'
+  | 'gameStart'
+  | 'gameEnd'
+  | 'illegal'
 
 const SOUND_FILES: Record<ChessSoundName, string> = {
-  move: '/chess/sounds/move.mp3',
-  capture: '/chess/sounds/capture.mp3',
-  check: '/chess/sounds/check.mp3',
-  checkmate: '/chess/sounds/checkmate.mp3',
-  victory: '/chess/sounds/victory.mp3',
-  defeat: '/chess/sounds/defeat.mp3',
-  draw: '/chess/sounds/draw.mp3',
-  select: '/chess/sounds/select.mp3',
-  confirmation: '/chess/sounds/confirmation.mp3',
-  error: '/chess/sounds/error.mp3',
+  moveSelf: '/chess/sounds/default/move-self.mp3',
+  moveOpponent: '/chess/sounds/default/move-opponent.mp3',
+  capture: '/chess/sounds/default/capture.mp3',
+  check: '/chess/sounds/default/move-check.mp3',
+  checkmate: '/chess/sounds/default/game-end.mp3',
+  castle: '/chess/sounds/default/castle.mp3',
+  promote: '/chess/sounds/default/promote.mp3',
+  victory: '/chess/sounds/default/game-win.mp3',
+  defeat: '/chess/sounds/default/game-end.mp3',
+  draw: '/chess/sounds/default/game-draw.mp3',
+  gameStart: '/chess/sounds/default/game-start.mp3',
+  gameEnd: '/chess/sounds/default/game-end.mp3',
+  illegal: '/chess/sounds/default/illegal.mp3',
 }
 
 const cache = new Map<ChessSoundName, HTMLAudioElement>()
@@ -64,12 +66,14 @@ export function playChessSound(name: ChessSoundName, enabled = true) {
   void audio.play().catch(() => {})
 }
 
-/** Same priority as Lichess sound.move(san). */
-export function chessSoundFromSan(san: string): ChessSoundName {
+/** Priority: checkmate > check > capture > castle > promote > move */
+export function chessSoundFromSan(san: string, isPlayerMove: boolean): ChessSoundName {
   if (san.includes('#')) return 'checkmate'
   if (san.includes('+')) return 'check'
   if (san.includes('x')) return 'capture'
-  return 'move'
+  if (san === 'O-O' || san === 'O-O-O') return 'castle'
+  if (san.includes('=')) return 'promote'
+  return isPlayerMove ? 'moveSelf' : 'moveOpponent'
 }
 
 export function chessSoundFromOutcome(outcome: 'win' | 'loss' | 'draw'): ChessSoundName {

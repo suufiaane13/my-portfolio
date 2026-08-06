@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react'
+import { useId } from 'react'
 import { Input } from '@/components/ui/Input'
 import { Textarea } from '@/components/ui/Textarea'
 
@@ -8,9 +9,10 @@ interface FormFieldProps {
 }
 
 export function FormField({ label, children }: FormFieldProps) {
+  const id = useId()
   return (
     <div>
-      <label className="mb-2 block text-sm font-medium text-foreground">{label}</label>
+      <label htmlFor={id} className="mb-2 block text-sm font-medium text-foreground">{label}</label>
       {children}
     </div>
   )
@@ -29,15 +31,18 @@ export function FormInput({
   type?: string
   placeholder?: string
 }) {
+  const id = useId()
   return (
-    <FormField label={label}>
+    <div>
+      <label htmlFor={id} className="mb-2 block text-sm font-medium text-foreground">{label}</label>
       <Input
+        id={id}
         type={type}
         value={value}
         placeholder={placeholder}
         onChange={(e) => onChange(e.target.value)}
       />
-    </FormField>
+    </div>
   )
 }
 
@@ -52,9 +57,11 @@ export function FormTextarea({
   onChange: (value: string) => void
   rows?: number
 }) {
+  const id = useId()
   return (
-    <FormField label={label}>
-      <Textarea value={value} rows={rows} onChange={(e) => onChange(e.target.value)} />
-    </FormField>
+    <div>
+      <label htmlFor={id} className="mb-2 block text-sm font-medium text-foreground">{label}</label>
+      <Textarea id={id} value={value} rows={rows} onChange={(e) => onChange(e.target.value)} />
+    </div>
   )
 }

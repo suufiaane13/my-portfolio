@@ -1,8 +1,11 @@
 import { getSupabase, isSupabaseConfigured } from '@/lib/supabase'
+import { formatDuration } from '@/lib/time'
 import { isTimeoutError, withTimeout } from '@/lib/withTimeout'
 import type { Locale } from '@/i18n/types'
 import type { ChessDifficulty } from '@/lib/chess/stockfishEngine'
 import { getSavedPlayerName, savePlayerName } from '@/services/memoryGame'
+
+export { formatDuration as formatLeaderboardTime }
 
 const FETCH_TIMEOUT_MS = 12_000
 const INVOKE_TIMEOUT_MS = 15_000
@@ -32,6 +35,8 @@ export interface SubmitChessGamePayload {
   seconds: number
   openingName?: string | null
   uciMoves: string
+  moveNotation: string
+  hintsUsed: number
   locale: Locale
 }
 
@@ -54,12 +59,6 @@ export class ChessScoreServiceError extends Error {
 }
 
 export { getSavedPlayerName, savePlayerName }
-
-export function formatLeaderboardTime(seconds: number) {
-  const mins = Math.floor(seconds / 60)
-  const secs = seconds % 60
-  return `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`
-}
 
 export async function fetchChessLeaderboard(
   difficulty: ChessDifficulty,
@@ -132,6 +131,8 @@ export async function submitChessGame(
           seconds: payload.seconds,
           opening_name: payload.openingName ?? null,
           uci_moves: payload.uciMoves,
+          move_notation: payload.moveNotation,
+          hints_used: payload.hintsUsed,
           locale: payload.locale,
           website: '',
         },

@@ -60,7 +60,7 @@ export async function fetchAllChessGames(limit = 100): Promise<ChessGameRow[]> {
   const { data, error } = await supabase
     .from('chess_games')
     .select(
-      'id, player_name, difficulty, player_color, result, ply_count, seconds, opening_name, locale, created_at',
+      'id, player_name, difficulty, player_color, result, ply_count, seconds, opening_name, hints_used, move_notation, uci_moves, locale, created_at',
     )
     .order('created_at', { ascending: false })
     .limit(limit)
@@ -79,10 +79,48 @@ export async function fetchAllChessGames(limit = 100): Promise<ChessGameRow[]> {
     plyCount: row.ply_count,
     seconds: row.seconds,
     openingName: row.opening_name ?? null,
+    hintsUsed: row.hints_used ?? 0,
+    moveNotation: row.move_notation ?? '',
+    uciMoves: row.uci_moves ?? '',
     locale: row.locale,
     createdAt: row.created_at,
     rank: null,
   }))
+}
+
+export async function fetchChessGameById(id: string): Promise<ChessGameRow | null> {
+  const supabase = getSupabase()
+  if (!supabase) return null
+
+  const { data, error } = await supabase
+    .from('chess_games')
+    .select(
+      'id, player_name, difficulty, player_color, result, ply_count, seconds, opening_name, hints_used, move_notation, uci_moves, locale, created_at',
+    )
+    .eq('id', id)
+    .single()
+
+  if (error || !data) {
+    console.error('[admin] fetch chess game failed:', error?.message)
+    return null
+  }
+
+  return {
+    id: data.id,
+    playerName: data.player_name,
+    difficulty: data.difficulty,
+    playerColor: data.player_color,
+    result: data.result,
+    plyCount: data.ply_count,
+    seconds: data.seconds,
+    openingName: data.opening_name ?? null,
+    hintsUsed: data.hints_used ?? 0,
+    moveNotation: data.move_notation ?? '',
+    uciMoves: data.uci_moves ?? '',
+    locale: data.locale,
+    createdAt: data.created_at,
+    rank: null,
+  }
 }
 
 export async function deleteChessGame(id: string): Promise<boolean> {

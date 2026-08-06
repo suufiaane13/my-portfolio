@@ -139,7 +139,10 @@ html.theme-switching *,
 html.theme-switching *::before,
 html.theme-switching *::after {
   transition: none !important;
-  animation: none !important;
+}
+
+html.theme-switching .animate-spin {
+  animation: spinner-spin 1.5s linear infinite !important;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -153,5 +156,15 @@ html.theme-switching *::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
+  }
+
+  .animate-spin {
+    animation: spinner-spin 1.5s linear infinite !important;
+  }
+}
+
+@keyframes spinner-spin {
+  to {
+    transform: rotate(360deg);
   }
 }

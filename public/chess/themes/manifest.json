@@ -1,7 +1,7 @@
 {
   "source": "https://github.com/lichess-org/lila",
-  "licenseNote": "Piece/board assets from Lichess (lila) plus extra open-source sets (ansuz, skak, echecs). See NOTICE.md.",
-  "generatedAt": "2026-07-23T19:10:21.669Z",
+  "licenseNote": "Piece/board assets from Lichess (lila) plus extra open-source sets. See NOTICE.md.",
+  "generatedAt": "2026-08-04T11:41:37.404Z",
   "pieceSets": [
     {
       "id": "alpha",
@@ -770,6 +770,204 @@
         "bP.svg"
       ],
       "path": "pieces/echecs"
+    },
+    {
+      "id": "halloween",
+      "files": [
+        "wK.svg",
+        "wQ.svg",
+        "wR.svg",
+        "wB.svg",
+        "wN.svg",
+        "wP.svg",
+        "bK.svg",
+        "bQ.svg",
+        "bR.svg",
+        "bB.svg",
+        "bN.svg",
+        "bP.svg"
+      ],
+      "path": "pieces/halloween"
+    },
+    {
+      "id": "skulls",
+      "files": [
+        "wK.svg",
+        "wQ.svg",
+        "wR.svg",
+        "wB.svg",
+        "wN.svg",
+        "wP.svg",
+        "bK.svg",
+        "bQ.svg",
+        "bR.svg",
+        "bB.svg",
+        "bN.svg",
+        "bP.svg"
+      ],
+      "path": "pieces/skulls"
+    },
+    {
+      "id": "eyes",
+      "files": [
+        "wK.svg",
+        "wQ.svg",
+        "wR.svg",
+        "wB.svg",
+        "wN.svg",
+        "wP.svg",
+        "bK.svg",
+        "bQ.svg",
+        "bR.svg",
+        "bB.svg",
+        "bN.svg",
+        "bP.svg"
+      ],
+      "path": "pieces/eyes"
+    },
+    {
+      "id": "freak",
+      "files": [
+        "wK.svg",
+        "wQ.svg",
+        "wR.svg",
+        "wB.svg",
+        "wN.svg",
+        "wP.svg",
+        "bK.svg",
+        "bQ.svg",
+        "bR.svg",
+        "bB.svg",
+        "bN.svg",
+        "bP.svg"
+      ],
+      "path": "pieces/freak"
+    },
+    {
+      "id": "prmi",
+      "files": [
+        "wK.svg",
+        "wQ.svg",
+        "wR.svg",
+        "wB.svg",
+        "wN.svg",
+        "wP.svg",
+        "bK.svg",
+        "bQ.svg",
+        "bR.svg",
+        "bB.svg",
+        "bN.svg",
+        "bP.svg"
+      ],
+      "path": "pieces/prmi"
+    },
+    {
+      "id": "livius",
+      "files": [
+        "wK.svg",
+        "wQ.svg",
+        "wR.svg",
+        "wB.svg",
+        "wN.svg",
+        "wP.svg",
+        "bK.svg",
+        "bQ.svg",
+        "bR.svg",
+        "bB.svg",
+        "bN.svg",
+        "bP.svg"
+      ],
+      "path": "pieces/livius"
+    },
+    {
+      "id": "meridian",
+      "files": [
+        "wK.svg",
+        "wQ.svg",
+        "wR.svg",
+        "wB.svg",
+        "wN.svg",
+        "wP.svg",
+        "bK.svg",
+        "bQ.svg",
+        "bR.svg",
+        "bB.svg",
+        "bN.svg",
+        "bP.svg"
+      ],
+      "path": "pieces/meridian"
+    },
+    {
+      "id": "meridian-shaded",
+      "files": [
+        "wK.svg",
+        "wQ.svg",
+        "wR.svg",
+        "wB.svg",
+        "wN.svg",
+        "wP.svg",
+        "bK.svg",
+        "bQ.svg",
+        "bR.svg",
+        "bB.svg",
+        "bN.svg",
+        "bP.svg"
+      ],
+      "path": "pieces/meridian-shaded"
+    },
+    {
+      "id": "1kbyte-gambit",
+      "files": [
+        "wK.svg",
+        "wQ.svg",
+        "wR.svg",
+        "wB.svg",
+        "wN.svg",
+        "wP.svg",
+        "bK.svg",
+        "bQ.svg",
+        "bR.svg",
+        "bB.svg",
+        "bN.svg",
+        "bP.svg"
+      ],
+      "path": "pieces/1kbyte-gambit"
+    },
+    {
+      "id": "kaneo",
+      "files": [
+        "wK.svg",
+        "wQ.svg",
+        "wR.svg",
+        "wB.svg",
+        "wN.svg",
+        "wP.svg",
+        "bK.svg",
+        "bQ.svg",
+        "bR.svg",
+        "bB.svg",
+        "bN.svg",
+        "bP.svg"
+      ],
+      "path": "pieces/kaneo"
+    },
+    {
+      "id": "kaneo-midnight",
+      "files": [
+        "wK.svg",
+        "wQ.svg",
+        "wR.svg",
+        "wB.svg",
+        "wN.svg",
+        "wP.svg",
+        "bK.svg",
+        "bQ.svg",
+        "bR.svg",
+        "bB.svg",
+        "bN.svg",
+        "bP.svg"
+      ],
+      "path": "pieces/kaneo-midnight"
     }
   ],
   "boards": [
@@ -870,6 +1068,55 @@
       "light": "#e2e8f0",
       "dark": "#475569",
       "label": "Slate"
+    },
+    {
+      "id": "halloween-solid",
+      "type": "solid",
+      "light": "#f97316",
+      "dark": "#1c1917",
+      "label": "Halloween"
+    },
+    {
+      "id": "skulls-solid",
+      "type": "solid",
+      "light": "#292524",
+      "dark": "#0c0a09",
+      "label": "Skulls"
+    },
+    {
+      "id": "christmas-solid",
+      "type": "solid",
+      "light": "#dc2626",
+      "dark": "#14532d",
+      "label": "Christmas"
+    },
+    {
+      "id": "valentine-solid",
+      "type": "solid",
+      "light": "#fda4af",
+      "dark": "#881337",
+      "label": "Valentine"
+    },
+    {
+      "id": "autumn-solid",
+      "type": "solid",
+      "light": "#c2410c",
+      "dark": "#78350f",
+      "label": "Autumn"
+    },
+    {
+      "id": "winter-solid",
+      "type": "solid",
+      "light": "#bfdbfe",
+      "dark": "#e0f2fe",
+      "label": "Winter"
+    },
+    {
+      "id": "spring-solid",
+      "type": "solid",
+      "light": "#86efac",
+      "dark": "#fbcfe8",
+      "label": "Spring"
     },
     {
       "id": "blue-marble",

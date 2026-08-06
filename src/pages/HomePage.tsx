@@ -11,6 +11,7 @@ import { Projects } from '@/components/sections/Projects'
 import { Skills } from '@/components/sections/Skills'
 import { SpokenLanguages } from '@/components/sections/SpokenLanguages'
 import { Analytics } from '@/components/shared/Analytics'
+import { ErrorBoundary } from '@/components/shared/ErrorBoundary'
 import { PortfolioAnalytics } from '@/components/shared/PortfolioAnalytics'
 import { PortfolioChatWidget } from '@/components/chat/PortfolioChatWidget'
 import { ScrollToTop } from '@/components/shared/ScrollToTop'
@@ -40,15 +41,33 @@ function HomePageContent() {
 
       <LanguageTransition className="min-h-screen">
         <main className="min-h-screen bg-background">
-          <Hero />
-          <About />
-          <Skills />
-          <Experience />
-          <Education />
-          <Projects />
-          <Interests />
-          <SpokenLanguages />
-          <Contact />
+          <ErrorBoundary>
+            <Hero />
+          </ErrorBoundary>
+          <ErrorBoundary>
+            <About />
+          </ErrorBoundary>
+          <ErrorBoundary>
+            <Skills />
+          </ErrorBoundary>
+          <ErrorBoundary>
+            <Experience />
+          </ErrorBoundary>
+          <ErrorBoundary>
+            <Education />
+          </ErrorBoundary>
+          <ErrorBoundary>
+            <Projects />
+          </ErrorBoundary>
+          <ErrorBoundary>
+            <Interests />
+          </ErrorBoundary>
+          <ErrorBoundary>
+            <SpokenLanguages />
+          </ErrorBoundary>
+          <ErrorBoundary>
+            <Contact />
+          </ErrorBoundary>
           <Footer />
         </main>
       </LanguageTransition>
