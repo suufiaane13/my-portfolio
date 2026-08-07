@@ -13,6 +13,8 @@ export interface SearchOptions {
   keepHash?: boolean
   /** Restrict root search to these UCI moves (space-separated). */
   searchMoves?: string
+  /** Run immediately, aborting any ongoing search (for bot moves). */
+  immediate?: boolean
 }
 
 export const DIFFICULTY_PRESETS: Record<ChessDifficulty, DifficultyPreset & { approxElo: number }> = {
@@ -124,6 +126,7 @@ export class StockfishEngine {
     await this.init()
 
     const run = async (): Promise<EngineSearchResult> => {
+      console.log(`[SF] getBestMove.run called: fen=${fen}, preset=${preset.id}, skill=${preset.skillLevel}, movetime=${preset.movetimeMs}`)
       await this.setDifficulty(preset)
       // Abort any leftover search before starting a new one
       this.send('stop')
@@ -137,6 +140,7 @@ export class StockfishEngine {
           settled = true
           unsubscribe()
           this.send('stop')
+          console.error(`[SF] TIMEOUT after ${Math.max(12000, preset.movetimeMs + 8000)}ms for preset ${preset.id}`)
           reject(new Error('Stockfish search timed out'))
         }, Math.max(12000, preset.movetimeMs + 8000))
 
@@ -158,6 +162,7 @@ export class StockfishEngine {
             unsubscribe()
             const parts = line.split(/\s+/)
             const bestMove = parts[1]
+            console.log(`[SF] bestmove received: ${bestMove} for preset ${preset.id}`)
             if (!bestMove || bestMove === '(none)') {
               reject(new Error('No legal move from engine'))
               return
@@ -185,10 +190,17 @@ export class StockfishEngine {
               : `go movetime ${preset.movetimeMs}`,
           )
         }
+        console.log(`[SF] sent go command for ${preset.id}: movetime=${preset.movetimeMs}, depth=${preset.depth}`)
       })
     }
 
-    const result = this.searchTail.then(run, run)
+    const result = options?.immediate
+      ? (async () => {
+          console.log('[SF] getBestMove.immediate: aborting ongoing search')
+          this.send('stop')
+          return run()
+        })()
+      : this.searchTail.then(run, run)
     this.searchTail = result.then(
       () => undefined,
       () => undefined,

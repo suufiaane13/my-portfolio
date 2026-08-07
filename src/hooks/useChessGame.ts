@@ -116,6 +116,7 @@ export function useChessGame({ playerColor, difficulty }: UseChessGameOptions) {
 
   // Keep eval bar in sync with the displayed position (arrows / notation / live)
   useEffect(() => {
+    console.log('[EVAL] evaluate effect fired', { engineReady, analyzing, thinking, turn: displayChess.turn(), playerColor })
     if (!engineReady || analyzing || thinking) return
     const engine = engineRef.current
     if (!engine) return
@@ -123,6 +124,7 @@ export function useChessGame({ playerColor, difficulty }: UseChessGameOptions) {
     const gen = ++reviewEvalGen.current
     const fen = displayChess.fen()
     const sideToMove = displayChess.turn()
+    console.log('[EVAL] calling engine.evaluate, fen:', fen)
 
     void engine.evaluate(fen, 160).then((result) => {
       if (gen !== reviewEvalGen.current || !result) return
@@ -199,6 +201,7 @@ export function useChessGame({ playerColor, difficulty }: UseChessGameOptions) {
   }, [moves.length])
 
   const playBotMove = useCallback(async () => {
+    console.log('[BOT] playBotMove called', { botBusy: botBusy.current, resigned, turn: liveChess.turn(), playerColor })
     if (botBusy.current || resigned) return
     if (gameStatus(liveChess) === 'checkmate' || gameStatus(liveChess) === 'draw') return
     if (liveChess.turn() === playerColor) return
@@ -208,6 +211,7 @@ export function useChessGame({ playerColor, difficulty }: UseChessGameOptions) {
     setEngineError(null)
     const thinkStarted = Date.now()
     const preset = resolveDifficultyPreset(difficulty)
+    console.log('[BOT] preset resolved:', preset.id, 'movetime:', preset.movetimeMs)
     /** Even book replies wait a bit so opening moves don't feel instant. */
     const minThinkMs = Math.max(450, Math.min(900, Math.round(preset.movetimeMs * 0.45)))
 
@@ -269,7 +273,9 @@ export function useChessGame({ playerColor, difficulty }: UseChessGameOptions) {
       const engine = engineRef.current
       if (!engine) throw new Error('no engine')
       const sideToMove = liveChess.turn()
-      const result = await engine.getBestMove(liveChess.fen(), preset)
+      console.log('[BOT] calling engine.getBestMove, fen:', liveChess.fen())
+      const result = await engine.getBestMove(liveChess.fen(), preset, { immediate: true })
+      console.log('[BOT] engine.getBestMove resolved:', result)
       await waitMinThink()
       if (result.evaluation) {
         const flip = sideToMove === 'b' ? -1 : 1
@@ -279,28 +285,38 @@ export function useChessGame({ playerColor, difficulty }: UseChessGameOptions) {
         })
       }
       const parsed = uciToMove(result.bestMove)
-      applyMove(
+      console.log('[BOT] applying move:', parsed)
+      const applied = applyMove(
         parsed.from as Square,
         parsed.to as Square,
         parsed.promotion as PieceSymbol | undefined,
       )
-    } catch {
+      console.log('[BOT] applyMove returned:', applied)
+      if (!applied) {
+        console.error('[BOT] applyMove failed - move was illegal')
+        throw new Error('Illegal move from engine')
+      }
+    } catch (err) {
+      console.error('[BOT] error in playBotMove:', err)
       await waitMinThink()
       const legal = liveChess.moves({ verbose: true })
       const pick = legal[Math.floor(Math.random() * legal.length)]
       if (pick) applyMove(pick.from, pick.to, pick.promotion)
       else setEngineError('engine')
     } finally {
+      console.log('[BOT] playBotMove finally block')
       setThinking(false)
       botBusy.current = false
     }
   }, [applyMove, difficulty, liveChess, playerColor, resigned, uciHistory])
 
   useEffect(() => {
+    console.log('[BOT_EFFECT] playBotMove effect fired', { engineReady, resigned, turn: liveChess.turn(), playerColor })
     if (!engineReady || resigned) return
     const current = gameStatus(liveChess)
     if (current === 'checkmate' || current === 'draw') return
     if (liveChess.turn() === playerColor) return
+    console.log('[BOT_EFFECT] calling playBotMove()')
     void playBotMove()
   }, [engineReady, liveChess, playBotMove, playerColor, resigned, uciHistory.length])
 
