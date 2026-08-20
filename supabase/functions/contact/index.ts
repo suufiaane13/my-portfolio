@@ -79,7 +79,7 @@ async function sendResendEmail(payload: Record<string, unknown>, label: string) 
 
   if (!response.ok) {
     const errorBody = await response.text()
-    console.error(`[contact] ${label} failed (${response.status}):`, errorBody)
+    console.error(`[contact] ${label} failed (${response.status}):`, String(errorBody).slice(0, 500))
     return false
   }
 
