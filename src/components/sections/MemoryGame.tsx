@@ -17,6 +17,7 @@ import { Section, SectionHeading } from '@/components/layout/Container'
 import { SectionReveal } from '@/components/shared/SectionReveal'
 import { Leaderboard } from '@/components/sections/memory/Leaderboard'
 import { Button } from '@/components/ui/Button'
+import { Dialog } from '@/components/ui/Dialog'
 import { Input } from '@/components/ui/Input'
 import { CardIcon } from '@/components/sections/memory/CardIcons'
 import { type CardId, type GridSize } from '@/data/memoryGame'
@@ -112,7 +113,6 @@ export function MemoryGame() {
   const [leaderboardRefreshKey, setLeaderboardRefreshKey] = useState(0)
   const [personalBest, setPersonalBest] = useState(() => getPersonalBest(gridSize))
   const [isNewRecord, setIsNewRecord] = useState(false)
-  const winMessageRef = useRef<HTMLDivElement>(null)
   const winTrackedRef = useRef(false)
   const { play } = useGameSounds(soundOn)
 
@@ -244,20 +244,6 @@ export function MemoryGame() {
       metadata: { gridSize, moves, seconds },
     })
   }, [gridSize, isWon, locale, moves, seconds])
-
-  useEffect(() => {
-    if (!isWon) return
-
-    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
-    const timer = window.setTimeout(() => {
-      winMessageRef.current?.scrollIntoView({
-        behavior: reducedMotion ? 'auto' : 'smooth',
-        block: 'center',
-      })
-    }, 200)
-
-    return () => window.clearTimeout(timer)
-  }, [isWon])
 
   const stats = useMemo(
     () => [
@@ -434,86 +420,85 @@ export function MemoryGame() {
 
           <AnimatePresence>
             {isWon && (
-              <motion.div
-                ref={winMessageRef}
-                initial={{ opacity: 0, y: 16 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -8 }}
-                className="memory-win mt-6 rounded-2xl border p-6 text-center"
-                tabIndex={-1}
+              <Dialog
+                open={isWon}
+                onClose={handleRestart}
+                title={t.memoryGame.winTitle}
+                className="sm:max-w-md"
               >
-                <div className="memory-win__icon mx-auto mb-3 flex h-14 w-14 items-center justify-center rounded-full">
-                  <Trophy className="h-7 w-7" aria-hidden="true" />
-                </div>
-                <h3 className="font-display text-2xl font-bold text-foreground">{t.memoryGame.winTitle}</h3>
-                {isNewRecord && (
-                  <p className="mt-2 text-sm font-semibold text-primary">{t.memoryGame.newRecord}</p>
-                )}
-                <p className="mt-2 text-base text-muted-foreground">{t.memoryGame.winMessage}</p>
-                <p className="mt-3 text-sm text-muted-foreground">
-                  {t.memoryGame.winStats
-                    .replace('{{moves}}', String(moves))
-                    .replace('{{time}}', formattedTime)}
-                </p>
-
-                {isLeaderboardEnabled() && (
-                  <div className="mx-auto mt-5 max-w-sm text-left">
-                    {scoreSubmitted ? (
-                      <p className="rounded-xl border border-[rgb(37_99_235/0.28)] bg-[rgb(37_99_235/0.08)] px-4 py-3 text-sm text-foreground">
-                        {submittedRank
-                          ? t.memoryGame.leaderboard.successRank.replace(
-                              '{{rank}}',
-                              String(submittedRank),
-                            )
-                          : t.memoryGame.leaderboard.success}
-                      </p>
-                    ) : (
-                      <>
-                        <label
-                          htmlFor="player-name"
-                          className="mb-2 block text-sm font-medium text-foreground"
-                        >
-                          {t.memoryGame.leaderboard.nameLabel}
-                        </label>
-                        <div className="flex gap-2">
-                          <Input
-                            id="player-name"
-                            value={playerName}
-                            onChange={(event) => setPlayerName(event.target.value)}
-                            placeholder={t.memoryGame.leaderboard.namePlaceholder}
-                            maxLength={20}
-                            disabled={isSubmitting}
-                            autoComplete="nickname"
-                          />
-                          <Button
-                            type="button"
-                            onClick={() => void handleSubmitScore()}
-                            disabled={isSubmitting}
-                            className="shrink-0"
-                          >
-                            {isSubmitting ? (
-                              <Loader2 className="h-4 w-4 animate-spin" aria-hidden="true" />
-                            ) : (
-                              <Send className="h-4 w-4" aria-hidden="true" />
-                            )}
-                            <span className="sr-only">{t.memoryGame.leaderboard.submit}</span>
-                          </Button>
-                        </div>
-                        {submitError && (
-                          <p className="mt-2 text-sm text-destructive" role="alert">
-                            {submitError}
-                          </p>
-                        )}
-                      </>
-                    )}
+                <div className="text-center">
+                  <div className="memory-win__icon mx-auto mb-3 flex h-14 w-14 items-center justify-center rounded-full">
+                    <Trophy className="h-7 w-7" aria-hidden="true" />
                   </div>
-                )}
+                  {isNewRecord && (
+                    <p className="mt-2 text-sm font-semibold text-primary">{t.memoryGame.newRecord}</p>
+                  )}
+                  <p className="mt-2 text-base text-muted-foreground">{t.memoryGame.winMessage}</p>
+                  <p className="mt-3 text-sm text-muted-foreground">
+                    {t.memoryGame.winStats
+                      .replace('{{moves}}', String(moves))
+                      .replace('{{time}}', formattedTime)}
+                  </p>
 
-                <Button className="mt-5" onClick={handleRestart}>
-                  <RotateCcw className="h-4 w-4" />
-                  {t.memoryGame.playAgain}
-                </Button>
-              </motion.div>
+                  {isLeaderboardEnabled() && (
+                    <div className="mx-auto mt-5 max-w-sm text-left">
+                      {scoreSubmitted ? (
+                        <p className="rounded-xl border border-[rgb(37_99_235/0.28)] bg-[rgb(37_99_235/0.08)] px-4 py-3 text-sm text-foreground">
+                          {submittedRank
+                            ? t.memoryGame.leaderboard.successRank.replace(
+                                '{{rank}}',
+                                String(submittedRank),
+                              )
+                            : t.memoryGame.leaderboard.success}
+                        </p>
+                      ) : (
+                        <>
+                          <label
+                            htmlFor="player-name"
+                            className="mb-2 block text-sm font-medium text-foreground"
+                          >
+                            {t.memoryGame.leaderboard.nameLabel}
+                          </label>
+                          <div className="flex gap-2">
+                            <Input
+                              id="player-name"
+                              value={playerName}
+                              onChange={(event) => setPlayerName(event.target.value)}
+                              placeholder={t.memoryGame.leaderboard.namePlaceholder}
+                              maxLength={20}
+                              disabled={isSubmitting}
+                              autoComplete="nickname"
+                            />
+                            <Button
+                              type="button"
+                              onClick={() => void handleSubmitScore()}
+                              disabled={isSubmitting}
+                              className="shrink-0"
+                            >
+                              {isSubmitting ? (
+                                <Loader2 className="h-4 w-4 animate-spin" aria-hidden="true" />
+                              ) : (
+                                <Send className="h-4 w-4" aria-hidden="true" />
+                              )}
+                              <span className="sr-only">{t.memoryGame.leaderboard.submit}</span>
+                            </Button>
+                          </div>
+                          {submitError && (
+                            <p className="mt-2 text-sm text-destructive" role="alert">
+                              {submitError}
+                            </p>
+                          )}
+                        </>
+                      )}
+                    </div>
+                  )}
+
+                  <Button className="mt-5" onClick={handleRestart}>
+                    <RotateCcw className="h-4 w-4" />
+                    {t.memoryGame.playAgain}
+                  </Button>
+                </div>
+              </Dialog>
             )}
           </AnimatePresence>
 
