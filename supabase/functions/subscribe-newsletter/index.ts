@@ -69,6 +69,25 @@ Deno.serve(async (req) => {
   const clientIp = req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ?? 'unknown'
   const ipHash = await hashIp(clientIp, ipSalt)
 
+  // Rate limiting: 5 subscriptions per hour per IP
+  const oneHourAgo = new Date(Date.now() - 60 * 60 * 1000).toISOString()
+  const maxPerHour = Number.parseInt(Deno.env.get('NEWSLETTER_RATE_LIMIT_MAX') ?? '5', 10)
+
+  const { count, error: countError } = await supabase
+    .from('newsletter_subscribers')
+    .select('*', { count: 'exact', head: true })
+    .eq('ip_hash', ipHash)
+    .gte('created_at', oneHourAgo)
+
+  if (countError) {
+    console.error('[subscribe-newsletter] Rate limit check failed:', countError)
+    return jsonResponse({ error: 'server_error' }, 500)
+  }
+
+  if ((count ?? 0) >= maxPerHour) {
+    return jsonResponse({ error: 'rate_limit' }, 429)
+  }
+
   const { data: existing } = await supabase
     .from('newsletter_subscribers')
     .select('id, unsubscribed_at')
