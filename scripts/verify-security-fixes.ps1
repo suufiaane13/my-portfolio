@@ -32,19 +32,21 @@ function Test-Result {
 Write-Host "`n=== 1. XSS dans /contact ===" -ForegroundColor Cyan
 # ============================================================
 
-$body = '{"name":"Test","email":"verify@test.com","message":"<img src=x onerror=alert(1)>","locale":"fr"}'
+# Le serveur DOIT accepter le message et le sanitiser (pas le rejeter)
+$body = '{"name":"XSS-Test","email":"verify@test.com","message":"<img src=x onerror=alert(1)>","locale":"fr"}'
 
 try {
     $resp = Invoke-RestMethod -Uri "$FUNCTIONS_URL/contact" -Method POST -Headers $headers -Body $body -ErrorAction Stop
-    Test-Result 'XSS payload accepted (rejected?)' ($resp.success -eq $null -or $resp.error -ne $null) "Got success=$($resp.success)"
+    Test-Result 'XSS payload accepted & sanitized' ($resp.success -eq $true) "Got success=$($resp.success)"
 } catch {
     $code = [int]$_.Exception.Response.StatusCode
-    if ($code -eq 400) {
-        Test-Result 'XSS payload rejected' $true "Got 400"
-    } else {
-        Test-Result 'XSS payload rejected' $false "Got $code"
-    }
+    Test-Result 'XSS payload accepted & sanitized' $false "HTTP $code - function rejected the request"
 }
+
+# Verifier que le code source contient la sanitization
+$contactCode = Get-Content 'supabase/functions/contact/index.ts' -Raw
+$hasSanitize = $contactCode -match 'sanitizeHtml|sanitize\('
+Test-Result 'Sanitization function present in code' $hasSanitize "sanitizeHtml not found in contact/index.ts"
 
 # ============================================================
 Write-Host "`n=== 2. Score manipulation dans /submit-score ===" -ForegroundColor Cyan
@@ -99,37 +101,41 @@ Write-Host "`n=== 3. IP hash masque (memory_scores) ===" -ForegroundColor Cyan
 $url1 = "$REST_URL/memory_scores_public?select=*&limit=1"
 try {
     $data = Invoke-RestMethod -Uri $url1 -Method GET -Headers $headers -ErrorAction Stop
-    Test-Result 'memory_scores_public accessible' ($data -ne $null) ''
+    Test-Result 'memory_scores_public view exists' ($data -ne $null) 'View returned null'
 } catch {
-    Test-Result 'memory_scores_public accessible' $false "Cannot read view"
+    $code = [int]$_.Exception.Response.StatusCode
+    if ($code -eq 404) {
+        Test-Result 'memory_scores_public view exists' $false 'View not found (404) - migration not applied'
+    } else {
+        Test-Result 'memory_scores_public view exists' $false "HTTP $code"
+    }
 }
 
 $url2 = "$REST_URL/memory_scores_public?select=ip_hash&limit=1"
 try {
     $data = Invoke-RestMethod -Uri $url2 -Method GET -Headers $headers -ErrorAction Stop
-    $hasIpHash = $false
-    if ($data -is [array] -and $data.Count -gt 0) {
-        $hasIpHash = $data[0].PSObject.Properties.Name -contains 'ip_hash'
-    } elseif ($data -ne $null) {
-        $hasIpHash = $data.PSObject.Properties.Name -contains 'ip_hash'
-    }
-    Test-Result 'ip_hash NOT in public view' (-not $hasIpHash) "ip_hash column exposed"
+    # Si la colonne ip_hash existe,PostgREST retourne les données; sinon erreur
+    Test-Result 'ip_hash NOT in public view' $false "ip_hash column exposed in memory_scores_public"
 } catch {
-    Test-Result 'ip_hash NOT in public view' $true "Column not accessible"
+    $errMsg = $_.Exception.Message
+    if ($errMsg -match 'ip_hash' -and $errMsg -match 'does not exist') {
+        Test-Result 'ip_hash NOT in public view' $true 'Column does not exist (correct)'
+    } else {
+        Test-Result 'ip_hash NOT in public view' $true "Column not selectable"
+    }
 }
 
 $url3 = "$REST_URL/memory_leaderboard?select=ip_hash&limit=1"
 try {
     $data = Invoke-RestMethod -Uri $url3 -Method GET -Headers $headers -ErrorAction Stop
-    $hasIpHash = $false
-    if ($data -is [array] -and $data.Count -gt 0) {
-        $hasIpHash = $data[0].PSObject.Properties.Name -contains 'ip_hash'
-    } elseif ($data -ne $null) {
-        $hasIpHash = $data.PSObject.Properties.Name -contains 'ip_hash'
-    }
-    Test-Result 'ip_hash NOT in leaderboard' (-not $hasIpHash) "ip_hash column exposed in leaderboard"
+    Test-Result 'ip_hash NOT in leaderboard' $false "ip_hash column exposed in memory_leaderboard"
 } catch {
-    Test-Result 'ip_hash NOT in leaderboard' $true "Column not accessible"
+    $errMsg = $_.Exception.Message
+    if ($errMsg -match 'ip_hash' -and $errMsg -match 'does not exist') {
+        Test-Result 'ip_hash NOT in leaderboard' $true 'Column does not exist (correct)'
+    } else {
+        Test-Result 'ip_hash NOT in leaderboard' $true "Column not selectable"
+    }
 }
 
 # ============================================================
