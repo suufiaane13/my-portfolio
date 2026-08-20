@@ -2,8 +2,14 @@
 -- Masquer ip_hash du public — leaderboard reste lisible, hashes IP cachés
 -- ═══════════════════════════════════════════════════════════════════════════════
 
--- 1. Supprimer la policy trop permissive sur la table brute
+-- 1. Remettre une policy SELECT sur la table (security_invoker en a besoin)
+--    Le masquage ip_hash est assuré par la vue, pas par la policy
 drop policy if exists "memory_scores_public_read" on public.memory_scores;
+create policy "memory_scores_public_read"
+  on public.memory_scores
+  for select
+  to anon, authenticated
+  using (true);
 
 -- 2. Vue publique SANS ip_hash (lecture seule pour anon/authenticated)
 create or replace view public.memory_scores_public
