@@ -33,6 +33,19 @@ function isValidEmail(value: string) {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)
 }
 
+function sanitizeHtml(input: string): string {
+  return input
+    .replaceAll('&', '&amp;')
+    .replaceAll('<', '&lt;')
+    .replaceAll('>', '&gt;')
+    .replaceAll('"', '&quot;')
+    .replaceAll("'", '&#39;')
+}
+
+function sanitize(input: string): string {
+  return sanitizeHtml(input).trim().slice(0, 2000)
+}
+
 function validatePayload(body: ContactBody) {
   const name = body.name?.trim() ?? ''
   const email = body.email?.trim() ?? ''
@@ -43,7 +56,12 @@ function validatePayload(body: ContactBody) {
   if (!isValidEmail(email)) return null
   if (message.length < 10 || message.length > 2000) return null
 
-  return { name, email, message, locale }
+  return {
+    name: sanitize(name),
+    email,
+    message: sanitize(message),
+    locale,
+  }
 }
 
 async function hashIp(ip: string, salt: string) {

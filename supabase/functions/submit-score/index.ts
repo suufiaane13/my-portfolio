@@ -29,6 +29,17 @@ async function hashIp(ip: string, salt: string) {
     .join('')
 }
 
+function sanitizePlayerName(input: string): string {
+  return input
+    .replaceAll('&', '&amp;')
+    .replaceAll('<', '&lt;')
+    .replaceAll('>', '&gt;')
+    .replaceAll('"', '&quot;')
+    .replaceAll("'", '&#39;')
+    .trim()
+    .slice(0, 20)
+}
+
 function validatePayload(body: SubmitScoreBody) {
   const playerName = body.player_name?.trim() ?? ''
   const gridSize = body.grid_size
@@ -41,11 +52,20 @@ function validatePayload(body: SubmitScoreBody) {
   if (typeof moves !== 'number' || !Number.isInteger(moves) || moves <= 0) return null
   if (typeof seconds !== 'number' || !Number.isInteger(seconds) || seconds < 0) return null
 
-  const minMoves = gridSize === 4 ? 8 : 18
-  if (moves < minMoves) return null
-  if (seconds > 3600) return null
+  const pairs = (gridSize * gridSize) / 2
+  const minMoves = pairs
+  const maxMoves = pairs * 10
 
-  return { playerName, gridSize, moves, seconds, locale }
+  if (moves < minMoves || moves > maxMoves) return null
+  if (seconds < 1 || seconds > 3600) return null
+
+  return {
+    playerName: sanitizePlayerName(playerName),
+    gridSize,
+    moves,
+    seconds,
+    locale,
+  }
 }
 
 Deno.serve(async (req) => {
