@@ -1,9 +1,7 @@
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.49.1'
+import { getCorsHeaders, jsonResponse } from '../_shared/cors.ts'
 
-const corsHeaders = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
-}
+const corsHeaders = getCorsHeaders()
 
 const VOICES: Record<string, string> = {
   fr: 'Charon',
@@ -14,13 +12,6 @@ const TTS_MODELS = [
   'gemini-2.5-flash-preview-tts',
   'gemini-2.5-pro-preview-tts',
 ]
-
-function jsonResponse(body: Record<string, unknown>, status = 200) {
-  return new Response(JSON.stringify(body), {
-    status,
-    headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-  })
-}
 
 function pcmToWav(pcm: Uint8Array, sampleRate = 24000, channels = 1, bitDepth = 16): Uint8Array {
   const byteRate = (sampleRate * channels * bitDepth) / 8
@@ -117,7 +108,7 @@ async function callGeminiTts(
 
 Deno.serve(async (req) => {
   if (req.method === 'OPTIONS') {
-    return new Response('ok', { headers: corsHeaders })
+    return new Response('ok', { headers: getCorsHeaders(req) })
   }
 
   // ── DELETE audio ────────────────────────────────────────────────────────────

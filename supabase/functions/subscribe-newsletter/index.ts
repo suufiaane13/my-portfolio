@@ -1,21 +1,12 @@
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.49.1'
+import { getCorsHeaders, isOriginAllowed, jsonResponse } from '../_shared/cors.ts'
 
-const corsHeaders = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
-}
+const corsHeaders = getCorsHeaders()
 
 interface SubscribeBody {
   email?: string
   locale?: string
   source?: string
-}
-
-function jsonResponse(body: Record<string, unknown>, status = 200) {
-  return new Response(JSON.stringify(body), {
-    status,
-    headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-  })
 }
 
 function isValidEmail(value: string) {
@@ -32,7 +23,11 @@ async function hashIp(ip: string, salt: string) {
 
 Deno.serve(async (req) => {
   if (req.method === 'OPTIONS') {
-    return new Response('ok', { headers: corsHeaders })
+    return new Response('ok', { headers: getCorsHeaders(req) })
+  }
+
+  if (!isOriginAllowed(req)) {
+    return jsonResponse({ error: 'forbidden' }, 403)
   }
 
   if (req.method !== 'POST') {

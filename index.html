@@ -17,21 +17,7 @@
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:site" content="@suufiaane" />
     <title>Soufiane HAJJI — Développeur Full-Stack & UI/UX Designer</title>
-    <script>
-      ;(() => {
-        const key = 'susu-portfolio-theme'
-        const stored = localStorage.getItem(key)
-        const theme =
-          stored === 'light' || stored === 'dark'
-            ? stored
-            : window.matchMedia('(prefers-color-scheme: dark)').matches
-              ? 'dark'
-              : 'light'
-        document.documentElement.classList.toggle('dark', theme === 'dark')
-        document.documentElement.style.colorScheme = theme
-        document.documentElement.dataset.theme = theme
-      })()
-    </script>
+    <script src="/theme-init.js"></script>
     <style>
       :root {
         --loader-bg: oklch(0.98 0.005 270);
