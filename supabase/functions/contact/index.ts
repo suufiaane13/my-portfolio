@@ -10,8 +10,6 @@ import {
 } from './email-templates.ts'
 import { getCorsHeaders, isOriginAllowed, jsonResponse } from '../_shared/cors.ts'
 
-const corsHeaders = getCorsHeaders()
-
 interface ContactBody {
   name?: string
   email?: string

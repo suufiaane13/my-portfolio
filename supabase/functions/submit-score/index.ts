@@ -1,8 +1,6 @@
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.49.1'
 import { getCorsHeaders, isOriginAllowed, jsonResponse } from '../_shared/cors.ts'
 
-const corsHeaders = getCorsHeaders()
-
 interface SubmitScoreBody {
   player_name?: string
   grid_size?: number

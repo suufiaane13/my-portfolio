@@ -1,8 +1,6 @@
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.49.1'
 import { getCorsHeaders, jsonResponse } from '../_shared/cors.ts'
 
-const corsHeaders = getCorsHeaders()
-
 const VOICES: Record<string, string> = {
   fr: 'Charon',
   en: 'Orus',
